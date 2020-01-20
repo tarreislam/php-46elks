@@ -40,11 +40,14 @@ class PhoneCallTest extends TestCase
         // register some routes
         $router
             ->register('first', function (PhoneCallAction $action) {
+                return $action->next('url');
             })
             ->register('second', function (PhoneCallAction $action) {
+                return $action->next('url');
+
             });
 
-        $this->assertJson('{"first":"","second":""}', $router->compile());
+        $this->assertJson('{"first":{"next":"http:\/\/google.se\/url"},"second":{"next":"http:\/\/google.se\/url"}}', $router->compile());
     }
 
     public function testPhoneRouterActionConnect()
@@ -57,11 +60,10 @@ class PhoneCallTest extends TestCase
         // register some routes
         $router
             ->register('testRoute', function (PhoneCallAction $action) {
-
                 return $action->connect('+46701474417');
             });
 
-        $this->assertJson('{"testRoute":"{\"connect\":\"+46701474417\"}"}', $router->compile());
+        $this->assertJson('{"testRoute":{"connect":"+46701474417"}}', $router->compile());
     }
 
     public function testPhoneRouterActionPlay()
@@ -78,7 +80,7 @@ class PhoneCallTest extends TestCase
                 return $action->play('url.wav');
             });
 
-        $this->assertJson('{"testRoute":"{\"play\":\"url.wav\"}"}', $router->compile());
+        $this->assertJson('{"testRoute":{"play":"url.wav"}}', $router->compile());
     }
 
     public function testPhoneRouterActionIvr()
@@ -95,7 +97,7 @@ class PhoneCallTest extends TestCase
                 return $action->ivr('url.wav');
             });
 
-        $this->assertJson('{"testRoute":"{\"digits\":1,\"timeout\":30,\"repeat\":3,\"ivr\":\"url.wav\"}"}', $router->compile());
+        $this->assertJson('{"testRoute":{"digits":1,"timeout":30,"repeat":3,"ivr":"url.wav"}}', $router->compile());
     }
 
     public function testPhoneRouterActionRecord()
@@ -111,7 +113,7 @@ class PhoneCallTest extends TestCase
                 return $action->record('url');
             });
 
-        $this->assertJson('{"testRoute":"{\"record\":\"url\"}"}', $router->compile());
+        $this->assertJson('{"testRoute":{"record":"url"}}', $router->compile());
     }
 
     public function testPhoneRouterActionRecordCall()
@@ -130,7 +132,40 @@ class PhoneCallTest extends TestCase
                     ->next('someOtherWay');
             });
 
-        $this->assertJson('{"testRoute":"{\"recordcall\":\"url\",\"play\":\"somewav.mp3\",\"next\":\"http:\\\/\\\/google.se\\\/someOtherWay\"}"}', $router->compile());
+        $this->assertJson('{"testRoute":{"recordcall":"url","play":"somewav.mp3","next":"http:\/\/google.se\/someOtherWay"}}', $router->compile());
+    }
+
+    public function testPhoneRouterActionSerialization()
+    {
+        $FortySixClient = new Client('x', 'x');
+
+        // init router
+        $router = $FortySixClient->phone()->router('http://google.se');
+
+        // register some routes
+        $router
+            ->register('testRoute', function (PhoneCallAction $action) {
+                return $action
+                    ->recordCall('url')
+                    ->play('somewav.mp3')
+                    ->next('someOtherWay');
+            });
+
+        // compile to json
+        $encodedArray = (string)$router->compile();
+
+        // decode as array
+        $decodedJson = json_decode($encodedArray, true);
+
+        // restore in new router instance
+        $router2 = $FortySixClient->phone()->router('http://google.se');
+
+
+        $newJson = (string)$router2->compile($decodedJson);
+
+
+        $this->assertSame($encodedArray, $newJson);
+
     }
 
 }

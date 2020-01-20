@@ -28,6 +28,10 @@ class PhoneCallAction
         $this->denyNextAction = false;
     }
 
+    public function toArray()
+    {
+        return $this->getOptions();
+    }
 
     /**
      * @return false|string
@@ -35,6 +39,7 @@ class PhoneCallAction
     public function __toString()
     {
         return json_encode($this->getOptions());
+
     }
 
 

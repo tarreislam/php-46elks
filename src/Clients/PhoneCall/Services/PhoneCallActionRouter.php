@@ -8,7 +8,7 @@ use Exception;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 use Tarre\Php46Elks\Exceptions\InvalidActionException;
 
-class PhoneCallReceiverRouter
+class PhoneCallActionRouter
 {
     protected $callbacks;
     protected $compiledCallbacks = [];
@@ -35,16 +35,32 @@ class PhoneCallReceiverRouter
 
 
     /**
-     * Compile all previously registered routes
+     * Compile all previously registered routes or provide an array to "install" from an array
+     * @param array|null $array
      * @return $this
      */
-    public function compile(): self
+    public function compile(array $array = null): self
     {
-        $this->compiled = true;
 
-        foreach ($this->callbacks as $name => $callback) {
-            $this->compiledCallbacks[$name] = $callback(new PhoneCallAction($this->baseUrl));
+        if (is_null($array)) {
+            foreach ($this->callbacks as $name => $callback) {
+
+                $callable = $callback(new PhoneCallAction($this->baseUrl));
+
+                // only compile if callback is valid
+                if ($callable instanceof PhoneCallAction) {
+                    $this->compiledCallbacks[$name] = $callable->toArray();
+
+                }
+
+            }
+        } else {
+            foreach ($array as $name => $subArray) {
+                $this->compiledCallbacks[$name] = $subArray;
+            }
         }
+
+        $this->compiled = true;
 
         return $this;
     }
@@ -58,9 +74,12 @@ class PhoneCallReceiverRouter
      */
     public function handle($action)
     {
-        $this->throwIfNotCompiled();
+        if ($this->compiled) {
+            return $this->compiledCallbacks[$action]();
+        } else {
+            return $this->callbacks[$action](new PhoneCallAction($this->baseUrl));
+        }
 
-        return $this->callbacks[$action](new PhoneCallAction($this->baseUrl));
     }
 
 
@@ -74,8 +93,9 @@ class PhoneCallReceiverRouter
         // serialize all routes
 
         $serializedCallbacks = array_map(function ($r) {
-            return (string)$r;
+            return $r;
         }, $this->compiledCallbacks);
+
 
         // return serialized router
         return json_encode($serializedCallbacks);

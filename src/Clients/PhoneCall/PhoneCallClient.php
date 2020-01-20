@@ -5,7 +5,7 @@ namespace Tarre\Php46Elks\Clients\PhoneCall;
 
 
 use Tarre\Php46Elks\Clients\BaseClient;
-use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverRouter;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallActionRouter;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
 
 class PhoneCallClient extends BaseClient
@@ -19,11 +19,11 @@ class PhoneCallClient extends BaseClient
     }
 
     /**
-     * @return PhoneCallReceiverRouter
+     * @return PhoneCallActionRouter
      */
-    public function router($baseUrl): PhoneCallReceiverRouter
+    public function router($baseUrl): PhoneCallActionRouter
     {
-        return new PhoneCallReceiverRouter($baseUrl);
+        return new PhoneCallActionRouter($baseUrl);
     }
 
     // TODO Make a phone call
