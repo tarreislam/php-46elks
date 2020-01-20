@@ -9,6 +9,7 @@ use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Php46ElkPagination;
+use Tarre\Php46Elks\Utils\Validator;
 
 
 class SMSHistoryService extends SMSServiceBase
@@ -62,9 +63,7 @@ class SMSHistoryService extends SMSServiceBase
      */
     public function to($e164PhoneNumber): self
     {
-        if (!preg_match('/^\+\d{1,3}\d+/', $e164PhoneNumber)) {
-            throw new InvalidE164PhoneNumberFormatException($e164PhoneNumber);
-        }
+        Validator::validateE164PhoneNumber($e164PhoneNumber);
 
         $this->setOption('to', $e164PhoneNumber);
 

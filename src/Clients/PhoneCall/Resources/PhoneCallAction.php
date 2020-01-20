@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Tarre\Php46Elks\Clients\PhoneCall\Exceptions\ActionIsAlreadySetException;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
+use Tarre\Php46Elks\Utils\Validator;
 
 class PhoneCallAction
 {
@@ -75,16 +76,11 @@ class PhoneCallAction
         }
 
         foreach ($e164PhoneNumbers as $number) {
-            if (!preg_match('/^\+\d{1,3}\d+/', $number)) {
-                throw new InvalidE164PhoneNumberFormatException($number);
-            }
-        }
-
-        if (!is_null($callerId) && !preg_match('/^\+\d{1,3}\d+/', $callerId)) {
-            throw new InvalidE164PhoneNumberFormatException($callerId);
+            Validator::validateE164PhoneNumber($number);
         }
 
         if (!is_null($callerId)) {
+            Validator::validateE164PhoneNumber($callerId);
             $this->setOption('callerid', $callerId);
         }
 
