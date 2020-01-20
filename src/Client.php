@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
+use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Clients\SMS\SMSClient;
 
 
@@ -53,6 +54,15 @@ class Client
     public function sms(): SMSClient
     {
         return new SMSClient($this->getGuzzleClient(), $this->dryRun);
+    }
+
+
+    /**
+     * @return PhoneCallClient
+     */
+    public function phone(): PhoneCallClient
+    {
+        return new PhoneCallClient;
     }
 
 
