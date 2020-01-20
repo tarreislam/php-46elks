@@ -21,8 +21,16 @@ class PhoneCallClient extends BaseClient
     /**
      * @return PhoneCallReceiverRouter
      */
-    public function router(): PhoneCallReceiverRouter
+    public function router($baseUrl): PhoneCallReceiverRouter
     {
-        return new PhoneCallReceiverRouter;
+        return new PhoneCallReceiverRouter($baseUrl);
     }
+
+    // TODO Make a phone call
+
+    // TODO CALL HISTORY
+
+    // TODO GET CALL BY ID
+
+    // TODO CALL FROM CLIENT?
 }

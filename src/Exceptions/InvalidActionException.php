@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tarre\Php46Elks\Clients\PhoneCall\Exceptions;
+namespace Tarre\Php46Elks\Exceptions;
 
 
 use Exception;

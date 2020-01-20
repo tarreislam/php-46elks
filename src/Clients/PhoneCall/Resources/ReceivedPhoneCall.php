@@ -16,6 +16,15 @@ class ReceivedPhoneCall
     }
 
     /**
+     * @return mixed
+     */
+    public function direction()
+    {
+        return $this->data['direction'];
+    }
+
+
+    /**
      * The unique ID of the call in our systems.
      * @return mixed
      */

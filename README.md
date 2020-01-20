@@ -12,7 +12,7 @@ composer require tarre/php-46elks
 ### Docs
 
 * [SMS and MMS](docs/sms.md)
-* Phone clals (comming soon)
+* Phone calls (comming soon)
 
 
 ### Things to wrap 

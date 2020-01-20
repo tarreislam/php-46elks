@@ -62,7 +62,7 @@ class Client
      */
     public function phone(): PhoneCallClient
     {
-        return new PhoneCallClient;
+        return new PhoneCallClient($this->getGuzzleClient(), $this->dryRun);
     }
 
 

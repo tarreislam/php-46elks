@@ -4,7 +4,7 @@
 namespace Tarre\Php46Elks\Clients\PhoneCall\Resources;
 
 use InvalidArgumentException;
-use Tarre\Php46Elks\Clients\PhoneCall\Exceptions\ActionIsAlreadySetException;
+use Tarre\Php46Elks\Exceptions\ActionIsAlreadySetException;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Validator;
@@ -40,7 +40,7 @@ class PhoneCallAction
 
     /**
      * @param $uri
-     * @return void
+     * @return $this
      * @throws ActionIsAlreadySetException
      */
     public function next($uri): self
@@ -52,6 +52,8 @@ class PhoneCallAction
         }
 
         $this->setOption('next', $uri);
+
+        return $this;
     }
 
 
@@ -127,17 +129,38 @@ class PhoneCallAction
 
         if (!is_numeric($digits)) {
             throw new InvalidArgumentException('digits has to be numeric');
+        } else {
+            $this->setOption('digits', $digits);
         }
 
         if (!is_numeric($timeout)) {
             throw new InvalidArgumentException('timeout has to be numeric');
+        } else {
+            $this->setOption('timeout', $timeout);
         }
 
         if (!is_numeric($repeat)) {
             throw new InvalidArgumentException('repeat to be numeric');
+        } else {
+            $this->setOption('repeat', $repeat);
         }
 
         return $this->decideAction('ivr', $urlToPlay);
+    }
+
+
+    /**
+     * @param $url
+     * @return $this
+     * @throws ActionIsAlreadySetException
+     */
+    public function record($url): self
+    {
+        $this->throwIfActionIsAlreadyDecided();
+
+        $this->setOption('record', $url);
+
+        return $this->decideAction('ivr', $url);
     }
 
 
