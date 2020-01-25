@@ -133,11 +133,31 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
      * @param $image
      * @return $this
      */
-    public function image($image)
+    public function image($image): self
     {
         $this->setOption('image', $image);
 
         return $this;
+    }
+
+
+    /**
+     *    Send the message as a Flash SMS. The message will be displayed immediately upon arrival and not stored.
+     * @return $this
+     */
+    public function flashSms(): self
+    {
+        return $this->setOption('flashsms', 'yes');
+    }
+
+    /**
+     * This webhook URL will receive a POST request every time the delivery status changes.
+     * @return $this
+     */
+    public function whenDelivered($url): self
+    {
+        // TODO: fullurl här
+        return $this->setOption('whendelivered', $url);
     }
 
 
