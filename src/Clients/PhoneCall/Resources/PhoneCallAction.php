@@ -301,7 +301,7 @@ class PhoneCallAction
     protected function fullUrl($uri, array $options = null)
     {
         // The url is not relative.
-        if (preg_match('/^(?:http|\/\/|\\\\)/', $uri)) {
+        if (preg_match('/^(?:ftp|http|\/\/|\\\\)/', $uri)) {
             return $uri;
         }
 

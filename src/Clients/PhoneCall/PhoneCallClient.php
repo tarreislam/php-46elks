@@ -6,10 +6,20 @@ namespace Tarre\Php46Elks\Clients\PhoneCall;
 
 use Tarre\Php46Elks\Clients\BaseClient;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallActionRouter;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallDispatcherService;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
 
 class PhoneCallClient extends BaseClient
 {
+
+    /**
+     * @return PhoneCallDispatcherService
+     */
+    public function dispatcher()
+    {
+        return new PhoneCallDispatcherService($this);
+    }
+
     /**
      * @return PhoneCallReceiverService
      */
