@@ -66,10 +66,11 @@ class ReceivedPhoneCall
     }
 
     /**
+     * @param null $baseUrl
      * @return PhoneCallActionRouter
      */
-    public function router(): PhoneCallActionRouter
+    public function router($baseUrl = null): PhoneCallActionRouter
     {
-        return new PhoneCallActionRouter;
+        return new PhoneCallActionRouter($baseUrl);
     }
 }

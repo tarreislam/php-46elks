@@ -5,6 +5,17 @@ use Tarre\Php46Elks\Client;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
 
+class ForTestsClass
+{
+
+    public function validMethod()
+    {
+        $a = 1;
+        $a++;
+    }
+
+}
+
 
 class PhoneCallTest extends TestCase
 {
@@ -47,7 +58,7 @@ class PhoneCallTest extends TestCase
 
             });
 
-        $this->assertJson('{"first":{"next":"http:\/\/google.se\/url"},"second":{"next":"http:\/\/google.se\/url"}}', $router->compile());
+        $this->assertJson('{"first":{"next":"http:google.seurl"},"second":{"next":"http:google.seurl"}}', $router->compile());
     }
 
     public function testPhoneRouterActionConnect()
@@ -132,7 +143,7 @@ class PhoneCallTest extends TestCase
                     ->next('someOtherWay');
             });
 
-        $this->assertJson('{"testRoute":{"recordcall":"url","play":"somewav.mp3","next":"http:\/\/google.se\/someOtherWay"}}', $router->compile());
+        $this->assertJson('{"testRoute":{"recordcall":"url","play":"somewav.mp3","next":"http:google.sesomeOtherWay"}}', $router->compile());
     }
 
     public function testPhoneRouterActionSerialization()
@@ -165,6 +176,145 @@ class PhoneCallTest extends TestCase
 
 
         $this->assertSame($encodedArray, $newJson);
+
+    }
+
+    public function testPhoneActionInvocationVariationA()
+    {
+        $FortySixClient = new Client('x', 'x');
+
+        // init router
+        $router = $FortySixClient->phone()->router();
+
+        $router->register('test', function (PhoneCallAction $action) {
+
+            return $action
+                ->invoke(ForTestsClass::class, 'validMethod')
+                ->play('test.mp3')
+                ->next('anotherRoute');
+        });
+
+        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string) $router->compile());
+    }
+
+    public function testPhoneActionInvocationVariationB()
+    {
+        $FortySixClient = new Client('x', 'x');
+
+        // init router
+        $router = $FortySixClient->phone()->router();
+
+        $router->register('test', function (PhoneCallAction $action) {
+
+            return $action
+                ->invoke((new ForTestsClass), 'validMethod')
+                ->play('test.mp3')
+                ->next('anotherRoute');
+        });
+
+        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string) $router->compile());
+    }
+
+    public function testPhoneActionInvocationVariationC()
+    {
+        $FortySixClient = new Client('x', 'x');
+
+        // init router
+        $router = $FortySixClient->phone()->router();
+
+        $router->register('test', function (PhoneCallAction $action) {
+
+            return $action
+                ->invoke('ForTestsClass@validMethod')
+                ->play('test.mp3')
+                ->next('anotherRoute');
+        });
+
+        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string) $router->compile());
+    }
+
+    /**
+     * @throws \Tarre\Php46Elks\Exceptions\InvalidActionException
+     */
+    public function testPhoneActionHandlerWithoutPrecompile()
+    {
+        $FortySixClient = new Client('x', 'x');
+
+        // init router
+        $router = $FortySixClient->phone()->router();
+
+        // create some routes
+        $router->register('routeA', function (PhoneCallAction $action) {
+            return $action
+                ->play('test.mp3')
+                ->invoke('ForTestsClass@validMethod')
+                ->next('routeB');
+        });
+
+        $router->register('routeB', function (PhoneCallAction $action) {
+            return $action
+                ->connect('+46701474417')
+                ->hangUp('reject');
+        });
+
+
+        $routeA = $router->handle('routeA');
+
+        $this->assertSame([
+            'play' => 'test.mp3',
+            'next' => 'routeB'
+        ], $routeA);
+
+
+        $routeB = $router->handle('routeB');
+
+        $this->assertSame([
+            'connect' => '+46701474417',
+            'hangup' => 'reject'
+        ], $routeB);
+
+    }
+
+    /**
+     * @throws \Tarre\Php46Elks\Exceptions\InvalidActionException
+     */
+    public function testPhoneActionHandlerCompiled()
+    {
+        $FortySixClient = new Client('x', 'x');
+
+        // init router
+        $router = $FortySixClient->phone()->router();
+
+        // create some routes
+        $router->register('routeA', function (PhoneCallAction $action) {
+            return $action
+                ->play('test.mp3')
+                ->invoke('ForTestsClass@validMethod')
+                ->next('routeB');
+        });
+
+        $router->register('routeB', function (PhoneCallAction $action) {
+            return $action
+                ->connect('+46701474417')
+                ->hangUp('reject');
+        });
+
+        $router->compile();
+
+        $routeA = $router->handle('routeA');
+
+        $this->assertSame([
+            'play' => 'test.mp3',
+            'next' => 'routeB'
+        ], $routeA);
+
+
+        $routeB = $router->handle('routeB');
+
+        $this->assertSame([
+            'connect' => '+46701474417',
+            'hangup' => 'reject'
+        ], $routeB);
 
     }
 

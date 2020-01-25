@@ -19,9 +19,10 @@ class PhoneCallClient extends BaseClient
     }
 
     /**
+     * @param null $baseUrl
      * @return PhoneCallActionRouter
      */
-    public function router($baseUrl): PhoneCallActionRouter
+    public function router($baseUrl = null): PhoneCallActionRouter
     {
         return new PhoneCallActionRouter($baseUrl);
     }

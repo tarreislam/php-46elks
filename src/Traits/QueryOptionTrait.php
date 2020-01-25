@@ -39,4 +39,13 @@ trait QueryOptionTrait
     {
         return $this->queryOptions;
     }
+
+    /**
+     * @param string $option
+     * @return bool
+     */
+    public function hasOption(string $option): bool
+    {
+        return (bool)isset($this->queryOptions[$option]);
+    }
 }

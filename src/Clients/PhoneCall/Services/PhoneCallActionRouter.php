@@ -15,7 +15,11 @@ class PhoneCallActionRouter
     protected $baseUrl;
     protected $compiled;
 
-    public function __construct($baseUrl)
+    /**
+     * PhoneCallActionRouter constructor.
+     * @param null $baseUrl
+     */
+    public function __construct($baseUrl = null)
     {
         $this->baseUrl = $baseUrl;
     }
@@ -67,19 +71,36 @@ class PhoneCallActionRouter
 
 
     /**
+     * Handle an previously registered action. Non compiled callbacks will be compiled here
      * @param $action
-     * @return void
+     * @return mixed
      * @throws InvalidActionException
      * @throws Exception
      */
     public function handle($action)
     {
         if ($this->compiled) {
-            return $this->compiledCallbacks[$action]();
+            $result = $this->compiledCallbacks[$action];
         } else {
-            return $this->callbacks[$action](new PhoneCallAction($this->baseUrl));
+            // compile action and return it as an array
+            $result = $this->callbacks[$action](new PhoneCallAction($this->baseUrl))->toArray();
         }
 
+        // determine if we need to invoke anything
+        if (isset($result['_invoke']) && is_array($result['_invoke'])) {
+            $invoke = $result['_invoke'];
+            // (new $invoke['class'])->$invoke['method']();
+            call_user_func([$invoke['class'], $invoke['method']]);
+        }
+
+        // get rid of internal keys
+        $result = array_filter($result, function ($key) {
+            return !preg_match('/^_/', $key);
+        }, ARRAY_FILTER_USE_KEY);
+
+
+        // Return compiled action
+        return $result;
     }
 
 
