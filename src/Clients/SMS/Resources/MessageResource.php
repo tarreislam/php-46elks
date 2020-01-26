@@ -5,7 +5,7 @@ namespace Tarre\Php46Elks\Clients\SMS\Resources;
 
 
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
-use Tarre\Php46Elks\Utils\Validator;
+use Tarre\Php46Elks\Utils\Helper;
 
 
 class MessageResource
@@ -135,7 +135,7 @@ class MessageResource
      */
     public function forward($e164PhoneNumber)
     {
-        Validator::validateE164PhoneNumber($e164PhoneNumber);
+        Helper::validateE164PhoneNumber($e164PhoneNumber);
 
         return json_encode(['forward' => $e164PhoneNumber]);
     }

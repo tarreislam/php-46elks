@@ -8,7 +8,7 @@ use Tarre\Php46Elks\Clients\SMS\Resources\MessageResource;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Exceptions\NoRecipientsSetException;
-use Tarre\Php46Elks\Utils\Php46ElkPagination;
+use Tarre\Php46Elks\Utils\Paginator;
 
 final class SmsClientTest extends TestCase
 {
@@ -317,7 +317,7 @@ EOT;
 
         $paginationObject = $history->get();
 
-        $this->assertTrue($paginationObject instanceof Php46ElkPagination);
+        $this->assertTrue($paginationObject instanceof Paginator);
 
         foreach ($paginationObject->getData() as $smsMessage) {
             $this->assertTrue($smsMessage instanceof MessageResource);

@@ -4,7 +4,7 @@
 namespace Tarre\Php46Elks\Utils;
 
 
-class Php46ElkPagination
+class Paginator
 {
     protected $items;
 

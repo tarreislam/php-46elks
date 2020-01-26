@@ -11,7 +11,7 @@ use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Exceptions\NoRecipientsSetException;
 use Tarre\Php46Elks\Interfaces\RequestStructureInterface;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
-use Tarre\Php46Elks\Utils\Validator;
+use Tarre\Php46Elks\Utils\Helper;
 
 
 class SMSDispatcherService extends SMSServiceBase implements RequestStructureInterface
@@ -29,7 +29,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
      */
     public function recipient(string $e164PhoneNumber): self
     {
-        Validator::validateE164PhoneNumber($e164PhoneNumber);
+        Helper::validateE164PhoneNumber($e164PhoneNumber);
 
         // add only if not added
         if (!in_array($e164PhoneNumber, $this->recipients)) {

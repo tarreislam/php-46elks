@@ -8,7 +8,7 @@ use Tarre\Php46Elks\Exceptions\ActionIsAlreadySetException;
 use Tarre\Php46Elks\Exceptions\InvalidActionException;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
-use Tarre\Php46Elks\Utils\Validator;
+use Tarre\Php46Elks\Utils\Helper;
 
 class PhoneCallAction
 {
@@ -111,7 +111,7 @@ class PhoneCallAction
         $this->throwIfNextActionIsDenied();
 
         // prepare url
-        $url = $this->fullUrl($uri, $options);
+        $url =  Helper::url($uri, $options);
 
         return $this->setOption('next', $url);
     }
@@ -138,11 +138,11 @@ class PhoneCallAction
         }
 
         foreach ($e164PhoneNumbers as $number) {
-            Validator::validateE164PhoneNumber($number);
+            Helper::validateE164PhoneNumber($number);
         }
 
         if (!is_null($callerId)) {
-            Validator::validateE164PhoneNumber($callerId);
+            Helper::validateE164PhoneNumber($callerId);
             $this->setOption('callerid', $callerId);
         }
 
@@ -169,7 +169,7 @@ class PhoneCallAction
             $this->setOption('skippable', $skippable);
         }
 
-        $url = $this->fullUrl($url);
+        $url =  Helper::url($url);
 
         return $this->decideAction('play', $url);
     }
@@ -207,7 +207,7 @@ class PhoneCallAction
             $this->setOption('repeat', $repeat);
         }
 
-        $urlToPlay = $this->fullUrl($urlToPlay);
+        $urlToPlay =  Helper::url($urlToPlay);
 
         return $this->decideAction('ivr', $urlToPlay);
     }
@@ -222,7 +222,7 @@ class PhoneCallAction
     {
         $this->throwIfActionIsAlreadyDecided();
 
-        $url = $this->fullUrl($url);
+        $url =  Helper::url($url);
 
         $this->setOption('record', $url);
 
@@ -238,7 +238,7 @@ class PhoneCallAction
      */
     public function recordCall($url): self
     {
-        $url = $this->fullUrl($url);
+        $url =  Helper::url($url);
 
         $this->setOption('recordcall', $url);
 
@@ -293,30 +293,4 @@ class PhoneCallAction
         return $this;
     }
 
-    /**
-     * @param $uri
-     * @param array|null $options
-     * @return string
-     */
-    protected function fullUrl($uri, array $options = null)
-    {
-        // The url is not relative.
-        if (preg_match('/^(?:ftp|http|\/\/|\\\\)/', $uri)) {
-            return $uri;
-        }
-
-        // prepend baseUrl if its present
-        if (!is_null($this->baseUrl)) {
-            $url = sprintf('%s/%s', $this->baseUrl, $uri);
-        } else {
-            $url = $uri;
-        }
-
-        // append query params
-        if (!is_null($options)) {
-            $url .= http_build_query($options);
-        }
-
-        return $url;
-    }
 }

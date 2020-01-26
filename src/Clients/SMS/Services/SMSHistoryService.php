@@ -8,8 +8,8 @@ use Tarre\Php46Elks\Clients\SMS\Resources\MessageResource;
 use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
-use Tarre\Php46Elks\Utils\Php46ElkPagination;
-use Tarre\Php46Elks\Utils\Validator;
+use Tarre\Php46Elks\Utils\Paginator;
+use Tarre\Php46Elks\Utils\Helper;
 
 
 class SMSHistoryService extends SMSServiceBase
@@ -63,7 +63,7 @@ class SMSHistoryService extends SMSServiceBase
      */
     public function to($e164PhoneNumber): self
     {
-        Validator::validateE164PhoneNumber($e164PhoneNumber);
+        Helper::validateE164PhoneNumber($e164PhoneNumber);
 
         $this->setOption('to', $e164PhoneNumber);
 
@@ -72,9 +72,9 @@ class SMSHistoryService extends SMSServiceBase
 
 
     /**
-     * @return Php46ElkPagination
+     * @return Paginator
      */
-    public function get(): Php46ElkPagination
+    public function get(): Paginator
     {
         //  request with optional options
         $request = $this->getSMSClient()->getGuzzleClient()->get($this->getMediaType(), [
@@ -96,7 +96,7 @@ class SMSHistoryService extends SMSServiceBase
         ];
 
         // return our pagination object
-        return new Php46ElkPagination($payload);
+        return new Paginator($payload);
     }
 
 
