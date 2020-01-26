@@ -3,7 +3,6 @@
 
 namespace Tarre\Php46Elks\Clients\SMS\Traits;
 
-use Tarre\Php46Elks\Clients\SMS\Services\SMSDispatcherService;
 use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Utils\Helper;
 
@@ -18,9 +17,7 @@ trait CommonSmsTraits
      */
     public function from(string $senderId): self
     {
-        if (!preg_match('/[a-z]+[a-z0-9]+/i', $senderId)) {
-            throw new InvalidSenderIdException($senderId);
-        }
+        Helper::validateSenderID($senderId);
 
         $this->senderId = $senderId;
 

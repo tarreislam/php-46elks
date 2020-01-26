@@ -4,9 +4,12 @@
 namespace Tarre\Php46Elks\Utils;
 
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
+use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 
 class Helper
 {
+
+    const E164PhoneNumberRE = '\+\d{1,3}\d+';
 
     protected static $baseUrl;
 
@@ -74,10 +77,20 @@ class Helper
      */
     public static function validateE164PhoneNumber($phoneNumber)
     {
-        if (!preg_match('/^\+\d{1,3}\d+/', $phoneNumber)) {
+        if (!preg_match('/^' . self::E164PhoneNumberRE . '$/', $phoneNumber)) {
             throw new InvalidE164PhoneNumberFormatException($phoneNumber);
         }
+    }
 
+    /**
+     * @param $senderId
+     * @throws InvalidSenderIdException
+     */
+    public static function validateSenderID($senderId)
+    {
+        if (!preg_match('/^(?:[a-z]{1}[a-z0-9]{2,10}|' . self::E164PhoneNumberRE . ')$/i', $senderId)) {
+            throw new InvalidSenderIdException($senderId);
+        }
     }
 
 }
