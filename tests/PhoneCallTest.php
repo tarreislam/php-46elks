@@ -53,10 +53,19 @@ EOT;
         // dispatch requests
         $results = $phone
             ->voiceStart((new PhoneCallAction)->play('hello.mp3'))
-            ->setRecipients($recipients)
-            ->send();
+            ->setRecipients($recipients);
 
-        foreach ($results as $result) {
+        // validate request data
+        foreach ($results->getRequests() as $request) {
+            $this->assertSame([
+                'from' => '+46766861004'
+            ],[
+                'from' => $request['from']
+            ]);
+        }
+
+        // validate mocked response
+        foreach ($results->send() as $result) {
             $this->assertTrue(in_array($result['to'], $recipients));
             $this->assertSame('c719b1eefbf65b1f89c013e6433dbf537', $result['id']);
         }
