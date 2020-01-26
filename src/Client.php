@@ -8,6 +8,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Clients\SMS\SMSClient;
+use Tarre\Php46Elks\Utils\Helper;
 
 
 class Client
@@ -31,6 +32,18 @@ class Client
         $this->password = $password;
         $this->baseURL = $baseURL;
     }
+
+    /**
+     * Set the base URL for SMS & MMS resources such as Sms "WhenDelivered" or phone actions "play", "next" etc
+     * This option is persistent in the php process.
+     * @param $url
+     * @return void
+     */
+    public static function setResourceBaseUrl($url): self
+    {
+        Helper::setBaseUrl($url);
+    }
+
     /**
      * @return SMSClient
      */
