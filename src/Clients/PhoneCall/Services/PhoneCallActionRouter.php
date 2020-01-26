@@ -12,18 +12,7 @@ class PhoneCallActionRouter
 {
     protected $callbacks;
     protected $compiledCallbacks = [];
-    protected $baseUrl;
     protected $compiled;
-
-    /**
-     * PhoneCallActionRouter constructor.
-     * @param null $baseUrl
-     */
-    public function __construct($baseUrl = null)
-    {
-        $this->baseUrl = $baseUrl;
-    }
-
 
     /**
      * @param $name
@@ -49,7 +38,7 @@ class PhoneCallActionRouter
         if (is_null($array)) {
             foreach ($this->callbacks as $name => $callback) {
 
-                $callable = $callback(new PhoneCallAction($this->baseUrl));
+                $callable = $callback(new PhoneCallAction);
 
                 // only compile if callback is valid
                 if ($callable instanceof PhoneCallAction) {
@@ -83,7 +72,7 @@ class PhoneCallActionRouter
             $result = $this->compiledCallbacks[$action];
         } else {
             // compile action and return it as an array
-            $result = $this->callbacks[$action](new PhoneCallAction($this->baseUrl))->toArray();
+            $result = $this->callbacks[$action](new PhoneCallAction)->toArray();
         }
 
         // determine if we need to invoke anything

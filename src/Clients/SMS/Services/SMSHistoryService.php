@@ -7,53 +7,16 @@ use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\SMS\Resources\MessageResource;
 use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
+use Tarre\Php46Elks\Interfaces\DataResourceInterface;
+use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Paginator;
 use Tarre\Php46Elks\Utils\Helper;
 
 
-class SMSHistoryService extends SMSServiceBase
+class SMSHistoryService extends SMSServiceBase implements DataResourceInterface
 {
-    use QueryOptionTrait;
-
-    /**
-     * Retrieve SMS before this date.
-     * @param $start
-     * @return $this
-     */
-    public function start($start): self
-    {
-        $this->setOption('start', $start);
-
-        return $this;
-    }
-
-
-    /**
-     * Retrieve SMS after this date.
-     * @param $end
-     * @return $this
-     */
-    public function end($end): self
-    {
-        $this->setOption('end', $end);
-
-        return $this;
-    }
-
-
-    /**
-     * Limit the number of results on each page.
-     * @param $limit
-     * @return $this
-     */
-    public function limit($limit): self
-    {
-        $this->setOption('limit', $limit);
-
-        return $this;
-    }
-
+    use QueryOptionTrait, DataResourceFilterTrait;
 
     /**
      * Filter on recipient.

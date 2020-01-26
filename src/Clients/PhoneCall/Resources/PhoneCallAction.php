@@ -14,25 +14,15 @@ class PhoneCallAction
 {
     use QueryOptionTrait;
 
-    protected $baseUrl;
     protected $actionAlreadySet;
     protected $denyNextAction;
 
 
     /**
      * PhoneCallAction constructor.
-     * @param null $baseUrl
      */
-    public function __construct($baseUrl = null)
+    public function __construct()
     {
-        // fix baseUrl if its present
-        if (!is_null($baseUrl)) {
-            // trim
-            $baseUrl = trim($baseUrl);
-            // trim ending slashes
-            $baseUrl = preg_replace('/\/+$/', '', $baseUrl);
-        }
-        $this->baseUrl = $baseUrl;
         $this->actionAlreadySet = false;
         $this->denyNextAction = false;
     }

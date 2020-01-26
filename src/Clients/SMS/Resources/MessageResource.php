@@ -84,7 +84,7 @@ class MessageResource
      */
     public function delivered()
     {
-        return $this->data['delivered'] || null;
+        return $this->data['delivered'] ?: null;
     }
 
 
@@ -94,7 +94,7 @@ class MessageResource
      */
     public function status()
     {
-        return $this->data['status'] || null;
+        return $this->data['status'] ?: null;
     }
 
 
@@ -104,7 +104,7 @@ class MessageResource
      */
     public function cost()
     {
-        return $this->data['cost'] || 0;
+        return $this->data['cost'] ?: 0;
     }
 
     /**

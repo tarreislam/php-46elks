@@ -33,17 +33,22 @@ class Helper
     }
 
     /**
-     * Provide the full url of a given uri
-     * @param $uri
-     * @param array|null $options
+     * Provide a relative url and retrieve a FULL url.
+     * @param string|array $uri either a string or an array with the relative url and the query params ['/relativeUrl', ['queryparam1 => 'value1, 'queryparam2' => 'value2]]
+     * @param array|null $queryParams optional query parameters that will be appended
      * @param null $baseUrl
      * @return string
      */
-    public static function url($uri, array $options = null, $baseUrl = null)
+    public static function url($uri, array $queryParams = null, $baseUrl = null)
     {
         // handle non relative urls
         if (preg_match('/^(?:ftp|http|\/\/|\\\\)/', $uri)) {
             return $uri;
+        }
+
+        if (is_array($uri)) {
+            $uri = $uri[0];
+            $queryParams = $uri[1];
         }
 
         // trim ending slashes
@@ -62,8 +67,8 @@ class Helper
         }
 
         // append query params
-        if (!is_null($options)) {
-            $url .= http_build_query($options);
+        if (!is_null($queryParams)) {
+            $url .= http_build_query($queryParams);
         }
 
         return $url;

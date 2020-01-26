@@ -30,7 +30,7 @@ class Paginator
      */
     public function getNext()
     {
-        return $this->items['next'] || null;
+        return $this->items['next'] ?: null;
     }
 
 }

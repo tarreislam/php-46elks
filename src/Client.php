@@ -104,7 +104,13 @@ class Client
             'base_uri' => $this->baseURL,
             GuzzleHttpRequestOptions::AUTH => [
                 $this->username, $this->password
+            ],
+            /*
+             * Guzzle already does this as of guzzle 6
+            GuzzleHttpRequestOptions::HEADERS => [
+                'Content-Type' => 'application/x-www-form-urlencoded'
             ]
+            */
         ];
 
         // For testing purposes only

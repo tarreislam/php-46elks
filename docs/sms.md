@@ -136,7 +136,7 @@ $SMS
     ->recipient('+46number')
     ->line('Hello')
     ->line('Here is your code')
-    ->line('ABC123')// new line
+    ->line('ABC123')
     ->send();
 ```
 
