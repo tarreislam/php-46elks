@@ -1,33 +1,21 @@
 <?php
 
-use GuzzleHttp\Psr7\Response;
+
+namespace Clients\PhoneCall\Services;
+
 use PHPUnit\Framework\TestCase;
 use Tarre\Php46Elks\Client;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
-use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
 
-class ForTestsClass
+final class RouterTest extends TestCase
 {
-
-    public function validMethod()
-    {
-        $a = 1;
-        $a++;
-    }
-
-}
-
-
-class PhoneCallTest extends TestCase
-{
-
 
     public function testPhoneRouterActionHandler()
     {
         $FortySixClient = new Client('x', 'x');
 
         // init router
-        $router = $FortySixClient->phone()->router('http://google.se');
+        $router = $FortySixClient->phone()->router();
 
         // register some routes
         $router
@@ -40,6 +28,7 @@ class PhoneCallTest extends TestCase
             });
 
         $this->assertJson('{"first":{"next":"http:google.seurl"},"second":{"next":"http:google.seurl"}}', $router->compile());
+
     }
 
     public function testPhoneRouterActionConnect()
@@ -47,7 +36,7 @@ class PhoneCallTest extends TestCase
         $FortySixClient = new Client('x', 'x');
 
         // init router
-        $router = $FortySixClient->phone()->router('http://google.se');
+        $router = $FortySixClient->phone()->router();
 
         // register some routes
         $router
@@ -63,7 +52,7 @@ class PhoneCallTest extends TestCase
         $FortySixClient = new Client('x', 'x');
 
         // init router
-        $router = $FortySixClient->phone()->router('http://google.se');
+        $router = $FortySixClient->phone()->router();
 
         // register some routes
         $router
@@ -80,7 +69,7 @@ class PhoneCallTest extends TestCase
         $FortySixClient = new Client('x', 'x');
 
         // init router
-        $router = $FortySixClient->phone()->router('http://google.se');
+        $router = $FortySixClient->phone()->router();
 
         // register some routes
         $router
@@ -97,7 +86,7 @@ class PhoneCallTest extends TestCase
         $FortySixClient = new Client('x', 'x');
 
         // init router
-        $router = $FortySixClient->phone()->router('http://google.se');
+        $router = $FortySixClient->phone()->router();
 
         // register some routes
         $router
@@ -113,7 +102,7 @@ class PhoneCallTest extends TestCase
         $FortySixClient = new Client('x', 'x');
 
         // init router
-        $router = $FortySixClient->phone()->router('http://google.se');
+        $router = $FortySixClient->phone()->router();
 
         // register some routes
         $router
@@ -132,7 +121,7 @@ class PhoneCallTest extends TestCase
         $FortySixClient = new Client('x', 'x');
 
         // init router
-        $router = $FortySixClient->phone()->router('http://google.se');
+        $router = $FortySixClient->phone()->router();
 
         // register some routes
         $router
@@ -150,7 +139,7 @@ class PhoneCallTest extends TestCase
         $decodedJson = json_decode($encodedArray, true);
 
         // restore in new router instance
-        $router2 = $FortySixClient->phone()->router('http://google.se');
+        $router2 = $FortySixClient->phone()->router();
 
 
         $newJson = (string)$router2->compile($decodedJson);
@@ -175,7 +164,7 @@ class PhoneCallTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
     }
 
     public function testPhoneActionInvocationVariationB()
@@ -193,7 +182,7 @@ class PhoneCallTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
     }
 
     public function testPhoneActionInvocationVariationC()
@@ -206,12 +195,12 @@ class PhoneCallTest extends TestCase
         $router->register('test', function (PhoneCallAction $action) {
 
             return $action
-                ->invoke('ForTestsClass@validMethod')
+                ->invoke('Clients\\PhoneCall\\Services\\ForTestsClass@validMethod')
                 ->play('test.mp3')
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
     }
 
     /**
@@ -228,7 +217,7 @@ class PhoneCallTest extends TestCase
         $router->register('routeA', function (PhoneCallAction $action) {
             return $action
                 ->play('test.mp3')
-                ->invoke('ForTestsClass@validMethod')
+                ->invoke('Clients\\PhoneCall\\Services\\ForTestsClass@validMethod')
                 ->next('routeB');
         });
 
@@ -270,7 +259,7 @@ class PhoneCallTest extends TestCase
         $router->register('routeA', function (PhoneCallAction $action) {
             return $action
                 ->play('test.mp3')
-                ->invoke('ForTestsClass@validMethod')
+                ->invoke('Clients\\PhoneCall\\Services\\ForTestsClass@validMethod')
                 ->next('routeB');
         });
 
@@ -297,6 +286,18 @@ class PhoneCallTest extends TestCase
             'hangup' => 'reject'
         ], $routeB);
 
+    }
+}
+
+
+class ForTestsClass
+{
+
+    public function validMethod()
+    {
+        $a = 1;
+        $a++;
+        return $a;
     }
 
 }
