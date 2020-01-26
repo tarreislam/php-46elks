@@ -4,7 +4,7 @@
 namespace Tarre\Php46Elks\Clients\PhoneCall\Resources;
 
 
-use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallActionRouter;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallRouterService;
 
 class ReceivedPhoneCall
 {
@@ -67,10 +67,10 @@ class ReceivedPhoneCall
 
     /**
      * Return a new router instance
-     * @return PhoneCallActionRouter
+     * @return PhoneCallRouterService
      */
-    public function router(): PhoneCallActionRouter
+    public function router(): PhoneCallRouterService
     {
-        return new PhoneCallActionRouter;
+        return new PhoneCallRouterService;
     }
 }

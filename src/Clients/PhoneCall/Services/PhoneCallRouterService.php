@@ -8,7 +8,7 @@ use Exception;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 use Tarre\Php46Elks\Exceptions\InvalidActionException;
 
-class PhoneCallActionRouter
+class PhoneCallRouterService
 {
     protected $callbacks;
     protected $compiledCallbacks = [];
