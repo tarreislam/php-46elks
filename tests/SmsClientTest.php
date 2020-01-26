@@ -144,14 +144,16 @@ final class SmsClientTest extends TestCase
         $dispatcher->setRecipients($expectedRecipients);
 
         // set some lines
-        $dispatcher->content('Hello');
+        $dispatcher->content('Hello')
+        ->whenDelivered('https://myapp');
 
 
         foreach ($dispatcher->getRequests() as $key => $request) {
             $this->assertSame([
                 'to' => $expectedRecipients[$key],
                 'from' => 'Php46Elks',
-                'message' => 'Hello'
+                'message' => 'Hello',
+                'whendelivered' => 'https://myapp'
             ], $request);
         }
     }

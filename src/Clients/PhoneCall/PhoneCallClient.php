@@ -8,9 +8,11 @@ use Tarre\Php46Elks\Clients\BaseClient;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallActionRouter;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallDispatcherService;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+use Tarre\Php46Elks\Clients\PhoneCall\Traits\CommonPhoneTraits;
 
 class PhoneCallClient extends BaseClient
 {
+    use CommonPhoneTraits;
 
     /**
      * @return PhoneCallDispatcherService
