@@ -41,6 +41,10 @@ class Helper
      */
     public static function url($uri, array $options = null, $baseUrl = null)
     {
+        // handle non relative urls
+        if (preg_match('/^(?:ftp|http|\/\/|\\\\)/', $uri)) {
+            return $uri;
+        }
 
         // trim ending slashes
         $uri = preg_replace('/\/+$/', '', $uri);
@@ -48,11 +52,6 @@ class Helper
         // grab baseUrl
         if (is_null($baseUrl)) {
             $baseUrl = self::getBaseUrl();
-        }
-
-        // The url is not relative.
-        if (preg_match('/^(?:ftp|http|\/\/|\\\\)/', $uri)) {
-            return $uri;
         }
 
         // prepend baseUrl if its present
