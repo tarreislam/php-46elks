@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Tarre\Php46Elks\Client;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
@@ -19,6 +20,47 @@ class ForTestsClass
 
 class PhoneCallTest extends TestCase
 {
+
+    /**
+     * @throws \Tarre\Php46Elks\Exceptions\InvalidSenderIdException
+     * @throws \Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException
+     * @throws \Tarre\Php46Elks\Exceptions\NoRecipientsSetException
+     * @throws \Tarre\Php46Elks\Exceptions\ActionIsAlreadySetException
+     */
+    public function testPhoneDispatcher()
+    {
+        $jsonToMock = <<<EOT
+{
+  "direction": "outgoing",
+  "from": "+46766861004",
+  "created": "2016-11-03T15:08:14.609873",
+  "to": "+46766861004",
+  "state": "ongoing",
+  "id": "c719b1eefbf65b1f89c013e6433dbf537"
+}
+EOT;
+        $FortySixClient = (new Client('x', 'x'))->mock();
+
+        // add mock response
+        $FortySixClient->mockHandler()->append(new Response(200, [], $jsonToMock), new Response(200, [], $jsonToMock));
+
+        // dispatch two calls
+        $recipients = ['+46766861004', '+46766861005'];
+
+        // setup dispatcher with some default values
+        $phone = $FortySixClient->phone()->from('+46766861004')->dispatcher();
+
+        // dispatch requests
+        $results = $phone
+            ->voiceStart((new PhoneCallAction)->play('hello.mp3'))
+            ->setRecipients($recipients)
+            ->send();
+
+        foreach ($results as $result) {
+            $this->assertTrue(in_array($result['to'], $recipients));
+            $this->assertSame('c719b1eefbf65b1f89c013e6433dbf537', $result['id']);
+        }
+    }
 
     public function testPhoneReceiver()
     {
@@ -194,7 +236,7 @@ class PhoneCallTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string) $router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
     }
 
     public function testPhoneActionInvocationVariationB()
@@ -212,7 +254,7 @@ class PhoneCallTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string) $router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
     }
 
     public function testPhoneActionInvocationVariationC()
@@ -230,7 +272,7 @@ class PhoneCallTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string) $router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
     }
 
     /**

@@ -9,10 +9,11 @@ use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallActionRouter;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallDispatcherService;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
 use Tarre\Php46Elks\Clients\PhoneCall\Traits\CommonPhoneTraits;
+use Tarre\Php46Elks\Traits\QueryOptionTrait;
 
 class PhoneCallClient extends BaseClient
 {
-    use CommonPhoneTraits;
+    use QueryOptionTrait, CommonPhoneTraits;
 
     /**
      * @return PhoneCallDispatcherService
@@ -39,11 +40,8 @@ class PhoneCallClient extends BaseClient
         return new PhoneCallActionRouter($baseUrl);
     }
 
-    // TODO Make a phone call
-
     // TODO CALL HISTORY
 
     // TODO GET CALL BY ID
 
-    // TODO CALL FROM CLIENT?
 }

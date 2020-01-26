@@ -4,14 +4,12 @@
 namespace Tarre\Php46Elks\Clients\PhoneCall\Traits;
 
 
-use Tarre\Php46Elks\Clients\SMS\Traits\CommonSmsTraits;
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Utils\Helper;
 
 trait CommonPhoneTraits
 {
-    protected $senderId = null;
-
     /**
      * @param string $senderId
      * @return $this
@@ -21,20 +19,8 @@ trait CommonPhoneTraits
     {
         Helper::validateSenderID($senderId);
 
-        $this->senderId = $senderId;
-
-        return $this;
+        return $this->setOption('from', $senderId);
     }
-
-
-    /**
-     * @return string|null
-     */
-    public function getFrom()
-    {
-        return $this->senderId;
-    }
-
 
     /**
      * @param $url
@@ -47,12 +33,13 @@ trait CommonPhoneTraits
 
 
     /**
-     * @param $url
+     * A webhook URL that returns the first action to execute. See Call actions for details. It is also possible to add a JSON struct for direct call actions without any logic
+     * @param PhoneCallAction $action
      * @return mixed
      */
-    public function voiceStart($url)
+    public function voiceStart(PhoneCallAction $action)
     {
-        return $this->setOption('voice_start', $url);
+        return $this->setOption('voice_start', $action->toJson());
     }
 
 

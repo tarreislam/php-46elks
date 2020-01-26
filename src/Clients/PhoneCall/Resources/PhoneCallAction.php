@@ -47,8 +47,15 @@ class PhoneCallAction
      */
     public function __toString()
     {
-        return json_encode($this->getOptions());
+        return $this->toJson();
+    }
 
+    /**
+     * @return false|string
+     */
+    public function toJson()
+    {
+        return json_encode($this->getOptions());
     }
 
     /**
@@ -111,7 +118,7 @@ class PhoneCallAction
         $this->throwIfNextActionIsDenied();
 
         // prepare url
-        $url =  Helper::url($uri, $options);
+        $url = Helper::url($uri, $options);
 
         return $this->setOption('next', $url);
     }
@@ -169,7 +176,7 @@ class PhoneCallAction
             $this->setOption('skippable', $skippable);
         }
 
-        $url =  Helper::url($url);
+        $url = Helper::url($url);
 
         return $this->decideAction('play', $url);
     }
@@ -207,7 +214,7 @@ class PhoneCallAction
             $this->setOption('repeat', $repeat);
         }
 
-        $urlToPlay =  Helper::url($urlToPlay);
+        $urlToPlay = Helper::url($urlToPlay);
 
         return $this->decideAction('ivr', $urlToPlay);
     }
@@ -222,7 +229,7 @@ class PhoneCallAction
     {
         $this->throwIfActionIsAlreadyDecided();
 
-        $url =  Helper::url($url);
+        $url = Helper::url($url);
 
         $this->setOption('record', $url);
 
@@ -238,7 +245,7 @@ class PhoneCallAction
      */
     public function recordCall($url): self
     {
-        $url =  Helper::url($url);
+        $url = Helper::url($url);
 
         $this->setOption('recordcall', $url);
 
