@@ -221,9 +221,7 @@ class PhoneCallAction
 
         $url = Helper::url($url);
 
-        $this->setOption('record', $url);
-
-        return $this->decideAction('ivr', $url);
+        return $this->decideAction('record', $url);
     }
 
 

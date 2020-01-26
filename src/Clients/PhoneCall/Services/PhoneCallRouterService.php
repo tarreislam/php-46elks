@@ -99,8 +99,17 @@ class PhoneCallRouterService
      */
     public function __toString()
     {
-        $this->throwIfNotCompiled();
         // serialize all routes
+        return $this->toJson();
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function toJson(): string
+    {
+        $this->throwIfNotCompiled();
 
         $serializedCallbacks = array_map(function ($r) {
             return $r;

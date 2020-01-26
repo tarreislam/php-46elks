@@ -10,6 +10,9 @@ use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 final class RouterTest extends TestCase
 {
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneRouterActionHandler()
     {
         $FortySixClient = new Client('x', 'x');
@@ -27,10 +30,13 @@ final class RouterTest extends TestCase
 
             });
 
-        $this->assertJson('{"first":{"next":"http:google.seurl"},"second":{"next":"http:google.seurl"}}', $router->compile());
+        $this->assertSame('{"first":{"next":"url"},"second":{"next":"url"}}', $router->compile()->toJson());
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneRouterActionConnect()
     {
         $FortySixClient = new Client('x', 'x');
@@ -44,9 +50,12 @@ final class RouterTest extends TestCase
                 return $action->connect('+46701474417');
             });
 
-        $this->assertJson('{"testRoute":{"connect":"+46701474417"}}', $router->compile());
+        $this->assertSame('{"testRoute":{"connect":"+46701474417"}}', $router->compile()->toJson());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneRouterActionPlay()
     {
         $FortySixClient = new Client('x', 'x');
@@ -61,9 +70,12 @@ final class RouterTest extends TestCase
                 return $action->play('url.wav');
             });
 
-        $this->assertJson('{"testRoute":{"play":"url.wav"}}', $router->compile());
+        $this->assertSame('{"testRoute":{"play":"url.wav"}}', $router->compile()->toJson());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneRouterActionIvr()
     {
         $FortySixClient = new Client('x', 'x');
@@ -78,9 +90,12 @@ final class RouterTest extends TestCase
                 return $action->ivr('url.wav');
             });
 
-        $this->assertJson('{"testRoute":{"digits":1,"timeout":30,"repeat":3,"ivr":"url.wav"}}', $router->compile());
+        $this->assertSame('{"testRoute":{"digits":1,"timeout":30,"repeat":3,"ivr":"url.wav"}}', $router->compile()->toJson());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneRouterActionRecord()
     {
         $FortySixClient = new Client('x', 'x');
@@ -94,9 +109,12 @@ final class RouterTest extends TestCase
                 return $action->record('url');
             });
 
-        $this->assertJson('{"testRoute":{"record":"url"}}', $router->compile());
+        $this->assertSame('{"testRoute":{"record":"url"}}', $router->compile()->toJson());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneRouterActionRecordCall()
     {
         $FortySixClient = new Client('x', 'x');
@@ -113,9 +131,13 @@ final class RouterTest extends TestCase
                     ->next('someOtherWay');
             });
 
-        $this->assertJson('{"testRoute":{"recordcall":"url","play":"somewav.mp3","next":"http:google.sesomeOtherWay"}}', $router->compile());
+        $this->assertSame('{"testRoute":{"recordcall":"url","play":"somewav.mp3","next":"someOtherWay"}}', $router->compile()->toJson());
     }
 
+
+    /**
+     * @throws \Exception
+     */
     public function testPhoneRouterActionSerialization()
     {
         $FortySixClient = new Client('x', 'x');
@@ -133,7 +155,7 @@ final class RouterTest extends TestCase
             });
 
         // compile to json
-        $encodedArray = (string)$router->compile();
+        $encodedArray = (string)$router->compile()->toJson();
 
         // decode as array
         $decodedJson = json_decode($encodedArray, true);
@@ -149,6 +171,9 @@ final class RouterTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneActionInvocationVariationA()
     {
         $FortySixClient = new Client('x', 'x');
@@ -164,9 +189,12 @@ final class RouterTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', $router->compile()->toJson());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneActionInvocationVariationB()
     {
         $FortySixClient = new Client('x', 'x');
@@ -182,9 +210,12 @@ final class RouterTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile()->toJson());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testPhoneActionInvocationVariationC()
     {
         $FortySixClient = new Client('x', 'x');
@@ -200,7 +231,7 @@ final class RouterTest extends TestCase
                 ->next('anotherRoute');
         });
 
-        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile());
+        $this->assertSame('{"test":{"_invoke":{"class":"Clients\\\\PhoneCall\\\\Services\\\\ForTestsClass","method":"validMethod"},"play":"test.mp3","next":"anotherRoute"}}', (string)$router->compile()->toJson());
     }
 
     /**
