@@ -5,7 +5,7 @@ namespace Tarre\Php46Elks\Clients\SMS\Services;
 
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
-use Tarre\Php46Elks\Clients\SMS\Traits\SenderTrait;
+use Tarre\Php46Elks\Clients\SMS\Traits\CommonSmsTraits;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Exceptions\NoRecipientsSetException;
@@ -16,7 +16,7 @@ use Tarre\Php46Elks\Utils\Helper;
 
 class SMSDispatcherService extends SMSServiceBase implements RequestStructureInterface
 {
-    use QueryOptionTrait, SenderTrait;
+    use QueryOptionTrait, CommonSmsTraits;
 
     protected $lines = [];
     protected $recipients = [];
@@ -142,36 +142,12 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
 
 
     /**
-     *    Send the message as a Flash SMS. The message will be displayed immediately upon arrival and not stored.
-     * @return $this
-     */
-    public function flashSms(): self
-    {
-        return $this->setOption('flashsms', 'yes');
-    }
-
-    /**
-     * This webhook URL will receive a POST request every time the delivery status changes.
-     * @return $this
-     */
-    public function whenDelivered($url): self
-    {
-        // TODO: fullurl här
-        return $this->setOption('whendelivered', $url);
-    }
-
-
-    /**
      * @return array
      * @throws InvalidSenderIdException
      * @throws NoRecipientsSetException
      */
     public function getRequests(): array
     {
-        // se if global dryRun is enabled
-        if ($this->SMSClient->dryRun()) {
-            $this->setOption('dryrun', 'yes');
-        }
         // determine which senderID we want to use.
         $from = $this->getFrom() ?: $this->SMSClient->getFrom();
         $message = $this->getMessage();

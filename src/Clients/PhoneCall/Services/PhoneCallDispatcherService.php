@@ -5,12 +5,12 @@ namespace Tarre\Php46Elks\Clients\PhoneCall\Services;
 
 
 use Tarre\Php46Elks\Clients\BaseClient;
-use Tarre\Php46Elks\Clients\SMS\Traits\SenderTrait;
+use Tarre\Php46Elks\Clients\SMS\Traits\CommonSmsTraits;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 
 class PhoneCallDispatcherService
 {
-    use QueryOptionTrait, SenderTrait;
+    use QueryOptionTrait, CommonSmsTraits;
 
     public function __construct(BaseClient $client)
     {

@@ -12,9 +12,6 @@ use Tarre\Php46Elks\Clients\SMS\SMSClient;
 
 class Client
 {
-    // only for for "SMS" client
-    protected $dryRun = false;
-
     protected $username;
     protected $password;
     protected $baseURL;
@@ -34,26 +31,12 @@ class Client
         $this->password = $password;
         $this->baseURL = $baseURL;
     }
-
-    /**
-     * Enable when you want to verify your API request without actually sending an SMS to a mobile phone.
-     * No SMS message will be sent when this is enabled.
-     * @param bool $state
-     * @return $this
-     */
-    public function dryRun($state = true): self
-    {
-        $this->dryRun = $state;
-
-        return $this;
-    }
-
     /**
      * @return SMSClient
      */
     public function sms(): SMSClient
     {
-        return new SMSClient($this->getGuzzleClient(), $this->dryRun);
+        return new SMSClient($this->getGuzzleClient());
     }
 
 
@@ -62,7 +45,7 @@ class Client
      */
     public function phone(): PhoneCallClient
     {
-        return new PhoneCallClient($this->getGuzzleClient(), $this->dryRun);
+        return new PhoneCallClient($this->getGuzzleClient());
     }
 
 
@@ -103,9 +86,6 @@ class Client
      */
     protected function getGuzzleClient(): GuzzleHttpClient
     {
-        // static $client;
-
-        // if (!$client) {
 
         $options = [
             'base_uri' => $this->baseURL,
@@ -121,7 +101,6 @@ class Client
         }
 
         $client = new GuzzleHttpClient($options);
-        //  }
 
         return $client;
     }
