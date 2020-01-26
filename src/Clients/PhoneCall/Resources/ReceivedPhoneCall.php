@@ -66,6 +66,7 @@ class ReceivedPhoneCall
     }
 
     /**
+     * Return a new router instance
      * @return PhoneCallActionRouter
      */
     public function router(): PhoneCallActionRouter

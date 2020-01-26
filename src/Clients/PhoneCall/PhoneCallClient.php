@@ -7,6 +7,7 @@ namespace Tarre\Php46Elks\Clients\PhoneCall;
 use Tarre\Php46Elks\Clients\BaseClient;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallActionRouter;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallDispatcherService;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallHistoryService;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
 use Tarre\Php46Elks\Clients\PhoneCall\Traits\CommonPhoneTraits;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
@@ -39,8 +40,13 @@ class PhoneCallClient extends BaseClient
         return new PhoneCallActionRouter;
     }
 
-    // TODO CALL HISTORY
+    /**
+     * @return PhoneCallHistoryService
+     */
+    public function history()
+    {
+        return new PhoneCallHistoryService($this);
+    }
 
-    // TODO GET CALL BY ID
 
 }
