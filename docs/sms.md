@@ -1,3 +1,20 @@
+# The SMS client
+
+## Introduction
+
+TODO
+
+#### Available services
+
+This client has four sub services.
+
+* [Dispatcher](#dispatcher)
+* [Receiver](#receiver)
+* [DLR Receiver](#dlr)
+* [History](#history)
+
+
+
 ### Send an SMS
 ```php
 use Tarre\Php46Elks\Client;
