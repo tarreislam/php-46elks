@@ -6,7 +6,7 @@ namespace Tarre\Php46Elks\Clients\PhoneCall\Services;
 
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
-use Tarre\Php46Elks\Clients\PhoneCall\Resources\CallHistoryResource;
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\CallHistory;
 use Tarre\Php46Elks\Interfaces\DataResourceInterface;
 use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
@@ -46,7 +46,7 @@ class PhoneCallHistoryService implements DataResourceInterface
         $payload = [
             'next' => $assoc['next'],
             'data' => array_map(function ($row) {
-                return new CallHistoryResource($row);
+                return new CallHistory($row);
             }, $assoc['data'])
         ];
 
@@ -56,9 +56,9 @@ class PhoneCallHistoryService implements DataResourceInterface
 
     /**
      * @inheritDoc
-     * @return CallHistoryResource
+     * @return CallHistory
      */
-    public function getById(string $id): CallHistoryResource
+    public function getById(string $id): CallHistory
     {
         $request = $this->phoneCallClient->getGuzzleClient()->get(sprintf('calls/%s', $id));
 
@@ -69,6 +69,6 @@ class PhoneCallHistoryService implements DataResourceInterface
         $assoc = json_decode($response, true);
 
         // return SMS object
-        return new CallHistoryResource($assoc);
+        return new CallHistory($assoc);
     }
 }

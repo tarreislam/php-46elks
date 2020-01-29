@@ -73,4 +73,13 @@ class ReceivedPhoneCall
     {
         return new PhoneCallRouterService;
     }
+
+    /**
+     * Return a new action
+     * @return PhoneCallAction
+     */
+    public function action(): PhoneCallAction
+    {
+        return new PhoneCallAction;
+    }
 }

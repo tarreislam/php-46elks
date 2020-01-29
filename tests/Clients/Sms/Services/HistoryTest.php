@@ -7,7 +7,7 @@ namespace Clients\Sms\Services;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Tarre\Php46Elks\Client;
-use Tarre\Php46Elks\Clients\SMS\Resources\MessageResource;
+use Tarre\Php46Elks\Clients\SMS\Resources\Message;
 use Tarre\Php46Elks\Utils\Paginator;
 
 final class HistoryTest extends TestCase
@@ -68,7 +68,7 @@ EOT;
         $this->assertTrue($paginationObject instanceof Paginator);
 
         foreach ($paginationObject->getData() as $smsMessage) {
-            $this->assertTrue($smsMessage instanceof MessageResource);
+            $this->assertTrue($smsMessage instanceof Message);
         }
     }
 
@@ -100,7 +100,7 @@ EOT;
 
         $smsMessage = $history->getById('s17a6dafb12d6b1cabc053d57dac2b9d8');
 
-        $this->assertTrue($smsMessage instanceof MessageResource);
+        $this->assertTrue($smsMessage instanceof Message);
     }
 
 }

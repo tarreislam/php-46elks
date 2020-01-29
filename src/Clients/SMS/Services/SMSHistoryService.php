@@ -4,7 +4,7 @@
 namespace Tarre\Php46Elks\Clients\SMS\Services;
 
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
-use Tarre\Php46Elks\Clients\SMS\Resources\MessageResource;
+use Tarre\Php46Elks\Clients\SMS\Resources\Message;
 use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Interfaces\DataResourceInterface;
@@ -54,7 +54,7 @@ class SMSHistoryService extends SMSServiceBase implements DataResourceInterface
         $payload = [
             'next' => $assoc['next'],
             'data' => array_map(function ($row) {
-                return new MessageResource($row);
+                return new Message($row);
             }, $assoc['data'])
         ];
 
@@ -65,9 +65,9 @@ class SMSHistoryService extends SMSServiceBase implements DataResourceInterface
 
     /**
      * @param string $id
-     * @return MessageResource
+     * @return Message
      */
-    public function getById(string $id): MessageResource
+    public function getById(string $id): Message
     {
         $request = $this->SMSClient->getGuzzleClient()->get(sprintf('%s/%s', $this->getMediaType(), $id));
 
@@ -78,7 +78,7 @@ class SMSHistoryService extends SMSServiceBase implements DataResourceInterface
         $assoc = json_decode($response, true);
 
         // return SMS object
-        return new MessageResource($assoc);
+        return new Message($assoc);
     }
 
 }

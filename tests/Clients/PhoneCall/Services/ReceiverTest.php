@@ -2,6 +2,7 @@
 
 
 namespace Clients\PhoneCall\Services;
+
 use PHPUnit\Framework\TestCase;
 use Tarre\Php46Elks\Client;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
@@ -24,6 +25,10 @@ final class ReceiverTest extends TestCase
                 'to' => $receivedPhoneCall->to(),
                 'created' => $receivedPhoneCall->created()
             ], $_REQUEST);
+
+            return $receivedPhoneCall
+                ->action()
+                ->play('soundfile.mp3');
 
         });
     }

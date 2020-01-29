@@ -8,7 +8,7 @@ use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Utils\Helper;
 
 
-class MessageResource
+class Message
 {
     protected $data;
 

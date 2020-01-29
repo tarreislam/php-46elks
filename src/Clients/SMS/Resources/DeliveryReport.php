@@ -3,7 +3,7 @@
 namespace Tarre\Php46Elks\Clients\SMS\Resources;
 
 
-class DeliveryReportResource
+class DeliveryReport
 {
     protected $request;
 

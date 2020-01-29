@@ -7,7 +7,7 @@ namespace Clients\PhoneCall\Services;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Tarre\Php46Elks\Client;
-use Tarre\Php46Elks\Clients\PhoneCall\Resources\CallHistoryResource;
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\CallHistory;
 use Tarre\Php46Elks\Utils\Paginator;
 
 final class HistoryTest extends TestCase
@@ -64,7 +64,7 @@ EOT;
         $this->assertTrue($paginationObject instanceof Paginator);
 
         foreach ($paginationObject->getData() as $historyMessage) {
-            $this->assertTrue($historyMessage instanceof CallHistoryResource);
+            $this->assertTrue($historyMessage instanceof CallHistory);
         }
 
     }
@@ -113,7 +113,7 @@ EOT;
 
         $callHistoryResource = $history->getById('c70b23624c022a93a87907712cf804aca');
 
-        $this->assertTrue($callHistoryResource instanceof CallHistoryResource);
+        $this->assertTrue($callHistoryResource instanceof CallHistory);
 
     }
 }

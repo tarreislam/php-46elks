@@ -39,13 +39,13 @@ This method must be exposed to `46elks.se` webhooks to work.
 
 ```php
 use Tarre\Php46Elks\Client;
-use Tarre\Php46Elks\Clients\SMS\Resources\MessageResource;
+use Tarre\Php46Elks\Clients\SMS\Resources\Message;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
 $receiver = $Php46ElksClient->sms()->receiver();
 
-$receiver->handleRequest(function (MessageResource $SMS) {
+$receiver->handleRequest(function (Message $SMS) {
     print_r([
         'direction' => $SMS->direction(),
         'id' => $SMS->id(),
@@ -68,7 +68,6 @@ use Tarre\Php46Elks\Client;
 $Php46ElksClient = (new Client('username', 'password'));
 
 $SMS = $Php46ElksClient->sms()->SMSDispatcher();
-
 
 $SMS
     ->from('Php46Elks') 
@@ -167,14 +166,13 @@ $SMS
 
 ```php
 use Tarre\Php46Elks\Client;
-use Tarre\Php46Elks\Clients\SMS\Resources\DeliveryReportResource;
+use Tarre\Php46Elks\Clients\SMS\Resources\DeliveryReport;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-
 $dlr = $Php46ElksClient->sms()->dlr();
 
-$dlr->handleRequest(function (DeliveryReportResource $SMS) {
+$dlr->handleRequest(function (DeliveryReport $SMS) {
     print_r([
         'id' => $SMS->id(),
         'status' => $SMS->status(),
@@ -190,8 +188,6 @@ $dlr->handleRequest(function (DeliveryReportResource $SMS) {
 use Tarre\Php46Elks\Client;
 
 $Php46ElksClient = (new Client('username', 'password'));
-
-
 
 $history = $Php46ElksClient->sms()->history('sms'); // sms or mms
 
@@ -213,6 +209,7 @@ foreach($paginator->getData() as $SMS){
 // get by id
 
 $SMS = $history->getById('enter sms or MMS id here');
+
 print_r([
     'direction' => $SMS->direction(),
     'id' => $SMS->id(),

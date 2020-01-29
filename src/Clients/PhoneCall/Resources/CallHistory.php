@@ -8,7 +8,7 @@ use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 /**
  * @property PhoneCallClient phoneCallClient
  */
-class CallHistoryResource
+class CallHistory
 {
     protected $data;
 
