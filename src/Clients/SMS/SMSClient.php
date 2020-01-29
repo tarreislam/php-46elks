@@ -7,13 +7,13 @@ use Tarre\Php46Elks\Clients\SMS\Services\SMSDispatcherService;
 use Tarre\Php46Elks\Clients\SMS\Services\SMSDLRService;
 use Tarre\Php46Elks\Clients\SMS\Services\SMSHistoryService;
 use Tarre\Php46Elks\Clients\SMS\Services\SMSReceiverService;
-use Tarre\Php46Elks\Clients\SMS\Traits\SenderTrait;
+use Tarre\Php46Elks\Clients\SMS\Traits\CommonSmsTraits;
 use Tarre\Php46Elks\Exceptions\InvalidSMSClientTypeException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 
 class SMSClient extends BaseClient
 {
-    use SenderTrait, QueryOptionTrait;
+    use CommonSmsTraits, QueryOptionTrait;
 
 
     /**

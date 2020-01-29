@@ -1,12 +1,27 @@
+# The SMS client
+
+## Introduction
+
+TODO
+
+#### Available services
+
+This client has four sub services.
+
+* [Dispatcher](#dispatcher)
+* [Receiver](#receiver)
+* [DLR Receiver](#dlr)
+* [History](#history)
+
+
+
 ### Send an SMS
 ```php
 use Tarre\Php46Elks\Client;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-$SMSClient = $Php46ElksClient->sms();
-
-$SMS = $SMSClient->SMSDispatcher();
+$SMS = $Php46ElksClient->sms()->SMSDispatcher();
 
 
 $SMS
@@ -22,9 +37,7 @@ use Tarre\Php46Elks\Client;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-$SMSClient = $Php46ElksClient->sms();
-
-$MMS = $SMSClient->MMSDispatcher();
+$MMS = $Php46ElksClient->sms()->MMSDispatcher();
 
 $MMS
     ->from('<valid number for MMS>')
@@ -43,15 +56,13 @@ This method must be exposed to `46elks.se` webhooks to work.
 
 ```php
 use Tarre\Php46Elks\Client;
-use Tarre\Php46Elks\Clients\SMS\Resources\MessageResource;
+use Tarre\Php46Elks\Clients\SMS\Resources\Message;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-$SMSClient = $Php46ElksClient->sms();
+$receiver = $Php46ElksClient->sms()->receiver();
 
-$receiver = $SMSClient->receiver();
-
-$receiver->handleRequest(function (MessageResource $SMS) {
+$receiver->handleRequest(function (Message $SMS) {
     print_r([
         'direction' => $SMS->direction(),
         'id' => $SMS->id(),
@@ -73,10 +84,7 @@ use Tarre\Php46Elks\Client;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-$SMSClient = $Php46ElksClient->sms();
-
-$SMS = $SMSClient->SMSDispatcher();
-
+$SMS = $Php46ElksClient->sms()->SMSDispatcher();
 
 $SMS
     ->from('Php46Elks') 
@@ -86,7 +94,7 @@ $SMS
     ->content('Hello!')
     ->send();
 
-// alternate way
+// alternative way
 
 $SMS
     ->from('Php46Elks') 
@@ -102,9 +110,7 @@ use Tarre\Php46Elks\Client;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-$SMSClient = $Php46ElksClient->sms();
-
-$SMS = $SMSClient->SMSDispatcher();
+$SMS = $Php46ElksClient->sms()->SMSDispatcher();
 
 $SMS
     ->from('Php46Elks') 
@@ -115,7 +121,8 @@ $SMS
     ->line('Fourth line')
     ->send();
 
-// Alternate way
+// alternative way
+
 $SMS
     ->from('Php46Elks') 
     ->setRecipients(['+46Number1', '+46Number2', '+46Number3'])
@@ -128,24 +135,61 @@ $SMS
     ->send();
 ```
 
+### Send flash messages / "push notifications"
+
+> The message will be displayed immediately upon arrival and not stored.
+
+```php
+use Tarre\Php46Elks\Client;
+
+$Php46ElksClient = (new Client('username', 'password'));
+
+$SMS = $Php46ElksClient->sms()->SMSDispatcher();
+
+$SMS
+    ->from('Php46Elks') 
+    ->flash()
+    ->recipient('+46number')
+    ->line('Hello')
+    ->line('Here is your code')
+    ->line('ABC123')
+    ->send();
+```
+
+### Delivery reports and events
+
+> This webhook URL will receive a POST request every time the delivery status changes. See "Receive delivery reports" to handle these events
+
+```php
+use Tarre\Php46Elks\Client;
+
+$Php46ElksClient = (new Client('username', 'password'));
+
+$SMS = $Php46ElksClient->sms()->SMSDispatcher();
+
+$SMS
+    ->from('Php46Elks') 
+    ->recipient('+46number')
+    ->line('Hello did you receive this message?')
+    ->whenDelivered('https://yourapp.io/dlr')
+    ->send();
+```
+
 ### Receive delivery reports
 
-This method must be exposed to `46elks.se` webhooks to work.
 
 * `$_REQUEST` is used to handle the request data that 46elks sends, it can be overridden by passing another key->val `array` as the second parameter of `handleRequest`
 * If the `MessageResource` is an SMS you can reply to the sender by returning `$SMS->reply('Thanks for the text!')`
 
 ```php
 use Tarre\Php46Elks\Client;
-use Tarre\Php46Elks\Clients\SMS\Resources\DeliveryReportResource;
+use Tarre\Php46Elks\Clients\SMS\Resources\DeliveryReport;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-$SMSClient = $Php46ElksClient->sms();
+$dlr = $Php46ElksClient->sms()->dlr();
 
-$dlr = $SMSClient->dlr();
-
-$dlr->handleRequest(function (DeliveryReportResource $SMS) {
+$dlr->handleRequest(function (DeliveryReport $SMS) {
     print_r([
         'id' => $SMS->id(),
         'status' => $SMS->status(),
@@ -162,9 +206,7 @@ use Tarre\Php46Elks\Client;
 
 $Php46ElksClient = (new Client('username', 'password'));
 
-$SMSClient = $Php46ElksClient->sms();
-
-$history = $SMSClient->history('sms'); // sms or mms
+$history = $Php46ElksClient->sms()->history('sms'); // sms or mms
 
 $paginator = $history->get(); 
 
@@ -184,6 +226,7 @@ foreach($paginator->getData() as $SMS){
 // get by id
 
 $SMS = $history->getById('enter sms or MMS id here');
+
 print_r([
     'direction' => $SMS->direction(),
     'id' => $SMS->id(),

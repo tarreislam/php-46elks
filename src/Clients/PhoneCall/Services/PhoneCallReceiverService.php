@@ -9,7 +9,6 @@ use Tarre\Php46Elks\Interfaces\ReceiverInterface;
 
 class PhoneCallReceiverService implements ReceiverInterface
 {
-
     /**
      * @param callable $fn
      * @param array|null $request

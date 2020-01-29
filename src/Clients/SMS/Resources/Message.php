@@ -5,9 +5,10 @@ namespace Tarre\Php46Elks\Clients\SMS\Resources;
 
 
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
+use Tarre\Php46Elks\Utils\Helper;
 
 
-class MessageResource
+class Message
 {
     protected $data;
 
@@ -83,7 +84,7 @@ class MessageResource
      */
     public function delivered()
     {
-        return $this->data['delivered'] || null;
+        return $this->data['delivered'] ?: null;
     }
 
 
@@ -93,7 +94,7 @@ class MessageResource
      */
     public function status()
     {
-        return $this->data['status'] || null;
+        return $this->data['status'] ?: null;
     }
 
 
@@ -103,7 +104,7 @@ class MessageResource
      */
     public function cost()
     {
-        return $this->data['cost'] || 0;
+        return $this->data['cost'] ?: 0;
     }
 
     /**
@@ -134,9 +135,7 @@ class MessageResource
      */
     public function forward($e164PhoneNumber)
     {
-        if (!preg_match('/^\+\d{1,3}\d+/', $e164PhoneNumber)) {
-            throw new InvalidE164PhoneNumberFormatException($e164PhoneNumber);
-        }
+        Helper::validateE164PhoneNumber($e164PhoneNumber);
 
         return json_encode(['forward' => $e164PhoneNumber]);
     }

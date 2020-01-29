@@ -8,13 +8,11 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Clients\SMS\SMSClient;
+use Tarre\Php46Elks\Utils\Helper;
 
 
 class Client
 {
-    // only for for "SMS" client
-    protected $dryRun = false;
-
     protected $username;
     protected $password;
     protected $baseURL;
@@ -36,16 +34,14 @@ class Client
     }
 
     /**
-     * Enable when you want to verify your API request without actually sending an SMS to a mobile phone.
-     * No SMS message will be sent when this is enabled.
-     * @param bool $state
-     * @return $this
+     * Set the base URL for SMS & MMS resources such as Sms "WhenDelivered" or phone actions "play", "next" etc
+     * This option is persistent in the php process.
+     * @param $url
+     * @return void
      */
-    public function dryRun($state = true): self
+    public static function setResourceBaseUrl($url): self
     {
-        $this->dryRun = $state;
-
-        return $this;
+        Helper::setBaseUrl($url);
     }
 
     /**
@@ -53,7 +49,7 @@ class Client
      */
     public function sms(): SMSClient
     {
-        return new SMSClient($this->getGuzzleClient(), $this->dryRun);
+        return new SMSClient($this->getGuzzleClient());
     }
 
 
@@ -62,7 +58,7 @@ class Client
      */
     public function phone(): PhoneCallClient
     {
-        return new PhoneCallClient;
+        return new PhoneCallClient($this->getGuzzleClient());
     }
 
 
@@ -103,15 +99,18 @@ class Client
      */
     protected function getGuzzleClient(): GuzzleHttpClient
     {
-        // static $client;
-
-        // if (!$client) {
 
         $options = [
             'base_uri' => $this->baseURL,
             GuzzleHttpRequestOptions::AUTH => [
                 $this->username, $this->password
+            ],
+            /*
+             * Guzzle already does this as of guzzle 6
+            GuzzleHttpRequestOptions::HEADERS => [
+                'Content-Type' => 'application/x-www-form-urlencoded'
             ]
+            */
         ];
 
         // For testing purposes only
@@ -121,7 +120,6 @@ class Client
         }
 
         $client = new GuzzleHttpClient($options);
-        //  }
 
         return $client;
     }
