@@ -11,4 +11,10 @@ interface RequestStructureInterface
      * @return array
      */
     public function getRequests(): array;
+
+    /**
+     * Send requests
+     * @return array
+     */
+    public function send(): array;
 }

@@ -4,7 +4,7 @@
 namespace Tarre\Php46Elks\Utils;
 
 
-class Php46ElkPagination
+class Paginator
 {
     protected $items;
 
@@ -30,7 +30,7 @@ class Php46ElkPagination
      */
     public function getNext()
     {
-        return $this->items['next'] || null;
+        return $this->items['next'] ?: null;
     }
 
 }

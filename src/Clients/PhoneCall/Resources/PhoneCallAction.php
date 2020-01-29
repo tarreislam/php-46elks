@@ -4,53 +4,113 @@
 namespace Tarre\Php46Elks\Clients\PhoneCall\Resources;
 
 use InvalidArgumentException;
-use Tarre\Php46Elks\Clients\PhoneCall\Exceptions\ActionIsAlreadySetException;
+use Tarre\Php46Elks\Exceptions\ActionIsAlreadySetException;
+use Tarre\Php46Elks\Exceptions\InvalidActionException;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
+use Tarre\Php46Elks\Utils\Helper;
 
 class PhoneCallAction
 {
     use QueryOptionTrait;
 
-    protected $baseUrl;
     protected $actionAlreadySet;
     protected $denyNextAction;
 
+
     /**
      * PhoneCallAction constructor.
-     * @param $baseUrl
      */
-    public function __construct($baseUrl)
+    public function __construct()
     {
-        $this->baseUrl = $baseUrl;
         $this->actionAlreadySet = false;
         $this->denyNextAction = false;
     }
 
+    public function toArray()
+    {
+        return $this->getOptions();
+    }
 
     /**
      * @return false|string
      */
     public function __toString()
     {
+        return $this->toJson();
+    }
+
+    /**
+     * @return false|string
+     */
+    public function toJson()
+    {
         return json_encode($this->getOptions());
+    }
+
+    /**
+     * Invoke a method class, the returned data wont be used
+     * @param $method
+     * @param null $class
+     * @return $this
+     * @throws InvalidActionException
+     */
+    public function invoke($class, $method = null)
+    {
+        $callable = null;
+
+        if ($this->hasOption('_invoke')) {
+            throw new InvalidActionException('invoke already set');
+        }
+
+        // determine structure
+        if (is_object($class) && is_string($method)) {
+            $callable = [
+                'class' => get_class($class),
+                'method' => $method
+            ];
+        } else if (strpos($class, '@') && is_null($method)) {
+            $parts = explode('@', $class);
+            $callable = [
+                'class' => $parts[0],
+                'method' => $parts[1]
+            ];
+        } else if (is_string($class) && is_string($method)) {
+            $callable = [
+                'class' => $class,
+                'method' => $method
+            ];
+        }
+
+        // see if any combination was ok
+        if (is_null($callable)) {
+            throw new InvalidActionException('Invalid combination');
+        }
+
+        // see if the given class and or method exists
+        if (!method_exists($callable['class'], $callable['method'])) {
+            throw new InvalidActionException(sprintf('Class or method does not exist: %s@%s', $callable['class'], $callable['method']));
+        }
+
+
+        return $this->setOption('_invoke', $callable);
     }
 
 
     /**
      * @param $uri
-     * @return void
+     * @param array|null $options
+     * @return $this
      * @throws ActionIsAlreadySetException
      */
-    public function next($uri): self
+    public function next($uri, array $options = null): self
     {
         $this->throwIfNextActionIsDenied();
 
-        if (!preg_match('/^(?:http|\/\/|\\\\)/', $uri)) {
-            $uri = sprintf('%s/%s', $this->baseUrl, $uri);
-        }
+        // prepare url
+        $url = Helper::url($uri, $options);
 
-        $this->setOption('next', $uri);
+        return $this->setOption('next', $url);
     }
 
 
@@ -75,16 +135,11 @@ class PhoneCallAction
         }
 
         foreach ($e164PhoneNumbers as $number) {
-            if (!preg_match('/^\+\d{1,3}\d+/', $number)) {
-                throw new InvalidE164PhoneNumberFormatException($number);
-            }
-        }
-
-        if (!is_null($callerId) && !preg_match('/^\+\d{1,3}\d+/', $callerId)) {
-            throw new InvalidE164PhoneNumberFormatException($callerId);
+            Helper::validateE164PhoneNumber($number);
         }
 
         if (!is_null($callerId)) {
+            Helper::validateE164PhoneNumber($callerId);
             $this->setOption('callerid', $callerId);
         }
 
@@ -111,6 +166,8 @@ class PhoneCallAction
             $this->setOption('skippable', $skippable);
         }
 
+        $url = Helper::url($url);
+
         return $this->decideAction('play', $url);
     }
 
@@ -131,28 +188,54 @@ class PhoneCallAction
 
         if (!is_numeric($digits)) {
             throw new InvalidArgumentException('digits has to be numeric');
+        } else {
+            $this->setOption('digits', $digits);
         }
 
         if (!is_numeric($timeout)) {
             throw new InvalidArgumentException('timeout has to be numeric');
+        } else {
+            $this->setOption('timeout', $timeout);
         }
 
         if (!is_numeric($repeat)) {
             throw new InvalidArgumentException('repeat to be numeric');
+        } else {
+            $this->setOption('repeat', $repeat);
         }
+
+        $urlToPlay = Helper::url($urlToPlay);
 
         return $this->decideAction('ivr', $urlToPlay);
     }
 
 
     /**
+     * @param $url
+     * @return $this
+     * @throws ActionIsAlreadySetException
+     */
+    public function record($url): self
+    {
+        $this->throwIfActionIsAlreadyDecided();
+
+        $url = Helper::url($url);
+
+        return $this->decideAction('record', $url);
+    }
+
+
+    /**
      * This action records the entire call and sends out a webhook with a link to the recording when the call ends.
      * This action cannot be used by itself, it triggers at the same time as another action.
+     * @param $url
      * @return $this
      */
-    public function recordCall($uri): self
+    public function recordCall($url): self
     {
-        $this->setOption('recordcall', $uri);
+        $url = Helper::url($url);
+
+        $this->setOption('recordcall', $url);
 
         return $this;
     }
@@ -160,15 +243,17 @@ class PhoneCallAction
     /**
      * End the call. If this is your first action, it is possible to control signalling, otherwise only "reject" is allowed.
      * @param string $state
-     * @return void
+     * @return $this
      */
-    public function hangUp($state = 'busy')
+    public function hangUp($state = 'reject')
     {
         $this->denyNextAction = true;
 
         if (!preg_match('/^(?:busy|reject|404)$/', $state)) {
             throw new InvalidArgumentException(sprintf('invalid state "%s"', $state));
         }
+
+        return $this->decideAction('hangup', $state);
     }
 
     /**
@@ -202,4 +287,5 @@ class PhoneCallAction
         $this->setOption($key, $value);
         return $this;
     }
+
 }

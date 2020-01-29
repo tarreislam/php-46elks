@@ -12,17 +12,14 @@ use GuzzleHttp\Client;
 class BaseClient
 {
     protected $guzzleClient;
-    protected $dryRun;
 
     /**
      * BaseClient constructor.
      * @param Client $client
-     * @param $dryRun
      */
-    public function __construct(Client $client, $dryRun)
+    public function __construct(Client $client)
     {
         $this->guzzleClient = $client;
-        $this->dryRun = $dryRun;
     }
 
     /**
@@ -32,13 +29,4 @@ class BaseClient
     {
         return $this->guzzleClient;
     }
-
-    /**
-     * @return bool
-     */
-    public function dryRun(): bool
-    {
-        return $this->dryRun;
-    }
-
 }

@@ -5,62 +5,18 @@ namespace Tarre\Php46Elks\Clients\SMS\Services;
 
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
-use Tarre\Php46Elks\Clients\SMS\Traits\SenderTrait;
-use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
+use Tarre\Php46Elks\Clients\SMS\Traits\CommonSmsTraits;
 use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Exceptions\NoRecipientsSetException;
 use Tarre\Php46Elks\Interfaces\RequestStructureInterface;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
-
+use Tarre\Php46Elks\Traits\RecipientsTrait;
 
 class SMSDispatcherService extends SMSServiceBase implements RequestStructureInterface
 {
-    use QueryOptionTrait, SenderTrait;
+    use QueryOptionTrait, CommonSmsTraits, RecipientsTrait;
 
     protected $lines = [];
-    protected $recipients = [];
-
-    /**
-     * Add another recipients
-     * @param string $e164PhoneNumber
-     * @return $this
-     * @throws InvalidE164PhoneNumberFormatException
-     */
-    public function recipient(string $e164PhoneNumber): self
-    {
-        if (!preg_match('/^\+\d{1,3}\d+/', $e164PhoneNumber)) {
-            throw new InvalidE164PhoneNumberFormatException($e164PhoneNumber);
-        }
-        // add only if not added
-        if (!in_array($e164PhoneNumber, $this->recipients)) {
-            $this->recipients[] = $e164PhoneNumber;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array $recipients
-     * @return $this
-     * @throws InvalidE164PhoneNumberFormatException
-     */
-    public function setRecipients(array $recipients): self
-    {
-        foreach ($recipients as $recipient) {
-            $this->recipient($recipient);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRecipients(): array
-    {
-        return $this->recipients;
-    }
-
 
     /**
      * @param string $line
@@ -133,7 +89,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
      * @param $image
      * @return $this
      */
-    public function image($image)
+    public function image($image): self
     {
         $this->setOption('image', $image);
 
@@ -148,10 +104,6 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
      */
     public function getRequests(): array
     {
-        // se if global dryRun is enabled
-        if ($this->SMSClient->dryRun()) {
-            $this->setOption('dryrun', 'yes');
-        }
         // determine which senderID we want to use.
         $from = $this->getFrom() ?: $this->SMSClient->getFrom();
         $message = $this->getMessage();
@@ -177,7 +129,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
 
         // create request collection with all recipients
         return array_map(function ($recipient) use ($payload) {
-            return $requestCollection[] = [
+            return [
                     'to' => $recipient,
                 ] +
                 $payload;
@@ -186,6 +138,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
 
 
     /**
+     * Send request
      * @return array
      * @throws InvalidSenderIdException
      * @throws NoRecipientsSetException

@@ -4,7 +4,7 @@
 namespace Tarre\Php46Elks\Clients\PhoneCall\Resources;
 
 
-use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverRouter;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallRouterService;
 
 class ReceivedPhoneCall
 {
@@ -14,6 +14,15 @@ class ReceivedPhoneCall
     {
         $this->data = $data;
     }
+
+    /**
+     * @return mixed
+     */
+    public function direction()
+    {
+        return $this->data['direction'];
+    }
+
 
     /**
      * The unique ID of the call in our systems.
@@ -57,10 +66,20 @@ class ReceivedPhoneCall
     }
 
     /**
-     * @return PhoneCallReceiverRouter
+     * Return a new router instance
+     * @return PhoneCallRouterService
      */
-    public function router(): PhoneCallReceiverRouter
+    public function router(): PhoneCallRouterService
     {
-        return new PhoneCallReceiverRouter;
+        return new PhoneCallRouterService;
+    }
+
+    /**
+     * Return a new action
+     * @return PhoneCallAction
+     */
+    public function action(): PhoneCallAction
+    {
+        return new PhoneCallAction;
     }
 }
