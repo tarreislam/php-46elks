@@ -132,7 +132,7 @@ $SMS = $Php46ElksClient->sms()->SMSDispatcher();
 
 $SMS
     ->from('Php46Elks') 
-    ->flashSms()
+    ->flash()
     ->recipient('+46number')
     ->line('Hello')
     ->line('Here is your code')

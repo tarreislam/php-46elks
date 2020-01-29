@@ -5,12 +5,18 @@
 
 ### Installation
 
+*General PHP use*
 ```
 composer require tarre/php-46elks
 ```
 
-### Docs
+*For Laravel*
+```
+tarre/laravel-46elks
+```
 
+### Docs
+* [About](docs/about.md)
 * [SMS and MMS](docs/sms.md)
 * [Phone calls](docs/call.md)
 

@@ -38,7 +38,7 @@ trait CommonSmsTraits
      * Send the message as a Flash SMS. The message will be displayed immediately upon arrival and not stored.
      * @return $this
      */
-    public function flashSms(): self
+    public function flash(): self
     {
         return $this->setOption('flashsms', 'yes');
     }
