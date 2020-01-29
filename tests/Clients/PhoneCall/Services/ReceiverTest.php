@@ -2,10 +2,8 @@
 
 
 namespace Clients\PhoneCall\Services;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Tarre\Php46Elks\Client;
-use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
 
 final class ReceiverTest extends TestCase
