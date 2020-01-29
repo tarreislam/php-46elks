@@ -245,7 +245,7 @@ class PhoneCallAction
      * @param string $state
      * @return $this
      */
-    public function hangUp($state = 'busy')
+    public function hangUp($state = 'reject')
     {
         $this->denyNextAction = true;
 
