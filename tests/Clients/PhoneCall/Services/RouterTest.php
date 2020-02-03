@@ -6,6 +6,9 @@ namespace Clients\PhoneCall\Services;
 use PHPUnit\Framework\TestCase;
 use Tarre\Php46Elks\Client;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallRouterService;
+use Tarre\Php46Elks\Exceptions\RouteActionNotFoundException;
+use Tarre\Php46Elks\Exceptions\RouteNameReservedException;
 
 final class RouterTest extends TestCase
 {
@@ -317,6 +320,59 @@ final class RouterTest extends TestCase
             'hangup' => 'reject'
         ], $routeB);
 
+    }
+
+    public function testDefaultRouteWithException()
+    {
+        // init router
+        $router = new PhoneCallRouterService;
+
+        $router->register('routeB', function (PhoneCallAction $action) {
+            return $action
+                ->connect('+46701474417')
+                ->hangUp('reject');
+        });
+
+        // try register with error
+        try {
+            $router->register('default', function (PhoneCallAction $action) {
+                return $action;
+            });
+            $this->assertTrue(false);
+        } catch (RouteNameReservedException $exception) {
+            $this->assertTrue(true);
+        }
+
+        // try route without default
+        try {
+            $router->handle('invalidRouteName');
+            $this->assertTrue(false);
+        } catch (RouteActionNotFoundException $exception) {
+            $this->assertTrue(true);
+        }
+
+    }
+
+    public function testDefaultRoute()
+    {
+        // init router
+        $router = new PhoneCallRouterService;
+
+        $router->register('routeB', function (PhoneCallAction $action) {
+            return $action
+                ->connect('+46701474417')
+                ->hangUp('reject');
+        });
+
+        $router->default(function (PhoneCallAction $action) {
+            return $action->next('123');
+        });
+
+        $result = $router->handle('invalidRouteName');
+
+        $this->assertSame([
+            'next' => '123'
+        ], $result);
     }
 }
 

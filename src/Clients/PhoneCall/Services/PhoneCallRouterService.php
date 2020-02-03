@@ -7,9 +7,13 @@ namespace Tarre\Php46Elks\Clients\PhoneCall\Services;
 use Exception;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 use Tarre\Php46Elks\Exceptions\InvalidActionException;
+use Tarre\Php46Elks\Exceptions\RouteActionNotFoundException;
+use Tarre\Php46Elks\Exceptions\RouteNameReservedException;
 
 class PhoneCallRouterService
 {
+    const DEFAULT_ROUTE_NAME = 'default';
+
     protected $callbacks;
     protected $compiledCallbacks = [];
     protected $compiled;
@@ -18,10 +22,25 @@ class PhoneCallRouterService
      * @param $name
      * @param callable $fn
      * @return $this
+     * @throws RouteNameReservedException
      */
     public function register($name, callable $fn): self
     {
+        if ($name === 'default') {
+            throw new RouteNameReservedException('Route "default" is a reserved name. use the default() method instead');
+        }
         $this->callbacks[$name] = $fn;
+
+        return $this;
+    }
+
+    /**
+     * @param callable $fn
+     * @return $this
+     */
+    public function default(callable $fn): self
+    {
+        $this->callbacks['default'] = $fn;
 
         return $this;
     }
@@ -68,11 +87,22 @@ class PhoneCallRouterService
      */
     public function handle($action)
     {
-        if ($this->compiled) {
+        //
+        if ($this->compiled && isset($this->compiledCallbacks[$action])) {
             $result = $this->compiledCallbacks[$action];
-        } else {
+        } else if (isset($this->callbacks[$action])) {
             // compile action and return it as an array
             $result = $this->callbacks[$action](new PhoneCallAction)->toArray();
+        } else {
+            // If the registered route was not found. Try to fallback on the default route
+            if ($this->compiled && isset($this->compiledCallbacks[self::DEFAULT_ROUTE_NAME])) {
+                $result = $this->compiledCallbacks[self::DEFAULT_ROUTE_NAME];
+            } elseif (isset($this->callbacks[self::DEFAULT_ROUTE_NAME])) {
+                $result = $this->callbacks[self::DEFAULT_ROUTE_NAME](new PhoneCallAction)->toArray();
+            } else {
+                // no mamez MIERDA
+                throw new RouteActionNotFoundException(sprintf('No suitable route found'));
+            }
         }
 
         // determine if we need to invoke anything
