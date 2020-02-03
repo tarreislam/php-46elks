@@ -39,7 +39,7 @@ class Client
      * @param $url
      * @return void
      */
-    public static function setResourceBaseUrl($url): self
+    public static function setResourceBaseUrl($url)
     {
         Helper::setBaseUrl($url);
     }

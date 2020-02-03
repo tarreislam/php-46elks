@@ -68,7 +68,7 @@ class Helper
 
         // append query params
         if (!is_null($queryParams)) {
-            $url .= http_build_query($queryParams);
+            $url .= '?' . http_build_query($queryParams);
         }
 
         return $url;
