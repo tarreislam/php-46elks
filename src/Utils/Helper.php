@@ -12,6 +12,7 @@ class Helper
     const E164PhoneNumberRE = '\+\d{1,3}\d+';
 
     protected static $baseUrl;
+    protected static $defaultQueryParams;
 
     /**
      * @return mixed
@@ -22,14 +23,24 @@ class Helper
     }
 
     /**
-     * @param $baseUrl
+     * @return array|null
      */
-    public static function setBaseUrl($baseUrl)
+    public static function getDefaultQueryParams()
+    {
+        return self::$defaultQueryParams;
+    }
+
+    /**
+     * @param $baseUrl
+     * @param array $queryParams
+     */
+    public static function setBaseUrl($baseUrl, array $queryParams = null)
     {
         // trim
         $baseUrl = trim($baseUrl);
         // trim ending slashes
         self::$baseUrl = preg_replace('/\/+$/', '', $baseUrl);
+        self::$defaultQueryParams = $queryParams;
     }
 
     /**
@@ -51,6 +62,14 @@ class Helper
             $queryParams = $uri[1];
         }
 
+
+        // join global query params if they exists
+        if (!is_null(self::getDefaultQueryParams()) && !is_null($queryParams)) {
+            $queryParams += self::getDefaultQueryParams();
+        } elseif (!is_null(self::getDefaultQueryParams())) {
+            $queryParams = self::getDefaultQueryParams();
+        }
+
         // trim ending slashes
         $uri = preg_replace('/\/+$/', '', $uri);
 
@@ -68,7 +87,7 @@ class Helper
 
         // append query params
         if (!is_null($queryParams)) {
-            $url .= http_build_query($queryParams);
+            $url .= '?' . http_build_query($queryParams);
         }
 
         return $url;

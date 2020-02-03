@@ -12,7 +12,7 @@ composer require tarre/php-46elks
 
 *For Laravel*
 ```
-tarre/laravel-46elks
+compose require tarre/laravel-46elks
 ```
 
 ### Docs

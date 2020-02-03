@@ -35,13 +35,14 @@ class Client
 
     /**
      * Set the base URL for SMS & MMS resources such as Sms "WhenDelivered" or phone actions "play", "next" etc
-     * This option is persistent in the php process.
+     * This option is persistent in the php process. defaultQueryParams could also be set to always append in every request
      * @param $url
+     * @param array $defaultQueryParams
      * @return void
      */
-    public static function setResourceBaseUrl($url): self
+    public static function setResourceBaseUrl($url, array $defaultQueryParams = null)
     {
-        Helper::setBaseUrl($url);
+        Helper::setBaseUrl($url, $defaultQueryParams);
     }
 
     /**
@@ -119,9 +120,7 @@ class Client
             $options['handler'] = HandlerStack::create($this->mockHandler);
         }
 
-        $client = new GuzzleHttpClient($options);
-
-        return $client;
+        return new GuzzleHttpClient($options);
     }
 
 }
