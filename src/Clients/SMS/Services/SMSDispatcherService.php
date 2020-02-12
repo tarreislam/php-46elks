@@ -149,7 +149,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
         return array_map(function ($request) {
 
             $postRequest = $this->getSMSClient()->getGuzzleClient()->post($this->getMediaType(), [
-                GuzzleHttpRequestOptions::JSON => $request
+                GuzzleHttpRequestOptions::FORM_PARAMS => $request
             ]);
 
             return json_decode($postRequest->getBody()->getContents(), true);

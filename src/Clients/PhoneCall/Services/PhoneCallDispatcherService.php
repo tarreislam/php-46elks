@@ -78,7 +78,7 @@ class PhoneCallDispatcherService implements RequestStructureInterface
         return array_map(function ($request) {
 
             $postRequest = $this->phoneCallClient->getGuzzleClient()->post('calls', [
-                GuzzleHttpRequestOptions::JSON => $request
+                GuzzleHttpRequestOptions::FORM_PARAMS => $request
             ]);
 
             return json_decode($postRequest->getBody()->getContents(), true);
