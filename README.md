@@ -13,15 +13,13 @@ PHP-46Elks is a wrapper for [46elks.se](46elks.se) written to streamline the int
 
 ### Installation
 
-*General PHP use*
+install with composer
+
 ```
 composer require tarre/php-46elks
 ```
 
-*For Laravel (Includes notification driver)*
-```
-composer require tarre/laravel-46elks
-```
+For Laravel, please look at [Laravel-46elks](https://github.com/tarreislam/laravel-46elks) _(Includes notification driver)_
 
 ### Docs
 
