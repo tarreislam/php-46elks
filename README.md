@@ -1,7 +1,7 @@
 ![php 46elks logo](https://i.imgur.com/HW22gy9.png)
 
 # PHP-46Elks
-#### A simple PHP wrapper for [46elks.se](46elks.se)
+#### A PHP wrapper for [46elks.se](46elks.se)
 
 ### Installation
 
@@ -10,9 +10,9 @@
 composer require tarre/php-46elks
 ```
 
-*For Laravel*
+*For Laravel (Includes notification driver)*
 ```
-compose require tarre/laravel-46elks
+composer require tarre/laravel-46elks
 ```
 
 ### Docs
