@@ -3,3 +3,4 @@ vendor/
 .phpunit.result.cache
 test.php
 composer.lock
+coverage.xml

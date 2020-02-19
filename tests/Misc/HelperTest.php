@@ -49,7 +49,7 @@ final class HelperTest extends TestCase
     {
         $this->assertSame('http://localhost/?param1=a&param2=b', Helper::url('', [
             'param1' => 'a',
-            'param2' => 'b'
+            'param2' => 'b',
         ]));
     }
 
@@ -61,7 +61,7 @@ final class HelperTest extends TestCase
         Helper::setBaseUrl('http://localhost', [
             'param1' => 1,
             'param2' => 'b',
-            'param3' => 'c'
+            'param3' => 'c',
         ]);
 
 

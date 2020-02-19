@@ -15,7 +15,7 @@ final class HistoryTest extends TestCase
 
     public function testHistoryGet()
     {
-        $jsonToMock = <<<EOT
+        $jsonToMock = <<<'EOT'
             {
               "data": [
                 {
@@ -75,7 +75,7 @@ EOT;
 
     public function testHistoryGetById()
     {
-        $jsonToMock = <<<EOT
+        $jsonToMock = <<<'EOT'
                 {
                   "id": "s17a6dafb12d6b1cabc053d57dac2b9d8",
                   "created": "2017-03-14T09:52:07.302000",

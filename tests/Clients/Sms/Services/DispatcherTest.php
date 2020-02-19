@@ -44,7 +44,7 @@ final class DispatcherTest extends TestCase
             $this->assertSame([
                 'to' => $expectedRecipients[$key],
                 'from' => 'Php46Elks',
-                'message' => 'Hello'
+                'message' => 'Hello',
             ], $request);
         }
     }
@@ -80,7 +80,7 @@ final class DispatcherTest extends TestCase
             $this->assertSame([
                 'to' => $expectedRecipients[$key],
                 'from' => 'NewName',
-                'message' => 'Hello'
+                'message' => 'Hello',
             ], $request);
         }
     }
@@ -116,7 +116,7 @@ final class DispatcherTest extends TestCase
             $this->assertSame([
                 'to' => $expectedRecipients[$key],
                 'from' => 'NewerName',
-                'message' => 'Hello'
+                'message' => 'Hello',
             ], $request);
         }
     }
@@ -152,7 +152,7 @@ final class DispatcherTest extends TestCase
                 'to' => $expectedRecipients[$key],
                 'from' => 'Php46Elks',
                 'message' => 'Hello',
-                'whendelivered' => 'https://myapp'
+                'whendelivered' => 'https://myapp',
             ], $request);
         }
     }
