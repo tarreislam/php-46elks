@@ -1,19 +1,15 @@
-<p align="center">
-
-![php 46elks logo](https://i.imgur.com/HW22gy9.png)
-
-</p>
+<p align="center"><img src="https://i.imgur.com/HW22gy9.png"></p>
 
 <p align="center">
-[![CircleCI](https://img.shields.io/circleci/build/github/tarreislam/php-46elks?style=flat-square)](https://circleci.com/gh/tarreislam/php-46elks/tree/master)
-[![PackagistPHPver](https://img.shields.io/packagist/php-v/tarre/php-46elks?style=flat-square)](https://packagist.org/packages/tarre/php-46elks)
-[![PackagistPackageVer](https://img.shields.io/packagist/v/tarre/php-46elks?style=flat-square)](https://packagist.org/packages/tarre/php-46elks)
+<a href="https://circleci.com/gh/tarreislam/php-46elks/tree/master"><img src="https://img.shields.io/circleci/build/github/tarreislam/php-46elks?style=flat-square"></a>
+<a href="https://packagist.org/packages/tarre/php-46elks"><img src="https://img.shields.io/packagist/php-v/tarre/php-46elks?style=flat-square"></a>
+<a href="https://packagist.org/packages/tarre/php-46elks"><img src="https://img.shields.io/packagist/v/tarre/php-46elks?style=flat-square"></a>
 </p>
 
 
 ## About PHP-46Elks
 
-PHP-46Elks is a wrapper for [46elks.se](46elks.se) written for PHP
+PHP-46Elks is a wrapper for [46elks.se](46elks.se) written to streamline the interaction between 46elks API and PHP
 
 ### Installation
 
