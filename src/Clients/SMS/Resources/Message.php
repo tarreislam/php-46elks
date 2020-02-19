@@ -117,6 +117,7 @@ class Message
 
 
     /**
+     * The “reply” action sends an automatic reply back when receiving an SMS.
      * To reply to an received SMS, you should print this string with a 200-204 status (IE echo)
      * @param $text
      * @return false|string
@@ -128,15 +129,29 @@ class Message
 
 
     /**
+     * The “forward” action forwards incoming SMS to the defined phone number.
+     * prefix and suffix variables can optionally be used to add text to the beginning or the end of the message.
      * To forward an received SMS, you should print this string with a 200-204 status (IE echo)
      * @param $e164PhoneNumber
+     * @param null|string $prefix
+     * @param null|string $suffix
      * @return false|string
      * @throws InvalidE164PhoneNumberFormatException
      */
-    public function forward($e164PhoneNumber)
+    public function forward($e164PhoneNumber, $prefix = null, $suffix = null)
     {
         Helper::validateE164PhoneNumber($e164PhoneNumber);
 
-        return json_encode(['forward' => $e164PhoneNumber]);
+        $payload = ['forward' => $e164PhoneNumber];
+
+        if ($prefix) {
+            $payload['prefix'] = $prefix;
+        }
+
+        if ($suffix) {
+            $payload['suffix'] = $suffix;
+        }
+
+        return json_encode($payload);
     }
 }
