@@ -1,17 +1,54 @@
 # The Phone client
 
-## Introduction
-
-Unlike other PBX providers 46elks.com lets your application handle incomming and outgoing calls thru HTTP requests. This doc shows you have to achieve that in PHP
+The Phone client wraps the phone section of [46elks.se docs](https://46elks.se/docs/make-call)
 
 #### Available services
-
-This client has four sub services.
-
+* [Dispatcher](#dispatcher)
+    * [Make a phone call](#make-a-phone-call)
 * [Receiver](#receiver)
 * [Router](#router)
 * [Dispatcher](#dispatcher)
 * [History](#history)
+
+
+## <a id="dispatcher"></a> Dispatcher
+
+The dispatcher service handles outgoing phone calls. This is how you access the phone dispatcher
+
+```php
+use Tarre\Php46Elks\Client as Php46ElkClient;
+// Initialize client
+$Php46ElksClient = new Php46ElkClient('username', 'password');
+
+$phone = $Php46ElksClient->phone()->dispatcher();
+```
+
+### <a id="make-a-phone-call"></a> Make a phone call
+
+When you make a phone call
+
+```php
+use Tarre\Php46Elks\Client as Php46ElkClient;
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
+// Initialize client
+$Php46ElksClient = new Php46ElkClient('username', 'password');
+
+$phone = $Php46ElksClient->phone()->dispatcher();
+
+$phone
+    // Set recipeient(s)
+    ->recipient('+4671928398')
+    // Play a file
+    ->voiceStart(function(PhoneCallAction $action){
+        return $action
+            ->play('http://myapp.com/wav/hello.wav')
+            ->hangUp();
+});
+```
+
+
+
+-------- not done --------
 
 ## Receiving phone calls
 

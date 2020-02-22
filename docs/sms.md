@@ -4,8 +4,6 @@ The SMS client wraps the SMS section of [46elks.se docs](https://46elks.se/docs/
 
 ## Available services
 
-Click on the service to read more
-
 * [Dispatcher (SMS & MMS)](#dispatcher)
     * [Send an SMS](#send-an-sms)
     * [Send an MMS](#send-an-mms)

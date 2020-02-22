@@ -23,11 +23,13 @@ trait CommonPhoneTraits
     }
 
     /**
+     * URL to send call data to when call ends.
      * @param $url
      * @return $this
      */
     public function whenHangup($url): self
     {
+        $url = Helper::url($url);
         return $this->setOption('whenhangup', $url);
     }
 
