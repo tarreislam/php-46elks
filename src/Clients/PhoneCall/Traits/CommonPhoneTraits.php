@@ -42,7 +42,7 @@ trait CommonPhoneTraits
         if ($action instanceof PhoneCallAction) {
             $payload = $action->toJson();
         } else {
-            $payload = $action(new PhoneCallAction);
+            $payload = $action(new PhoneCallAction)->toJson();
         }
 
         return $this->setOption('voice_start', $payload);
