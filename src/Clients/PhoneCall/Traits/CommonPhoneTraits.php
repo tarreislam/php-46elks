@@ -34,12 +34,18 @@ trait CommonPhoneTraits
 
     /**
      * A webhook URL that returns the first action to execute. See Call actions for details. It is also possible to add a JSON struct for direct call actions without any logic
-     * @param PhoneCallAction $action
+     * @param PhoneCallAction|callable $action
      * @return mixed
      */
-    public function voiceStart(PhoneCallAction $action)
+    public function voiceStart($action)
     {
-        return $this->setOption('voice_start', $action->toJson());
+        if ($action instanceof PhoneCallAction) {
+            $payload = $action->toJson();
+        } else {
+            $payload = $action(new PhoneCallAction);
+        }
+
+        return $this->setOption('voice_start', $payload);
     }
 
 
