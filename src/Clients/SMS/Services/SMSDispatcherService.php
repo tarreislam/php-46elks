@@ -52,7 +52,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
     public function setLines(array $lines, $trim = true): self
     {
         // reset lines
-        $this->lines = [];
+        $this->removeAllLines();
 
         // add new lines
         foreach ($lines as $line) {
