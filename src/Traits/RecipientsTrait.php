@@ -50,4 +50,13 @@ trait RecipientsTrait
         return $this->recipients;
     }
 
+    /**
+     * Remove added recipients
+     * @return void
+     */
+    public function removeAllRecipients()
+    {
+        $this->recipients = [];
+    }
+
 }

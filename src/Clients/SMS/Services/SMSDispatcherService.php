@@ -44,13 +44,17 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
 
 
     /**
-     * Set the lines of the message
+     * Set the lines of the message. Previously set lines or content() will be removed.
      * @param array $lines
      * @param bool $trim
      * @return $this
      */
     public function setLines(array $lines, $trim = true): self
     {
+        // reset lines
+        $this->lines = [];
+
+        // add new lines
         foreach ($lines as $line) {
             $this->line($line, $trim);
         }
@@ -96,6 +100,14 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
         return $this;
     }
 
+    /**
+     * @return void
+     */
+    public function removeAllLines()
+    {
+        $this->lines = [];
+    }
+
 
     /**
      * @return array
@@ -138,7 +150,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
 
 
     /**
-     * Send request
+     * Send request. This will reset the message content (lines) and recipients, but preserve "from" and custom options
      * @return array
      * @throws InvalidSenderIdException
      * @throws NoRecipientsSetException
@@ -146,7 +158,7 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
     public function send(): array
     {
         // dispatch requests and return a collection of results
-        return array_map(function ($request) {
+        $result = array_map(function ($request) {
 
             $postRequest = $this->getSMSClient()->getGuzzleClient()->post($this->getMediaType(), [
                 GuzzleHttpRequestOptions::FORM_PARAMS => $request
@@ -154,6 +166,12 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
 
             return json_decode($postRequest->getBody()->getContents(), true);
         }, $this->getRequests());
+
+        // reset message data and recipients, but preserve the rest
+        $this->removeAllLines();
+        $this->removeAllRecipients();
+
+        return $result;
     }
 
 }
