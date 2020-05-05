@@ -1,0 +1,3 @@
+[submodule "laradock-php-46elks"]
+	path = laradock-php-46elks
+	url = https://github.com/Laradock/laradock.git

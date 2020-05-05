@@ -10,6 +10,12 @@ The Phone client wraps the phone section of [46elks.se docs](https://46elks.se/d
 * [Receiver](#receiver)
     * [Receive a phone call](#receive-phone-calls)
 * [Phone actions (Incoming and outgoing)](#phone-actions)
+    * [Action: Connect](#action-connect)
+    * [Action: Play](#action-play)
+    * [Action: IVR](#action-IVR)
+    * [Action: Record](#action-record)
+    * [Action: Recordcall](#action-record-call)
+    * [Action: Hangup](#action-hangup)
 * [Phone router (Incoming and outgoing)](#phone-router)
 * [History](#history)
 
@@ -135,14 +141,23 @@ return $receiver->handleRequest(function(ReceivedPhoneCall $phoneCall){
 });
 ```
 
-
 ## <a id="phone-actions"></a> Phone actions (Incoming and outgoing)
 
 Whether you are making outgoing calls or receiving incoming calls, the `PhoneCallAction` class can be accessed to peform certains actions to the active call.
 
 All examples will be presented as received calls without the base client
 
-**connect** _Connect the call to a given number, and in the case of an answer, let the two callers speak to each other._
+* [Connect](#action-connect)
+* [Play](#action-play)
+* [IVR](#action-IVR)
+* [Record](#action-record)
+* [Recordcall](#action-record-call)
+* [Hangup](#action-hangup)
+
+### <a id="action-connect"></a> Action: connect
+
+Connect the call to a given number, and in the case of an answer, let the two callers speak to each other.
+
 ```php
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
@@ -150,11 +165,31 @@ use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
 return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
 
     return $phoneCall
-        ->action() // access phone call actions
-        ->connect('+46701464412'); // connect the caller and this
+        ->action()
+        ->connect('+46701464412');
 });
 ```
-**ivr** _The “ivr” action fills the purpose of playing a sound resource while also retrieving digits pressed by the caller (think customer support menus etc.)_
+
+### <a id="action-play"></a> Action: play
+
+Play an audio file or predefined sound. Could be either a URL on your server or a sound resource provided by 46elks.
+
+```php
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+
+return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
+
+    return $phoneCall
+        ->action()
+        ->play('http://yourapp.com/welcome.mp3'); 
+});
+```
+
+### <a id="action-ivr"></a> Action: IVR
+
+The “ivr” action fills the purpose of playing a sound resource while also retrieving digits pressed by the caller (think customer support menus etc.).
+Once a key is pressed the url in `next` will recieive a post request with an query param called `result` with the key pressed, so if the `3` key was pressed the url would end up like this  `http://yourapp.com/ivr-test.php?result=3`
 
 ```php
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
@@ -167,9 +202,15 @@ return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall 
         ->ivr('welcome.mp3')
         ->next('http://yourapp.com/ivr-test.php'); // go back to the same url. Effectivly creates a loop
 });
-```
 
-**advanced ivr** _You can do some more fancy stuff by assigning actions to different keys_
+
+```
+------------- todo ---------------------------
+------------- todo ---------------------------
+------------- todo ---------------------------
+------------- todo ---------------------------
+------------- todo ---------------------------
+Its also possible to
 
 ```php
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
@@ -189,7 +230,7 @@ return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall 
 ```
 
 
-To learn more about call actions, please consult [this](https://46elks.com/docs/call-actions) portion of the documentation. All call actions are reflected as functions via; `PhoneCallAction`
+To learn more about call actions, please consult [this](https://46elks.com/docs/call-actions) portion of the documentation. All call actions are reflected as functions via `PhoneCallAction`
 
 
 
