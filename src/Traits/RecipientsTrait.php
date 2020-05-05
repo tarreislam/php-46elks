@@ -3,6 +3,7 @@
 
 namespace Tarre\Php46Elks\Traits;
 
+use phpDocumentor\Reflection\Types\This;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
 use Tarre\Php46Elks\Utils\Helper;
 
@@ -52,11 +53,12 @@ trait RecipientsTrait
 
     /**
      * Remove added recipients
-     * @return void
+     * @return self
      */
     public function removeAllRecipients()
     {
         $this->recipients = [];
+        return $this;
     }
 
 }
