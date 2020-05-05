@@ -18,7 +18,6 @@ class PhoneCallAction implements Arrayable
     protected $actionAlreadySet;
     protected $denyNextAction;
 
-
     /**
      * PhoneCallAction constructor.
      */
@@ -97,7 +96,6 @@ class PhoneCallAction implements Arrayable
         return $this->setOption('_invoke', $callable);
     }
 
-
     /**
      * @param $uri
      * @param array|null $options
@@ -113,7 +111,6 @@ class PhoneCallAction implements Arrayable
 
         return $this->setOption('next', $url);
     }
-
 
     /**
      * Connect the call to a given number, and in the case of an answer, let the two callers speak to each other.
@@ -210,7 +207,6 @@ class PhoneCallAction implements Arrayable
         return $this->decideAction('ivr', $urlToPlay);
     }
 
-
     /**
      * @param $url
      * @return $this
@@ -224,7 +220,6 @@ class PhoneCallAction implements Arrayable
 
         return $this->decideAction('record', $url);
     }
-
 
     /**
      * This action records the entire call and sends out a webhook with a link to the recording when the call ends.
