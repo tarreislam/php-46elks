@@ -165,10 +165,28 @@ return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall 
     return $phoneCall
         ->action() // access phone call actions
         ->ivr('welcome.mp3')
-        ->next('http://myapp/next-step-in-the-call');
+        ->next('http://yourapp.com/ivr-test.php'); // go back to the same url. Effectivly creates a loop
 });
 ```
 
+**advanced ivr** _You can do some more fancy stuff by assigning actions to different keys_
+
+```php
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+
+return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
+
+    return $phoneCall
+        ->action() // access phone call actions
+        ->ivr([
+                    'ivr' => 'welcome.mp3', //
+                    '1' => $phoneCall->action()->play('opend-hours.mp3'), // play opening hours
+                    '2' => $phoneCall->action()->connect('+467014674527'), // connect to customer service
+                ])
+        ->next('http://yourapp.com/ivr-test.php'); // go back to the same url. Effectivly creates a loop
+});
+```
 
 
 To learn more about call actions, please consult [this](https://46elks.com/docs/call-actions) portion of the documentation. All call actions are reflected as functions via; `PhoneCallAction`
