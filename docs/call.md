@@ -2,14 +2,16 @@
 
 The Phone client wraps the phone section of [46elks.se docs](https://46elks.se/docs/make-call)
 
-#### Available services
+## Available services
+
 * [Dispatcher](#dispatcher)
     * [Make a phone call](#make-a-phone-call)
+    * [Multiple recipients](#multiple-recipients)
 * [Receiver](#receiver)
-* [Router](#router)
-* [Dispatcher](#dispatcher)
+    * [Receive a phone call](#receive-phone-calls)
+* [Phone actions (Incoming and outgoing)](#phone-actions)
+* [Phone router (Incoming and outgoing)](#phone-router)
 * [History](#history)
-
 
 ## <a id="dispatcher"></a> Dispatcher
 
@@ -25,7 +27,7 @@ $phone = $Php46ElksClient->phone()->dispatcher();
 
 ### <a id="make-a-phone-call"></a> Make a phone call
 
-When you make a phone call
+To make an outgoing phonecall you need a valid number with `VOICE` support, you can get this number from 46elks control panel.
 
 ```php
 use Tarre\Php46Elks\Client as Php46ElkClient;
@@ -36,9 +38,11 @@ $Php46ElksClient = new Php46ElkClient('username', 'password');
 $phone = $Php46ElksClient->phone()->dispatcher();
 
 $phone
-    // Set recipeient(s)
+    // set outgoing number (Must be a valid VOICE enabled e164 number from 46elks dashboard)
+    ->from('+467147147417')
+    // Set recipeient
     ->recipient('+4671928398')
-    // Play a file
+    // When the accepts the call, play a file and hang up
     ->voiceStart(function(PhoneCallAction $action){
         return $action
             ->play('http://myapp.com/wav/hello.wav')
@@ -46,30 +50,60 @@ $phone
 });
 ```
 
+### <a id="multiple-recipients"></a> Multiple recipients
 
+You can use the `setRecipients` method to make multiple outgoing calls in one fell swoop, all calls will be async.
 
--------- not done --------
+```php
+use Tarre\Php46Elks\Client as Php46ElkClient;
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
+// Initialize client
+$Php46ElksClient = new Php46ElkClient('username', 'password');
 
-## Receiving phone calls
+$phone = $Php46ElksClient->phone()->dispatcher();
 
-In this section I will try to show how you can handle incoming phone calls and utilize 46elks full potential
-
-#### Lifecycle 
-
-The lifecycle is straight forward
-
+$phone
+    // set outgoing number (Must be a valid VOICE enabled e164 number from 46elks dashboard)
+    ->from('+467147147417')
+    // Set recipeient(s)
+    ->setRecipients([
+        '+46719283981',
+        '+46719283982',
+        '+46719283983',
+        '+46719283984',
+])
+    // When the accepts the call, play a file and hang up
+    ->voiceStart(function(PhoneCallAction $action){
+        return $action
+            ->play('http://myapp.com/wav/hello.wav')
+            ->hangUp();
+});
 ```
-1.  PEER dials 46elks number
-2.  46elks makes an request to your application via an webhook provided in the 46elks.com interface
-3.  Your application returns a simple json response with the next instruction or `action` as its called
+
+## <a id="receiver"></a> Receiving phone calls
+
+The receiver service handles incoming phone calls. This is how you access the phone receiver
+
+```php
+// Via base client
+use Tarre\Php46Elks\Client as Php46ElkClient;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+// Initialize client
+$Php46ElksClient = new Php46ElkClient('username', 'password');
+
+$phone = $Php46ElksClient->phone()->receiver();
+
+// without client
+$phone = new PhoneCallReceiverService;
 ```
 
-#### Handle your first incoming phone call
+**NOTE:** Receiving phone calls requires your PHP application to be exposed to 46elks.com`s webhooks.
 
-In this example we receive an phone call
+### <a id="receive-phone-calls"></a> Receive a phone call
 
-1. Play a soundfile
-2. Hangup
+Receiving phone calls is pretty straight forward, 46elks.com sends an `POST` request to the web hook to the url you provided in their control panel.
+
+When your app receives the message, you can read certain data and peform some actions. 
 
 ```php
 use Tarre\Php46Elks\Client;
@@ -81,6 +115,19 @@ $receiver = $Php46ElksClient->phone()->receiver();
 
 return $receiver->handleRequest(function(ReceivedPhoneCall $phoneCall){
     
+    // You wont be able to see this print_r result, so replace it with some log function of yours
+    print_r([
+        $phoneCall->callId(),
+        $phoneCall->created(),
+        $phoneCall->direction(),
+        $phoneCall->from(),
+        $phoneCall->to() 
+    ]);
+
+    // You wont be able to see this print_r result, so replace it with some log function of yours
+    print_r($phoneCall->toArray());
+
+    // handle the phone call by playing a soundfile, then hanging up
     return $phoneCall
         ->action() 
         ->play('http://yourapp.com/elks/soundfile.mp3') // play this file
@@ -88,34 +135,47 @@ return $receiver->handleRequest(function(ReceivedPhoneCall $phoneCall){
 });
 ```
 
-#### Incoming phone call details
 
-Besides performing `actions` you could also acquire information about the call via the `ReceivedPhoneCall` class
+## <a id="phone-actions"></a> Phone actions (Incoming and outgoing)
 
+Whether you are making outgoing calls or receiving incoming calls, the `PhoneCallAction` class can be accessed to peform certains actions to the active call.
+
+All examples will be presented as received calls without the base client
+
+**connect** _Connect the call to a given number, and in the case of an answer, let the two callers speak to each other._
 ```php
-use Tarre\Php46Elks\Client;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
 
-$Php46ElksClient = (new Client('username', 'password'));
+return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
 
-$receiver = $Php46ElksClient->phone()->receiver();
-
-return $receiver->handleRequest(function(ReceivedPhoneCall $phoneCall){
-    
-    print_r([
-        $phoneCall->callId(),
-        $phoneCall->direction(),
-        $phoneCall->created(),
-        $phoneCall->from(),
-        $phoneCall->to(),
-    ]);
-   
     return $phoneCall
-        ->action() 
-        ->play('http://yourapp.com/elks/soundfile.mp3')
-        ->hangUp(); // hangup the call
+        ->action() // access phone call actions
+        ->connect('+46701464412'); // connect the caller and this
 });
 ```
+**ivr** _The “ivr” action fills the purpose of playing a sound resource while also retrieving digits pressed by the caller (think customer support menus etc.)_
+
+```php
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+
+return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
+
+    return $phoneCall
+        ->action() // access phone call actions
+        ->ivr('welcome.mp3')
+        ->next('http://myapp/next-step-in-the-call');
+});
+```
+
+
+
+To learn more about call actions, please consult [this](https://46elks.com/docs/call-actions) portion of the documentation. All call actions are reflected as functions via; `PhoneCallAction`
+
+
+
+
 
 ## Using the router
 

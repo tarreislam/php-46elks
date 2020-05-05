@@ -173,14 +173,14 @@ class PhoneCallAction implements Arrayable
      * The “ivr” action fills the purpose of playing a sound resource while also retrieving digits pressed by the caller (think customer support menus etc.).
      *  * Repeat: You can choose how many times the voice response, your sound resource, is repeated using the “repeat” key
      *  * Time out: You can choose how many seconds to wait for input with the “timeout” key.
-     * @param $urlToPlay
+     * @param $urlOrCallable
      * @param int $digits
      * @param int $timeout
      * @param int $repeat
      * @return $this
      * @throws ActionIsAlreadySetException
      */
-    public function ivr($urlToPlay, $digits = 1, $timeout = 30, $repeat = 3): self
+    public function ivr($urlOrCallable, $digits = 1, $timeout = 30, $repeat = 3): self
     {
         $this->throwIfActionIsAlreadyDecided();
 
@@ -202,9 +202,15 @@ class PhoneCallAction implements Arrayable
             $this->setOption('repeat', $repeat);
         }
 
-        $urlToPlay = Helper::url($urlToPlay);
+        // TODO: Gör det möjligt att skicka in en callable som gör exmeplet "You can also supply the commands for the different alternatives directly."
+        if(is_callable($urlOrCallable)){
 
-        return $this->decideAction('ivr', $urlToPlay);
+        }else{
+            $urlOrCallable = Helper::url($urlOrCallable);
+
+        }
+
+        return $this->decideAction('ivr', $urlOrCallable);
     }
 
     /**
