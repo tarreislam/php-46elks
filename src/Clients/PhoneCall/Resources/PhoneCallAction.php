@@ -7,10 +7,11 @@ use InvalidArgumentException;
 use Tarre\Php46Elks\Exceptions\ActionIsAlreadySetException;
 use Tarre\Php46Elks\Exceptions\InvalidActionException;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
+use Tarre\Php46Elks\Interfaces\Arrayable;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Helper;
 
-class PhoneCallAction
+class PhoneCallAction implements Arrayable
 {
     use QueryOptionTrait;
 
@@ -27,7 +28,7 @@ class PhoneCallAction
         $this->denyNextAction = false;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return $this->getOptions();
     }
