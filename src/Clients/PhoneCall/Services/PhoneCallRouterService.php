@@ -26,8 +26,8 @@ class PhoneCallRouterService
      */
     public function register($name, callable $fn): self
     {
-        if ($name === 'default') {
-            throw new RouteNameReservedException('Route "default" is a reserved name. use the default() method instead');
+        if ($name === self::DEFAULT_ROUTE_NAME) {
+            throw new RouteNameReservedException(sprintf('The route name "%s" is reserved. use the default() method instead', self::DEFAULT_ROUTE_NAME));
         }
         $this->callbacks[$name] = $fn;
 
@@ -40,7 +40,7 @@ class PhoneCallRouterService
      */
     public function default(callable $fn): self
     {
-        $this->callbacks['default'] = $fn;
+        $this->callbacks[self::DEFAULT_ROUTE_NAME] = $fn;
 
         return $this;
     }
