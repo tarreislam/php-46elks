@@ -3,7 +3,9 @@
 namespace Tarre\Php46Elks\Clients\SMS\Resources;
 
 
-class DeliveryReport
+use Tarre\Php46Elks\Interfaces\Arrayable;
+
+class DeliveryReport implements Arrayable
 {
     protected $request;
 
@@ -38,5 +40,13 @@ class DeliveryReport
     public function delivered()
     {
         return $this->request['delivered'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array
+    {
+        return $this->request;
     }
 }
