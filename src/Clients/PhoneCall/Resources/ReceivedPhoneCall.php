@@ -5,8 +5,9 @@ namespace Tarre\Php46Elks\Clients\PhoneCall\Resources;
 
 
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallRouterService;
+use Tarre\Php46Elks\Interfaces\Arrayable;
 
-class ReceivedPhoneCall
+class ReceivedPhoneCall implements Arrayable
 {
     protected $data;
 
@@ -81,5 +82,10 @@ class ReceivedPhoneCall
     public function action(): PhoneCallAction
     {
         return new PhoneCallAction;
+    }
+
+    public function toArray(): array
+    {
+        return $this->data;
     }
 }

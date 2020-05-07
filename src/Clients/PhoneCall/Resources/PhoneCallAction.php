@@ -7,16 +7,16 @@ use InvalidArgumentException;
 use Tarre\Php46Elks\Exceptions\ActionIsAlreadySetException;
 use Tarre\Php46Elks\Exceptions\InvalidActionException;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
+use Tarre\Php46Elks\Interfaces\Arrayable;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Helper;
 
-class PhoneCallAction
+class PhoneCallAction implements Arrayable
 {
     use QueryOptionTrait;
 
     protected $actionAlreadySet;
     protected $denyNextAction;
-
 
     /**
      * PhoneCallAction constructor.
@@ -27,7 +27,7 @@ class PhoneCallAction
         $this->denyNextAction = false;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return $this->getOptions();
     }
@@ -96,7 +96,6 @@ class PhoneCallAction
         return $this->setOption('_invoke', $callable);
     }
 
-
     /**
      * @param $uri
      * @param array|null $options
@@ -112,7 +111,6 @@ class PhoneCallAction
 
         return $this->setOption('next', $url);
     }
-
 
     /**
      * Connect the call to a given number, and in the case of an answer, let the two callers speak to each other.
@@ -175,14 +173,14 @@ class PhoneCallAction
      * The “ivr” action fills the purpose of playing a sound resource while also retrieving digits pressed by the caller (think customer support menus etc.).
      *  * Repeat: You can choose how many times the voice response, your sound resource, is repeated using the “repeat” key
      *  * Time out: You can choose how many seconds to wait for input with the “timeout” key.
-     * @param $urlToPlay
+     * @param string|array $urlOrArray
      * @param int $digits
      * @param int $timeout
      * @param int $repeat
      * @return $this
      * @throws ActionIsAlreadySetException
      */
-    public function ivr($urlToPlay, $digits = 1, $timeout = 30, $repeat = 3): self
+    public function ivr($urlOrArray, $digits = 1, $timeout = 30, $repeat = 3): self
     {
         $this->throwIfActionIsAlreadyDecided();
 
@@ -204,11 +202,31 @@ class PhoneCallAction
             $this->setOption('repeat', $repeat);
         }
 
-        $urlToPlay = Helper::url($urlToPlay);
+        if (is_array($urlOrArray)) {
 
-        return $this->decideAction('ivr', $urlToPlay);
+            // grab next next action, either from the first array element or the key 'next'
+            if (isset($urlOrArray['ivr'])) {
+                $url = $urlOrArray['ivr'];
+                unset($urlOrArray['ivr']);
+            } else {
+                $url = array_shift($urlOrArray);
+            }
+
+            foreach ($urlOrArray as $key => $value) {
+
+                if ($value instanceOf PhoneCallAction) {
+                    $value = $value->toArray();
+                }
+
+                $this->setOption($key, $value);
+            }
+
+        } else {
+            $url = $urlOrArray;
+        }
+
+        return $this->decideAction('ivr', Helper::url($url));
     }
-
 
     /**
      * @param $url
@@ -223,7 +241,6 @@ class PhoneCallAction
 
         return $this->decideAction('record', $url);
     }
-
 
     /**
      * This action records the entire call and sends out a webhook with a link to the recording when the call ends.

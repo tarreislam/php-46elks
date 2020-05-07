@@ -52,11 +52,12 @@ trait RecipientsTrait
 
     /**
      * Remove added recipients
-     * @return void
+     * @return self
      */
     public function removeAllRecipients()
     {
         $this->recipients = [];
+        return $this;
     }
 
 }

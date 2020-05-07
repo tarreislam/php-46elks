@@ -39,7 +39,7 @@ final class HelperTest extends TestCase
      */
     public function testGenerateUrl()
     {
-        $this->assertSame('http://localhost/', Helper::url(''));
+        $this->assertSame('http://localhost', Helper::url(''));
     }
 
     /**
@@ -47,7 +47,7 @@ final class HelperTest extends TestCase
      */
     public function testGenerateUrlWithParams()
     {
-        $this->assertSame('http://localhost/?param1=a&param2=b', Helper::url('', [
+        $this->assertSame('http://localhost?param1=a&param2=b', Helper::url('', [
             'param1' => 'a',
             'param2' => 'b',
         ]));
@@ -65,7 +65,7 @@ final class HelperTest extends TestCase
         ]);
 
 
-        $this->assertSame('http://localhost/?param1=a&param2=b&param3=c', Helper::url('', [
+        $this->assertSame('http://localhost?param1=a&param2=b&param3=c', Helper::url('', [
             'param1' => 'a',
             'param2' => 'b',
         ]));
@@ -88,6 +88,8 @@ final class HelperTest extends TestCase
      */
     public function testGenerateUrlWithRelativeName()
     {
+        Helper::setBaseUrl('http://localhost');
+
         $this->assertSame('http://localhost/imRelative', Helper::url('imRelative'));
     }
 

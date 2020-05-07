@@ -5,10 +5,11 @@ namespace Tarre\Php46Elks\Clients\SMS\Resources;
 
 
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
+use Tarre\Php46Elks\Interfaces\Arrayable;
 use Tarre\Php46Elks\Utils\Helper;
 
 
-class Message
+class Message implements Arrayable
 {
     protected $data;
 
@@ -153,5 +154,10 @@ class Message
         }
 
         return json_encode($payload);
+    }
+
+    public function toArray(): array
+    {
+        return $this->data;
     }
 }

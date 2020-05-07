@@ -70,9 +70,6 @@ class Helper
             $queryParams = self::getDefaultQueryParams();
         }
 
-        // trim ending slashes
-        $uri = preg_replace('/\/+$/', '', $uri);
-
         // grab baseUrl
         if (is_null($baseUrl)) {
             $baseUrl = self::getBaseUrl();
@@ -84,6 +81,9 @@ class Helper
         } else {
             $url = $uri;
         }
+
+        // trim ending slashes
+        $url = preg_replace('/\/+$/', '', $url);
 
         // append query params
         if (!is_null($queryParams)) {

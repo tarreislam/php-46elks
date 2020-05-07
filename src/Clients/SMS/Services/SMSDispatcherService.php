@@ -101,11 +101,12 @@ class SMSDispatcherService extends SMSServiceBase implements RequestStructureInt
     }
 
     /**
-     * @return void
+     * @return self
      */
     public function removeAllLines()
     {
         $this->lines = [];
+        return $this;
     }
 
 
