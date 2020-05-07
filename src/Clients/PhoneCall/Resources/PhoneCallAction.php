@@ -213,6 +213,11 @@ class PhoneCallAction implements Arrayable
             }
 
             foreach ($urlOrArray as $key => $value) {
+
+                if ($value instanceOf PhoneCallAction) {
+                    $value = $value->toArray();
+                }
+
                 $this->setOption($key, $value);
             }
 

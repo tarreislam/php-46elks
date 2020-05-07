@@ -298,7 +298,6 @@ $receiver->handleRequest(function (Message $SMS) {
 });
 ```
 
-
 ## <a id="history"></a> History
 
 This is how you fetch [SMS history](https://46elks.se/docs/sms-history) from 46elks.

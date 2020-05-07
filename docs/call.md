@@ -12,13 +12,17 @@ The Phone client wraps the phone section of [46elks.se docs](https://46elks.se/d
 * [Phone actions (Incoming and outgoing)](#phone-actions)
     * [Action: Connect](#action-connect)
     * [Action: Play](#action-play)
-    * [Action: IVR](#action-IVR)
+    * [Action: IVR](#action-ivr)
     * [Action: Record](#action-record)
     * [Action: Recordcall](#action-record-call)
     * [Action: Hangup](#action-hangup)
 * [Phone router (Incoming and outgoing)](#phone-router)
+    * [Basic example](#router-basics)
+    * [Caching routes as json "Compiling"](#router-compiler)
 * [History](#history)
-
+   * [Get all](#get-all)
+   * [Filter requests](#filter-requests)
+   * [Get single](#get-single)
 ## <a id="dispatcher"></a> Dispatcher
 
 The dispatcher service handles outgoing phone calls. This is how you access the phone dispatcher
@@ -51,7 +55,7 @@ $phone
     // When the accepts the call, play a file and hang up
     ->voiceStart(function(PhoneCallAction $action){
         return $action
-            ->play('http://myapp.com/wav/hello.wav')
+            ->play('http://yourapp.com/wav/hello.wav')
             ->hangUp();
 });
 ```
@@ -81,7 +85,7 @@ $phone
     // When the accepts the call, play a file and hang up
     ->voiceStart(function(PhoneCallAction $action){
         return $action
-            ->play('http://myapp.com/wav/hello.wav')
+            ->play('http://yourapp.com/wav/hello.wav')
             ->hangUp();
 });
 ```
@@ -149,7 +153,7 @@ All examples will be presented as received calls without the base client
 
 * [Connect](#action-connect)
 * [Play](#action-play)
-* [IVR](#action-IVR)
+* [IVR](#action-ivr)
 * [Record](#action-record)
 * [Recordcall](#action-record-call)
 * [Hangup](#action-hangup)
@@ -200,17 +204,11 @@ return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall 
     return $phoneCall
         ->action() // access phone call actions
         ->ivr('welcome.mp3')
-        ->next('http://yourapp.com/ivr-test.php'); // go back to the same url. Effectivly creates a loop
+        ->next('http://yourapp.com/ivr-test.php'); // go back to the same url. Effectively a loop
 });
-
-
 ```
-------------- todo ---------------------------
-------------- todo ---------------------------
-------------- todo ---------------------------
-------------- todo ---------------------------
-------------- todo ---------------------------
-Its also possible to
+
+You can also supply phone actions for the different alternatives directly.
 
 ```php
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
@@ -220,25 +218,77 @@ return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall 
 
     return $phoneCall
         ->action() // access phone call actions
-        ->ivr([
-                    'ivr' => 'welcome.mp3', //
-                    '1' => $phoneCall->action()->play('opend-hours.mp3'), // play opening hours
-                    '2' => $phoneCall->action()->connect('+467014674527'), // connect to customer service
+        ->ivr([ 
+                    'ivr' => 'welcome.mp3', //play this when call is connected
+                    '1' => $phoneCall->action()->play('hours.mp3'), // if the caller presses 1, play opening hours
+                    '2' => $phoneCall->action()->connect('+467014674527'), // if the caller presses 2, connect them to customer service
                 ])
-        ->next('http://yourapp.com/ivr-test.php'); // go back to the same url. Effectivly creates a loop
+        ->next('http://yourapp.com/ivr-test.php'); // repeat
 });
 ```
 
+### <a id="action-record"></a> Action: Record 
+
+This action records the voice of the caller.
+
+```php
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+
+return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
+
+    return $phoneCall
+        ->action() // access phone call actions
+        ->recordCall('https://yourapp.example/elks/recordings')
+        ->connect('+46780121241')// Or any other action
+        ->next('https://yourapp.example/elks/calls'); // optional
+});
+```
+
+### <a id="action-record-call"></a> Action: Record call 
+
+This action records the entire call and sends out a webhook with a link to the recording when the call ends. This action cannot be used by itself, it triggers at the same time as another action.
+```php
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+
+return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
+
+    return $phoneCall
+        ->action() // access phone call actions
+        ->record('https://yourapp.example/elks/recordings')
+        ->next('https://yourapp.example/elks/calls'); // optional
+});
+```
+
+### <a id="action-hangup"></a> Action: Hangup 
+
+End the call. If this is your first action, it is possible to control signalling, otherwise only "reject" is allowed.
+
+```php
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\ReceivedPhoneCall;
+use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
+
+return (new PhoneCallReceiverService)->handleRequest(function(ReceivedPhoneCall $phoneCall){
+
+    return $phoneCall
+        ->action() // access phone call actions
+        ->play('https://yourapp.example/elks/recordings')
+        ->hangUp('reject'); // optional
+});
+```
 
 To learn more about call actions, please consult [this](https://46elks.com/docs/call-actions) portion of the documentation. All call actions are reflected as functions via `PhoneCallAction`
 
+## <a id="phone-router"></a> Phone router
 
+The phone router handles incoming requests.
 
+<p align="center">
+<img src="https://i.imgur.com/1X0hr9F.jpg"></img>
+</p>
 
-
-## Using the router
-
-Sometimes you want to do more. In those cases you could use the phone router service. Unlike the receiver service, the router service is used to handle multiple actions in a simple way
+### <a id="router-basics"></a> Basic example
 
 **This is the scenario:**
 > When you dial +46xxxxx
@@ -248,22 +298,20 @@ Sometimes you want to do more. In those cases you could use the phone router ser
 > Option 1 just plays a soundfile then hangs up
 > Option 2 connets the caller to another number
 
-
-> Assuming this code exists in `http://yourapp.com/elks/calls.php` and `voice_start` @ 46elks.com points to `http://yourapp.com/elks/calls.php?action=ivr`
-
+> Assuming this code exists in `http://yourapp.com/elks/calls` and `voice_start` @ 46elks.com points to `http://yourapp.com/elks/calls`
 
 ```php
 use Tarre\Php46Elks\Client;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 
-/* Set the baseURL for all actions and webhooks */
-Client::setResourceBaseUrl('http://yourapp.com/elks/calls.php');
+/* Set the baseURL for all actions and webhooks (Optional) */
+Client::setResourceBaseUrl('http://yourapp.com/elks/calls');
 
 $Php46ElksClient = (new Client('username', 'password'));
 
 $router = $Php46ElksClient->phone()->router();
 
-$router->register('ivr', function(PhoneCallAction $action){
+$router->default(function(PhoneCallAction $action){
     return $action
         ->ivr('choices.mp3')
         ->next('', ['action' => 'ivr']); // This will create a loopback to this action again
@@ -283,7 +331,7 @@ $router->register('ivr2', function(PhoneCallAction $action){
 // At first glance, this looks weird. But it makes sense.
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $digits = isset($_REQUEST['digits']) ? $_REQUEST['digits'] : '';
-// As you saw above this example, we assumed the calls initial endpoint is `calls.php?action=ivr`
+// As you saw above this example, we assumed the calls initial endpoint is `.../calls`
 // And according to https://46elks.se/docs/voice-ivr the IVR action will make a request with an added query param called `digits`
 // That means that when the user inputs 1 on their phone, 46elks will make this request `calls.php?action=ivr&digits=1`
 // Therefore we can match those 
@@ -294,10 +342,120 @@ $actionName = $action . $digits;
 return $router->handle($actionName);
 ```
 
-TODO: more examples on receving phone calls and using actions standalone in apps that already have an router.
+### <a id="router-compiler"></a> Caching routes as json "Compiling"
 
-## Dispatching phone calls
+if you want to save different routes dynamically you can save and load routes with `compile`
 
-TODO
+```php
+use Tarre\Php46Elks\Client;
+use Tarre\Php46Elks\Clients\PhoneCall\Resources\PhoneCallAction;
 
+/* Set the baseURL for all actions and webhooks (Optional) */
+Client::setResourceBaseUrl('http://yourapp.com/elks/calls');
 
+$Php46ElksClient = (new Client('username', 'password'));
+
+$router = $Php46ElksClient->phone()->router();
+
+$router->default(function(PhoneCallAction $action){
+    return $action
+        ->ivr('choices.mp3')
+        ->next('', ['action' => 'ivr']); // This will create a loopback to this action again
+});
+
+// save 
+$router->compile();
+
+$compiledRoutes = $router->toJson();
+
+// load json
+$router->compile(json_decode($compiledRoutes, true));
+
+```
+
+## <a id="history"></a> History
+
+This is how you fetch [call history](https://46elks.se/docs/call-history) from 46elks.
+
+_Notes_
+* Log retention is set in your account settings
+
+### <a id="get-all"></a> Get all history
+
+```php
+use Tarre\Php46Elks\Client as Php46ElkClient;
+// Initialize client
+$Php46ElksClient = new Php46ElkClient('username', 'password');
+
+$history = $Php46ElksClient->phoneCall()->history();
+
+$paginator = $history->get(); 
+
+foreach($paginator->getData() as $PhoneCall){
+    print_r([
+        'direction' => $PhoneCall->direction(),
+        'id' => $PhoneCall->id(),
+        'from' => $PhoneCall->from(),
+        'to' => $PhoneCall->to(),
+        'created' => $PhoneCall->created(),
+        'cost' => $PhoneCall->cost() 
+    ]);
+}
+```
+
+### <a id="filter"></a> Filter requests
+
+There exists a couple of filter settings you can use to search and narrow your results
+
+* `start($date)` Retrieve PhoneCall before this date.
+* `end($date)` Retrieve PhoneCall after this date.
+* `limit($number)` Limit the number of results on each page.
+
+These filters _MUST_ to be used before `get` is invoked. After `get` has been invoked, you can use `next()` to get the next "page"
+
+```php
+use Tarre\Php46Elks\Client as Php46ElkClient;
+// Initialize client
+$Php46ElksClient = new Php46ElkClient('username', 'password');
+
+$history = $Php46ElksClient->phone()->history(); 
+
+$paginator = $history
+    ->start('2020-02-14T09:52:07.302000')
+    ->end('2020-02-15T09:52:07.302000')
+    ->get(); 
+
+foreach($paginator->getData() as $PhoneCall){
+    print_r([
+        'direction' => $PhoneCall->direction(),
+        'id' => $PhoneCall->id(),
+        'from' => $PhoneCall->from(),
+        'to' => $PhoneCall->to(),
+        'created' => $PhoneCall->created(),
+        'cost' => $PhoneCall->cost() 
+    ]);
+}
+```
+
+### <a id="get-single"></a> Get single
+
+To retrieve a single resource you can invoke the `getById` instead of `get`
+
+```php
+use Tarre\Php46Elks\Client as Php46ElkClient;
+// Initialize client
+$Php46ElksClient = new Php46ElkClient('username', 'password');
+
+$history = $Php46ElksClient->phone()->history();
+
+$PhoneCall = $history->getById('enter phoneCall id here');
+
+print_r([
+    'direction' => $PhoneCall->direction(),
+    'id' => $PhoneCall->id(),
+    'from' => $PhoneCall->from(),
+    'to' => $PhoneCall->to(),
+    'created' => $PhoneCall->created(),
+    'cost' => $PhoneCall->cost() 
+]);
+```
