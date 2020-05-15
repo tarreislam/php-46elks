@@ -69,6 +69,43 @@ EOT;
 
     }
 
+    public function testHistoryGetWithMissingData()
+    {
+        $jsonToMock = <<<EOT
+                {
+                  "data": [
+                    {
+                      "direction": "ongoing",
+                      "from": "+46766861004",
+                      "to": "+46700371815",
+                      "start": "2018-02-20T11:55:41.528000",
+                      "state": "success",
+                      "id": "c70b23624c022a93a87907712cf804aca"
+                    }
+                  ]
+                }
+EOT;
+
+
+        // Initialize the main client with mock
+        $FortySixClient = (new Client('x', 'x'))->mock();
+
+        // add mock response
+        $FortySixClient->mockHandler()->append(new Response(200, [], $jsonToMock));
+
+        // Create our SMS client and set a different FROM
+        $history = $FortySixClient->phone()->history();
+
+        $paginationObject = $history->get();
+
+        $this->assertTrue($paginationObject instanceof Paginator);
+
+        foreach ($paginationObject->getData() as $historyMessage) {
+            $this->assertTrue($historyMessage instanceof CallHistory);
+        }
+
+    }
+
     public function testHistoryGetById()
     {
         $jsonToMock = <<<EOT

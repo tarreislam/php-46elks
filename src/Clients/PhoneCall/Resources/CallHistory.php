@@ -4,11 +4,12 @@
 namespace Tarre\Php46Elks\Clients\PhoneCall\Resources;
 
 use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
+use Tarre\Php46Elks\Interfaces\Arrayable;
 
 /**
  * @property PhoneCallClient phoneCallClient
  */
-class CallHistory
+class CallHistory implements Arrayable
 {
     protected $data;
 
@@ -19,36 +20,36 @@ class CallHistory
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function direction(): string
+    public function direction()
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function from(): string
+    public function from()
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function to(): string
+    public function to()
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function created(): string
+    public function created()
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
@@ -57,25 +58,25 @@ class CallHistory
      */
     public function actions(): array
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : [];
     }
 
 
     /**
-     * @return array
+     * @return string|null
      */
-    public function start(): string
+    public function start()
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function state(): string
+    public function state()
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
@@ -84,7 +85,7 @@ class CallHistory
      */
     public function cost(): int
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : 0;
     }
 
 
@@ -93,7 +94,7 @@ class CallHistory
      */
     public function duration(): int
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : 0;
     }
 
 
@@ -102,15 +103,23 @@ class CallHistory
      */
     public function legs(): array
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : [];
     }
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function id(): string
+    public function id()
     {
-        return $this->data[__METHOD__];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array
+    {
+        return $this->data;
     }
 }

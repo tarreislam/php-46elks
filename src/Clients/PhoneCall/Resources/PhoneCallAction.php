@@ -164,7 +164,9 @@ class PhoneCallAction implements Arrayable
             $this->setOption('skippable', $skippable);
         }
 
-        $url = Helper::url($url);
+        if($url !== 'sound/beep'){
+            $url = Helper::url($url);
+        }
 
         return $this->decideAction('play', $url);
     }
@@ -261,10 +263,12 @@ class PhoneCallAction implements Arrayable
      * End the call. If this is your first action, it is possible to control signalling, otherwise only "reject" is allowed.
      * @param string $state
      * @return $this
+     * @throws ActionIsAlreadySetException
      */
     public function hangUp($state = 'reject')
     {
         $this->denyNextAction = true;
+        $this->throwIfActionIsAlreadyDecided();
 
         if (!preg_match('/^(?:busy|reject|404)$/', $state)) {
             throw new InvalidArgumentException(sprintf('invalid state "%s"', $state));

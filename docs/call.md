@@ -285,7 +285,7 @@ To learn more about call actions, please consult [this](https://46elks.com/docs/
 The phone router handles incoming requests.
 
 <p align="center">
-<img src="https://i.imgur.com/1X0hr9F.jpg"></img>
+<img src="https://i.imgur.com/1X0hr9F.jpg">
 </p>
 
 ### <a id="router-basics"></a> Basic example

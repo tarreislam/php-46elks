@@ -21,91 +21,91 @@ class Message implements Arrayable
 
     /**
      * The unique id of the message in our systems.
-     * @return mixed
+     * @return string|null
      */
     public function id()
     {
-        return $this->data['id'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The sender of the SMS.
-     * @return mixed
+     * @return string|null
      */
     public function from()
     {
-        return $this->data['from'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The phone number the SMS was sent to.
-     * @return mixed
+     * @return string|null
      */
     public function to()
     {
-        return $this->data['to'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The contents of the SMS.
-     * @return mixed
+     * @return string|null
      */
     public function message()
     {
-        return $this->data['message'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The direction of the SMS. "incoming" or "outgoing"
-     * @return mixed
+     * @return string|null
      */
     public function direction()
     {
-        return $this->data['direction'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The time in UTC when the SMS object was created in our systems.
-     * @return mixed
+     * @return string|null
      */
     public function created()
     {
-        return $this->data['created'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The time in UTC when the SMS was delivered.
-     * @return mixed
+     * @return string|null
      */
     public function delivered()
     {
-        return $this->data['delivered'] ?: null;
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * created (recieved by our servers), sent (sent from us to the carrier), delivered (confirmed delivered to the recipient) or failed (could not be delivered)
-     * @return mixed
+     * @return string|null
      */
     public function status()
     {
-        return $this->data['status'] ?: null;
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The cost of sending the SMS. Specified in 10000s of the currency of the account (SEK or EUR). For example, for an account with currency SEK, a cost of 3500 means that it cost 0.35SEK. Learn more about the details of pricing
-     * @return mixed
+     * @return integer
      */
     public function cost()
     {
-        return $this->data['cost'] ?: 0;
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : 0;
     }
 
     /**
@@ -113,7 +113,7 @@ class Message implements Arrayable
      */
     public function images(): array
     {
-        return $this->data['images'] ?: [];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : [];
     }
 
 
