@@ -31,7 +31,7 @@ class Message implements Arrayable
 
     /**
      * The sender of the SMS.
-     * @return string
+     * @return string|null
      */
     public function from()
     {
@@ -41,7 +41,7 @@ class Message implements Arrayable
 
     /**
      * The phone number the SMS was sent to.
-     * @return string
+     * @return string|null
      */
     public function to()
     {
@@ -51,7 +51,7 @@ class Message implements Arrayable
 
     /**
      * The contents of the SMS.
-     * @return mixed
+     * @return string|null
      */
     public function message()
     {
@@ -61,7 +61,7 @@ class Message implements Arrayable
 
     /**
      * The direction of the SMS. "incoming" or "outgoing"
-     * @return string
+     * @return string|null
      */
     public function direction()
     {
@@ -71,7 +71,7 @@ class Message implements Arrayable
 
     /**
      * The time in UTC when the SMS object was created in our systems.
-     * @return mixed
+     * @return string|null
      */
     public function created()
     {
@@ -81,7 +81,7 @@ class Message implements Arrayable
 
     /**
      * The time in UTC when the SMS was delivered.
-     * @return mixed
+     * @return string|null
      */
     public function delivered()
     {
@@ -91,7 +91,7 @@ class Message implements Arrayable
 
     /**
      * created (recieved by our servers), sent (sent from us to the carrier), delivered (confirmed delivered to the recipient) or failed (could not be delivered)
-     * @return mixed
+     * @return string|null
      */
     public function status()
     {
@@ -101,7 +101,7 @@ class Message implements Arrayable
 
     /**
      * The cost of sending the SMS. Specified in 10000s of the currency of the account (SEK or EUR). For example, for an account with currency SEK, a cost of 3500 means that it cost 0.35SEK. Learn more about the details of pricing
-     * @return mixed
+     * @return integer
      */
     public function cost()
     {
