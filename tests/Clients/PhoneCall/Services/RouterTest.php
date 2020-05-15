@@ -257,8 +257,7 @@ final class RouterTest extends TestCase
 
         $router->register('routeB', function (PhoneCallAction $action) {
             return $action
-                ->connect('+46701474417')
-                ->hangUp('reject');
+                ->connect('+46701474417');
         });
 
 
@@ -273,8 +272,7 @@ final class RouterTest extends TestCase
         $routeB = $router->handle('routeB');
 
         $this->assertSame([
-            'connect' => '+46701474417',
-            'hangup' => 'reject'
+            'connect' => '+46701474417'
         ], $routeB);
 
     }
@@ -299,8 +297,7 @@ final class RouterTest extends TestCase
 
         $router->register('routeB', function (PhoneCallAction $action) {
             return $action
-                ->connect('+46701474417')
-                ->hangUp('reject');
+                ->connect('+46701474417');
         });
 
         $router->compile();
@@ -316,8 +313,7 @@ final class RouterTest extends TestCase
         $routeB = $router->handle('routeB');
 
         $this->assertSame([
-            'connect' => '+46701474417',
-            'hangup' => 'reject'
+            'connect' => '+46701474417'
         ], $routeB);
 
     }

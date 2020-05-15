@@ -21,31 +21,31 @@ class Message implements Arrayable
 
     /**
      * The unique id of the message in our systems.
-     * @return mixed
+     * @return string|null
      */
     public function id()
     {
-        return $this->data['id'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The sender of the SMS.
-     * @return mixed
+     * @return string
      */
     public function from()
     {
-        return $this->data['from'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The phone number the SMS was sent to.
-     * @return mixed
+     * @return string
      */
     public function to()
     {
-        return $this->data['to'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
@@ -55,17 +55,17 @@ class Message implements Arrayable
      */
     public function message()
     {
-        return $this->data['message'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
     /**
      * The direction of the SMS. "incoming" or "outgoing"
-     * @return mixed
+     * @return string
      */
     public function direction()
     {
-        return $this->data['direction'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
@@ -75,7 +75,7 @@ class Message implements Arrayable
      */
     public function created()
     {
-        return $this->data['created'];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
@@ -85,7 +85,7 @@ class Message implements Arrayable
      */
     public function delivered()
     {
-        return $this->data['delivered'] ?: null;
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
@@ -95,7 +95,7 @@ class Message implements Arrayable
      */
     public function status()
     {
-        return $this->data['status'] ?: null;
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
 
@@ -105,7 +105,7 @@ class Message implements Arrayable
      */
     public function cost()
     {
-        return $this->data['cost'] ?: 0;
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : 0;
     }
 
     /**
@@ -113,7 +113,7 @@ class Message implements Arrayable
      */
     public function images(): array
     {
-        return $this->data['images'] ?: [];
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : [];
     }
 
 

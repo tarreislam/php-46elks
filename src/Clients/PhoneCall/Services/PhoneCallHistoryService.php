@@ -44,7 +44,7 @@ class PhoneCallHistoryService implements DataResourceInterface
 
         // create payload
         $payload = [
-            'next' => $assoc['next'],
+            'next' => isset($assoc['next']) ? $assoc['next'] : null,
             'data' => array_map(function ($row) {
                 return new CallHistory($row);
             }, $assoc['data'])

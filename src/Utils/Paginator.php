@@ -26,11 +26,11 @@ class Paginator
     }
 
     /**
-     * @return bool
+     * @return string|null
      */
     public function getNext()
     {
-        return $this->items['next'] ?: null;
+        return isset($this->items['next']) ? $this->items['next'] : null;
     }
 
 }
