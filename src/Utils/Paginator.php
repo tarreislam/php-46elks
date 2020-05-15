@@ -26,6 +26,7 @@ class Paginator
     }
 
     /**
+     * start time for the next page if more resources are available
      * @return string|null
      */
     public function getNext()
