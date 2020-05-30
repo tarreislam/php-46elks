@@ -50,16 +50,7 @@ class NumberClient extends BaseClient
         }
 
         // validate options
-        foreach ($options as $key => $value) {
-            // validate key
-            if (!in_array($key, ['sms_url', 'voice_start', 'mms_url'])) {
-                throw new InvalidNumberOptionException(sprintf('Only "sms_url", "voice_start" and "mms_url" is allowed'));
-            }
-
-            if (json_decode($value) === null || !filter_var($key, FILTER_VALIDATE_URL)) {
-                throw new InvalidNumberOptionException(sprintf('The value of "%s" must be json or an valid url. "%s" given', $key, $value));
-            }
-        }
+        $this->validateNumberOptions($options);
 
         // prepare capabilities
         $capabilities = implode(',', $capabilities);
@@ -70,7 +61,7 @@ class NumberClient extends BaseClient
         $this->setOption('category', $category);
         $this->setOptions($options);
 
-        // peform request
+        // perform request
         $response = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
 
         // catch result
@@ -88,8 +79,61 @@ class NumberClient extends BaseClient
      */
     public function deallocate(string $id, $active = 'yes'): Number
     {
-        // TODO :clean array!?!?
+        // setup request
+        $this->setOption('active', $active);
 
+        // perform request
+        $response = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
+
+        // catch result
+        $json = $response->getBody()->getContents();
+        $array = json_decode($json, true);
+
+        // return number resource
+        return new Number($array);
+    }
+
+    public function configure(string $id, array $options)
+    {
+        $this->validateNumberOptions($options);
+
+        // setup request
+        $this->setOptions($options);
+
+        // perform request
+        $response = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
+
+        // catch result
+        $json = $response->getBody()->getContents();
+        $array = json_decode($json, true);
+
+        // return number resource
+        return new Number($array);
+    }
+
+    /**
+     * @param array $options
+     * @throws InvalidNumberOptionException
+     */
+    protected function validateNumberOptions(array $options)
+    {
+        // validate key
+
+        foreach ($options as $key => $value) {
+            if (!in_array($key, ['sms_url', 'voice_start', 'mms_url', 'sms_replies'])) {
+                throw new InvalidNumberOptionException(sprintf('Only "sms_url", "voice_start" and "mms_url" is allowed'));
+            }
+
+            if ($key == 'sms_replies') {
+                if (!in_array($value, ['yes', 'no'])) {
+                    throw new InvalidNumberOptionException(sprintf('The value of "%s" must be "yes" or "no" "%s" given', $key, $value));
+                }
+            } else {
+                if (json_decode($value) === null || !filter_var($key, FILTER_VALIDATE_URL)) {
+                    throw new InvalidNumberOptionException(sprintf('The value of "%s" must be json or an valid url. "%s" given', $key, $value));
+                }
+            }
+        }
 
     }
 }
