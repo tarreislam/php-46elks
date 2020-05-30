@@ -10,6 +10,7 @@ use Tarre\Php46Elks\Exceptions\InvalidNumberCapabilityException;
 use Tarre\Php46Elks\Exceptions\InvalidNumberCategoryException;
 use Tarre\Php46Elks\Exceptions\InvalidNumberOptionException;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
+use Tarre\Php46Elks\Utils\Paginator;
 
 class NumberClient extends BaseClient
 {
@@ -134,9 +135,31 @@ class NumberClient extends BaseClient
         return new Number($array);
     }
 
-    public function getAll()
+    /**
+     * List all virtual phone numbers
+     * @return Paginator
+     */
+    public function get()
     {
-        // TODO (Tarre, lägg även till result" @ callHistory
+        // perform request
+        $response = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
+
+        // catch result
+        $json = $response->getBody()->getContents();
+
+        // deserialize
+        $assoc = json_decode($json, true);
+
+        // create payload
+        $payload = [
+            'next' => isset($assoc['next']) ? $assoc['next'] : null,
+            'data' => array_map(function ($row) {
+                return new Number($row);
+            }, $assoc['data'])
+        ];
+
+        // return new pagination object
+        return new Paginator($payload);
     }
 
     /**
