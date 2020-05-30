@@ -93,6 +93,12 @@ class NumberClient extends BaseClient
         return new Number($array);
     }
 
+    /**
+     * @param string $id
+     * @param array $options
+     * @return Number
+     * @throws InvalidNumberOptionException
+     */
     public function configure(string $id, array $options)
     {
         $this->validateNumberOptions($options);
@@ -112,16 +118,39 @@ class NumberClient extends BaseClient
     }
 
     /**
+     * @param string $id
+     * @return Number
+     */
+    public function getById(string  $id)
+    {
+        // perform request
+        $response = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
+
+        // catch result
+        $json = $response->getBody()->getContents();
+        $array = json_decode($json, true);
+
+        // return number resource
+        return new Number($array);
+    }
+
+    public function getAll()
+    {
+        // TODO (Tarre, lägg även till result" @ callHistory
+    }
+
+    /**
      * @param array $options
      * @throws InvalidNumberOptionException
      */
     protected function validateNumberOptions(array $options)
     {
-        // validate key
+        $validKeys = ['sms_url', 'voice_start', 'mms_url', 'sms_replies'];
 
+        // validate option array
         foreach ($options as $key => $value) {
-            if (!in_array($key, ['sms_url', 'voice_start', 'mms_url', 'sms_replies'])) {
-                throw new InvalidNumberOptionException(sprintf('Only "sms_url", "voice_start" and "mms_url" is allowed'));
+            if (!in_array($key, $validKeys)) {
+                throw new InvalidNumberOptionException(sprintf('Only "%s" is allowed "%s" given', implode(', ', $validKeys), $key));
             }
 
             if ($key == 'sms_replies') {
