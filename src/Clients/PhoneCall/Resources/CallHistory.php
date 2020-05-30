@@ -18,8 +18,17 @@ class CallHistory implements Arrayable
         $this->data = $data;
     }
 
+    /**
+     * The result of the call "newincoming", "busy", "failed", "successs"
+     * @return mixed|null
+     */
+    public function result()
+    {
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
+    }
 
     /**
+     * The direction of the call. Set to "outgoing" for calls initated by the API and "incoming" for calls initated by phones.
      * @return string|null
      */
     public function direction()
@@ -28,6 +37,7 @@ class CallHistory implements Arrayable
     }
 
     /**
+     * The calling part of the call E.164 format.
      * @return string|null
      */
     public function from()
@@ -35,8 +45,8 @@ class CallHistory implements Arrayable
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
-
     /**
+     * The phone number that was called in E.164 format.
      * @return string|null
      */
     public function to()
@@ -45,6 +55,7 @@ class CallHistory implements Arrayable
     }
 
     /**
+     * Time in UTC when the call was created.
      * @return string|null
      */
     public function created()
@@ -54,6 +65,7 @@ class CallHistory implements Arrayable
 
 
     /**
+     * Array of actions taken by the API druing the call, like action connect or action play.
      * @return array
      */
     public function actions(): array
@@ -63,6 +75,7 @@ class CallHistory implements Arrayable
 
 
     /**
+     * Time the call was picked up.
      * @return string|null
      */
     public function start()
@@ -72,6 +85,7 @@ class CallHistory implements Arrayable
 
 
     /**
+     * Status of the call for example "ongoing" or "success".
      * @return string|null
      */
     public function state()
@@ -81,6 +95,7 @@ class CallHistory implements Arrayable
 
 
     /**
+     * Cost of the call. Specified in 10000s of the currency of your account. For an account with currency SEK a cost of 1500 means that the price for sending this SMS was 0.15 SEK.
      * @return int
      */
     public function cost(): int
@@ -90,6 +105,7 @@ class CallHistory implements Arrayable
 
 
     /**
+     * The direction of the call. Set to "outgoing" for calls initated by the API and "incoming" for calls initated by phones.
      * @return int
      */
     public function duration(): int
@@ -99,6 +115,7 @@ class CallHistory implements Arrayable
 
 
     /**
+     * Array of calls made during the call with call action connect.
      * @return array
      */
     public function legs(): array
@@ -108,6 +125,7 @@ class CallHistory implements Arrayable
 
 
     /**
+     * Unique ID for the call.
      * @return string|null
      */
     public function id()
