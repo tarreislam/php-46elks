@@ -11,6 +11,7 @@ use Tarre\Php46Elks\Clients\Number\Resources\Number;
 use Tarre\Php46Elks\Exceptions\InvalidNumberCapabilityException;
 use Tarre\Php46Elks\Exceptions\InvalidNumberCategoryException;
 use Tarre\Php46Elks\Exceptions\InvalidNumberOptionException;
+use Tarre\Php46Elks\Utils\Paginator;
 
 
 final class NumberClientTest extends TestCase
@@ -203,5 +204,75 @@ EOT;
         $this->assertSame('https://yourapp.example/elks/sms', $result->sms_url());
         $this->assertSame('https://yourapp.example/elks/calls', $result->voice_start());
 
+    }
+
+    public function testGetById()
+    {
+        $jsonToMock = <<<'EOT'
+        {
+          "id": "n57c8f48af76bf986a14f251b35389e8b",
+          "active": "yes",
+          "country": "se",
+          "number": "+46766861001",
+          "capabilities": [ "sms", "voice", "mms" ],
+          "sms_url": "https://yourapp.example/elks/sms",
+          "mms_url": "https://yourapp.example/elks/mms",
+          "voice_start": "https://yourapp.example/elks/calls"
+        }
+EOT;
+
+        $client = (new Client('x', 'y'))->mock();
+
+        $client->mockHandler()->append(new Response(200, [], $jsonToMock));
+
+        $result = $client->number()->getById('n57c8f48af76bf986a14f251b35389e8b');
+
+        $this->assertInstanceOf(Number::class, $result);
+
+        $this->assertSame('yes', $result->active());
+        $this->assertSame('se', $result->country());
+        $this->assertSame('sms', $result->capabilities()[0]);
+        $this->assertSame('voice', $result->capabilities()[1]);
+        $this->assertSame('mms', $result->capabilities()[2]);
+        $this->assertSame('https://yourapp.example/elks/mms', $result->mms_url());
+        $this->assertSame('https://yourapp.example/elks/sms', $result->sms_url());
+        $this->assertSame('https://yourapp.example/elks/calls', $result->voice_start());
+    }
+
+    public function testGetAll()
+    {
+        $jsonToMock = <<<'EOT'
+            {
+              "data": [
+                {
+                  "id": "n0ba74fef557dfcec3a96d8d4477ae634",
+                  "active": "yes",
+                  "category": "mobile",
+                  "capabilities": [
+                    "sms",
+                    "mms",
+                    "voice"
+                  ],
+                  "country": "se",
+                  "number": "+46766861217",
+                  "created": "2018-02-07T14:14:14.834000",
+                  "allocated": "2018-02-16T15:53:19.737000",
+                  "deallocated": "2018-02-22T15:23:01.611000"
+                }
+              ]
+            }
+EOT;
+
+        $client = (new Client('x', 'y'))->mock();
+
+        $client->mockHandler()->append(new Response(200, [], $jsonToMock));
+
+        $result = $client->number()->get();
+
+        $this->assertInstanceOf(Paginator::class, $result);
+
+        foreach ($result->getData() as $result){
+            $this->assertInstanceOf(Number::class, $result);
+        }
     }
 }

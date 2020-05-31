@@ -61,6 +61,15 @@ class Number implements Arrayable
     }
 
     /**
+     * UTC time when the number was dealloted.
+     * @return string|null
+     */
+    public function allocated()
+    {
+        return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
+    }
+
+    /**
      * UTC time when the number was deallocated.
      * @return string|null
      */
