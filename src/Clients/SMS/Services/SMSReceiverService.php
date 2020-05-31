@@ -9,18 +9,18 @@ use Tarre\Php46Elks\Interfaces\ReceiverInterface;
 class SMSReceiverService implements ReceiverInterface
 {
     /**
-     * @param callable $fn
+     * @param callable $fnc
      * @param array|null $request
      * @return mixed
      */
-    public function handleRequest(callable $fn, array $request = null)
+    public function handleRequest(callable $fnc, array $request = null)
     {
 
         if (is_null($request)) {
             $request = $_REQUEST;
         }
 
-        return $fn(new Message($request));
+        return $fnc(new Message($request));
     }
 
 }
