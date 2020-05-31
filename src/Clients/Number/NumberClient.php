@@ -27,7 +27,7 @@ class NumberClient extends BaseClient
      * @throws InvalidNumberOptionException
      * @throws InvalidNumberCapabilityException
      */
-    public function allocate(string $country, $capabilities, string $category, array $options): Number
+    public function allocate(string $country, $capabilities, string $category, array $options = []): Number
     {
         if (!is_array($capabilities)) {
             $capabilities = explode(',', $capabilities);
@@ -55,6 +55,7 @@ class NumberClient extends BaseClient
 
         // prepare capabilities
         $capabilities = implode(',', $capabilities);
+        $country = mb_strtolower($country);
 
         // setup request
         $this->setOption('country', $country);
@@ -63,14 +64,14 @@ class NumberClient extends BaseClient
         $this->setOptions($options);
 
         // perform request
-        $response = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
+        $request = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
 
         // catch result
-        $json = $response->getBody()->getContents();
-        $array = json_decode($json, true);
+        $response = $request->getBody()->getContents();
+        $assoc = json_decode($response, true);
 
         // return number resource
-        return new Number($array);
+        return new Number($assoc);
     }
 
     /**
@@ -84,14 +85,14 @@ class NumberClient extends BaseClient
         $this->setOption('active', $active);
 
         // perform request
-        $response = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
+        $request = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
 
         // catch result
-        $json = $response->getBody()->getContents();
-        $array = json_decode($json, true);
+        $response = $request->getBody()->getContents();
+        $assoc = json_decode($response, true);
 
         // return number resource
-        return new Number($array);
+        return new Number($assoc);
     }
 
     /**
@@ -102,37 +103,38 @@ class NumberClient extends BaseClient
      */
     public function configure(string $id, array $options)
     {
+        // validate options
         $this->validateNumberOptions($options);
 
         // setup request
         $this->setOptions($options);
 
         // perform request
-        $response = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
+        $request = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
 
         // catch result
-        $json = $response->getBody()->getContents();
-        $array = json_decode($json, true);
+        $response = $request->getBody()->getContents();
+        $assoc = json_decode($response, true);
 
         // return number resource
-        return new Number($array);
+        return new Number($assoc);
     }
 
     /**
      * @param string $id
      * @return Number
      */
-    public function getById(string  $id)
+    public function getById(string $id)
     {
         // perform request
-        $response = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
+        $request = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
 
         // catch result
-        $json = $response->getBody()->getContents();
-        $array = json_decode($json, true);
+        $response = $request->getBody()->getContents();
+        $assoc = json_decode($response, true);
 
         // return number resource
-        return new Number($array);
+        return new Number($assoc);
     }
 
     /**
@@ -142,13 +144,13 @@ class NumberClient extends BaseClient
     public function get()
     {
         // perform request
-        $response = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
+        $request = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
 
         // catch result
-        $json = $response->getBody()->getContents();
+        $response = $request->getBody()->getContents();
 
         // deserialize
-        $assoc = json_decode($json, true);
+        $assoc = json_decode($response, true);
 
         // create payload
         $payload = [
@@ -176,14 +178,10 @@ class NumberClient extends BaseClient
                 throw new InvalidNumberOptionException(sprintf('Only "%s" is allowed "%s" given', implode(', ', $validKeys), $key));
             }
 
-            if ($key == 'sms_replies') {
-                if (!in_array($value, ['yes', 'no'])) {
-                    throw new InvalidNumberOptionException(sprintf('The value of "%s" must be "yes" or "no" "%s" given', $key, $value));
-                }
-            } else {
-                if (json_decode($value) === null || !filter_var($key, FILTER_VALIDATE_URL)) {
-                    throw new InvalidNumberOptionException(sprintf('The value of "%s" must be json or an valid url. "%s" given', $key, $value));
-                }
+            if ($key == 'sms_replies' && !in_array($value, ['yes', 'no'])) {
+                throw new InvalidNumberOptionException(sprintf('The value of "%s" must be "yes" or "no" "%s" given', $key, $value));
+            } else if (json_decode($value) == null && !filter_var($value, FILTER_VALIDATE_URL)) {
+                throw new InvalidNumberOptionException(sprintf('The value of "%s" must be json or an valid url. "%s" given', $key, $value));
             }
         }
 

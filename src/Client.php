@@ -66,7 +66,7 @@ class Client
     /**
      * @return NumberClient
      */
-    public function Number(): NumberClient
+    public function number(): NumberClient
     {
         return new NumberClient($this->getGuzzleClient());
     }
