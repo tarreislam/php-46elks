@@ -167,4 +167,38 @@ EOT;
         $this->assertSame('2018-02-22T15:23:01.611000', $result->deallocated());
 
     }
+    public function testConfigureWithSuccess()
+    {
+        $jsonToMock = <<<'EOT'
+        {
+          "id": "n57c8f48af76bf986a14f251b35389e8b",
+          "active": "yes",
+          "country": "se",
+          "number": "+46766861001",
+          "capabilities": [ "sms", "voice", "mms" ],
+          "sms_url": "https://yourapp.example/elks/sms",
+          "mms_url": "https://yourapp.example/elks/mms",
+          "voice_start": "https://yourapp.example/elks/calls"
+        }
+EOT;
+
+        $client = (new Client('x', 'y'))->mock();
+
+        $client->mockHandler()->append(new Response(200, [], $jsonToMock));
+
+        $result = $client->number()->configure('n57c8f48af76bf986a14f251b35389e8b', [
+            'mms_url' => 'https://yourapp.example/elks/mms',
+            'sms_url' => 'https://yourapp.example/elks/sms'
+        ]);
+
+        $this->assertSame('yes', $result->active());
+        $this->assertSame('se', $result->country());
+        $this->assertSame('sms', $result->capabilities()[0]);
+        $this->assertSame('voice', $result->capabilities()[1]);
+        $this->assertSame('mms', $result->capabilities()[2]);
+        $this->assertSame('https://yourapp.example/elks/mms', $result->mms_url());
+        $this->assertSame('https://yourapp.example/elks/sms', $result->sms_url());
+        $this->assertSame('https://yourapp.example/elks/calls', $result->voice_start());
+
+    }
 }
