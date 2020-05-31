@@ -87,7 +87,7 @@ final class NumberClientTest extends TestCase
               "id": "n57c8f48af76bf986a14f251b35389e8b",
               "active": "yes",
               "country": "se",
-              "number": "+46766861001",
+              "number": "+4610444555666",
               "capabilities": [ "voice" ]
             }
 EOT;
@@ -104,7 +104,46 @@ EOT;
 
         $this->assertSame("n57c8f48af76bf986a14f251b35389e8b", $result->id());
         $this->assertSame("yes", $result->active());
+        $this->assertSame("+4610444555666", $result->number());
+        $this->assertSame('voice', $result->capabilities()[0]);
+    }
+
+    /**
+     * @throws InvalidNumberCapabilityException
+     * @throws InvalidNumberCategoryException
+     * @throws InvalidNumberOptionException
+     */
+    public function testConfigureMobileNumberWithVoiceAndSmsCapabilitiesWithSuccess()
+    {
+
+        $jsonToMock = <<<'EOT'
+            {
+              "id": "n57c8f48af76bf986a14f251b35389e8b",
+              "active": "yes",
+              "country": "se",
+              "number": "+46766861001",
+              "capabilities": [ "voice", "sms" ]
+            }
+EOT;
+
+        $client = (new Client('x', 'y'))->mock();
+
+        $client->mockHandler()->append(new Response(200, [], $jsonToMock));
+
+        $result = $client->number()->allocate('SE', [
+            'voice',
+            'sms'
+        ], 'mobile', [
+            'voice_start' => 'http://yourapp.com/handle',
+            'sms_url' => '{"forward": "+46701473317"}'
+        ]);
+
+        $this->assertInstanceOf(Number::class, $result);
+
+        $this->assertSame("n57c8f48af76bf986a14f251b35389e8b", $result->id());
+        $this->assertSame("yes", $result->active());
         $this->assertSame("+46766861001", $result->number());
         $this->assertSame('voice', $result->capabilities()[0]);
+        $this->assertSame('sms', $result->capabilities()[1]);
     }
 }
