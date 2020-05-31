@@ -3,12 +3,8 @@
 
 namespace Tarre\Php46Elks\Clients\PhoneCall\Resources;
 
-use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Interfaces\Arrayable;
 
-/**
- * @property PhoneCallClient phoneCallClient
- */
 class CallHistory implements Arrayable
 {
     protected $data;
@@ -19,7 +15,7 @@ class CallHistory implements Arrayable
     }
 
     /**
-     * The result of the call "newincoming", "busy", "failed", "successs"
+     * The result of the call "newincoming", "busy", "failed", "success", "ok"
      * @return mixed|null
      */
     public function result()
@@ -63,7 +59,6 @@ class CallHistory implements Arrayable
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
-
     /**
      * Array of actions taken by the API druing the call, like action connect or action play.
      * @return array
@@ -72,7 +67,6 @@ class CallHistory implements Arrayable
     {
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : [];
     }
-
 
     /**
      * Time the call was picked up.
@@ -83,7 +77,6 @@ class CallHistory implements Arrayable
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
 
-
     /**
      * Status of the call for example "ongoing" or "success".
      * @return string|null
@@ -92,7 +85,6 @@ class CallHistory implements Arrayable
     {
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
     }
-
 
     /**
      * Cost of the call. Specified in 10000s of the currency of your account. For an account with currency SEK a cost of 1500 means that the price for sending this SMS was 0.15 SEK.
@@ -103,7 +95,6 @@ class CallHistory implements Arrayable
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : 0;
     }
 
-
     /**
      * The direction of the call. Set to "outgoing" for calls initated by the API and "incoming" for calls initated by phones.
      * @return int
@@ -113,7 +104,6 @@ class CallHistory implements Arrayable
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : 0;
     }
 
-
     /**
      * Array of calls made during the call with call action connect.
      * @return array
@@ -122,7 +112,6 @@ class CallHistory implements Arrayable
     {
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : [];
     }
-
 
     /**
      * Unique ID for the call.

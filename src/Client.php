@@ -11,7 +11,6 @@ use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Clients\SMS\SMSClient;
 use Tarre\Php46Elks\Utils\Helper;
 
-
 class Client
 {
     protected $username;
@@ -20,9 +19,9 @@ class Client
     protected $mock = false;
     protected $mockHandler = null;
 
-
     /**
      * Client constructor.
+     *
      * @param string $username
      * @param string $password
      * @param string $baseURL
@@ -37,8 +36,10 @@ class Client
     /**
      * Set the base URL for SMS & MMS resources such as Sms "WhenDelivered" or phone actions "play", "next" etc
      * This option is persistent in the php process. defaultQueryParams could also be set to always append in every request
+     *
      * @param $url
      * @param array $defaultQueryParams
+     *
      * @return void
      */
     public static function setResourceBaseUrl($url, array $defaultQueryParams = null)
@@ -53,7 +54,6 @@ class Client
     {
         return new SMSClient($this->getGuzzleClient());
     }
-
 
     /**
      * @return PhoneCallClient
@@ -71,9 +71,9 @@ class Client
         return new NumberClient($this->getGuzzleClient());
     }
 
-
     /**
      * @param bool $state
+     *
      * @return $this
      */
     public function mock($state = true): self
@@ -85,7 +85,6 @@ class Client
         return $this;
     }
 
-
     /**
      * @return MockHandler
      */
@@ -94,7 +93,6 @@ class Client
         return $this->mockHandler;
     }
 
-
     /**
      * @return bool
      */
@@ -102,7 +100,6 @@ class Client
     {
         return $this->mock;
     }
-
 
     /**
      * @return GuzzleHttpClient
@@ -131,5 +128,4 @@ class Client
 
         return new GuzzleHttpClient($options);
     }
-
 }
