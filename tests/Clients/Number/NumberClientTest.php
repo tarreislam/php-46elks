@@ -16,7 +16,7 @@ use Tarre\Php46Elks\Exceptions\InvalidNumberOptionException;
 final class NumberClientTest extends TestCase
 {
 
-    public function testConfigureNumberWithInvalidNumberCategoryException()
+    public function testAllocateNumberWithInvalidNumberCategoryException()
     {
         $client = (new Client('x', 'y'))->mock();
 
@@ -28,7 +28,7 @@ final class NumberClientTest extends TestCase
 
     }
 
-    public function testConfigureNumberWithInvalidNumberCapabilityException()
+    public function testAllocateNumberWithInvalidNumberCapabilityException()
     {
         $client = (new Client('x', 'y'))->mock();
 
@@ -45,7 +45,7 @@ final class NumberClientTest extends TestCase
         }
     }
 
-    public function testConfigureNumberValidateNumberOptions()
+    public function testAllocateNumberValidateNumberOptions()
     {
         $client = (new Client('x', 'y'))->mock();
 
@@ -79,7 +79,7 @@ final class NumberClientTest extends TestCase
      * @throws InvalidNumberCategoryException
      * @throws InvalidNumberOptionException
      */
-    public function testConfigureFixedSeNumberWithVoiceCapabilitiesWithSuccess()
+    public function testAllocateFixedSeNumberWithVoiceCapabilitiesWithSuccess()
     {
 
         $jsonToMock = <<<'EOT'
@@ -113,7 +113,7 @@ EOT;
      * @throws InvalidNumberCategoryException
      * @throws InvalidNumberOptionException
      */
-    public function testConfigureMobileNumberWithVoiceAndSmsCapabilitiesWithSuccess()
+    public function testAllocateMobileNumberWithVoiceAndSmsCapabilitiesWithSuccess()
     {
 
         $jsonToMock = <<<'EOT'
@@ -145,5 +145,26 @@ EOT;
         $this->assertSame("+46766861001", $result->number());
         $this->assertSame('voice', $result->capabilities()[0]);
         $this->assertSame('sms', $result->capabilities()[1]);
+    }
+
+    public function testDeallocateWithSuccess()
+    {
+        $jsonToMock = <<<'EOT'
+        {
+             "id": "n0ba74fef557dfcec3a96d8d4477ae634",
+             "active": "no",
+             "deallocated": "2018-02-22T15:23:01.611000"
+        }
+EOT;
+
+        $client = (new Client('x', 'y'))->mock();
+
+        $client->mockHandler()->append(new Response(200, [], $jsonToMock));
+
+        $result = $client->number()->deallocate('n0ba74fef557dfcec3a96d8d4477ae634', 'yes');
+
+        $this->assertSame('no', $result->active());
+        $this->assertSame('2018-02-22T15:23:01.611000', $result->deallocated());
+
     }
 }
