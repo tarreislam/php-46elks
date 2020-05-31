@@ -163,6 +163,7 @@ EOT;
 
         $result = $client->number()->deallocate('n0ba74fef557dfcec3a96d8d4477ae634', 'yes');
 
+        $this->assertInstanceOf(Number::class, $result);
         $this->assertSame('no', $result->active());
         $this->assertSame('2018-02-22T15:23:01.611000', $result->deallocated());
 
@@ -190,6 +191,8 @@ EOT;
             'mms_url' => 'https://yourapp.example/elks/mms',
             'sms_url' => 'https://yourapp.example/elks/sms'
         ]);
+
+        $this->assertInstanceOf(Number::class, $result);
 
         $this->assertSame('yes', $result->active());
         $this->assertSame('se', $result->country());
