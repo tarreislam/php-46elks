@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
+use Tarre\Php46Elks\Clients\Account\AccountClient;
 use Tarre\Php46Elks\Clients\Number\NumberClient;
 use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Clients\SMS\SMSClient;
@@ -69,6 +70,14 @@ class Client
     public function number(): NumberClient
     {
         return new NumberClient($this->getGuzzleClient());
+    }
+
+    /**
+     * @return AccountClient
+     */
+    public function account(): AccountClient
+    {
+        return new AccountClient($this->getGuzzleClient());
     }
 
     /**
