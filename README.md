@@ -34,8 +34,7 @@ For Laravel, please check out [Laravel-46elks](https://github.com/tarreislam/lar
 * ~~SMS & MMS~~ (Done!)
 * ~~Phone calls~~ (Done!)
 * ~~Numbers~~ (Done!)
-* ~~Account~~
-* Images  (Next!)
-* Recorings
+* Recorings (Next!)
+* Images (Next!)
+* ~~Account~~ (Done!)
 * Subaccounts
-* Voice clients
