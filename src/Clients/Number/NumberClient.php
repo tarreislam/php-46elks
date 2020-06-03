@@ -55,7 +55,7 @@ class NumberClient extends BaseClient
 
         // prepare capabilities
         $capabilities = implode(',', $capabilities);
-        $country = mb_strtolower($country);
+        $country = strtolower($country);
 
         // setup request
         $this->setOption('country', $country);
@@ -101,7 +101,7 @@ class NumberClient extends BaseClient
      * @return Number
      * @throws InvalidNumberOptionException
      */
-    public function configure(string $id, array $options)
+    public function configure(string $id, array $options): Number
     {
         // validate options
         $this->validateNumberOptions($options);
@@ -124,7 +124,7 @@ class NumberClient extends BaseClient
      * @param string $id
      * @return Number
      */
-    public function getById(string $id)
+    public function getById(string $id): Number
     {
         // perform request
         $request = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
@@ -141,7 +141,7 @@ class NumberClient extends BaseClient
      * List all virtual phone numbers
      * @return Paginator
      */
-    public function get()
+    public function get(): Paginator
     {
         // perform request
         $request = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
@@ -167,8 +167,10 @@ class NumberClient extends BaseClient
     /**
      * @param array $options
      * @throws InvalidNumberOptionException
+     *
+     * @return void
      */
-    protected function validateNumberOptions(array $options)
+    protected function validateNumberOptions(array $options): void
     {
         $validKeys = ['sms_url', 'voice_start', 'mms_url', 'sms_replies'];
 
