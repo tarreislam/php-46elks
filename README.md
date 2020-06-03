@@ -27,14 +27,15 @@ For Laravel, please check out [Laravel-46elks](https://github.com/tarreislam/lar
 * [SMS and MMS](docs/sms.md)
 * [Phone calls](docs/call.md)
 * [Numbers](docs/number.md)
+* [Account](docs/account.md)
 
 
 ### Things to wrap 
 * ~~SMS & MMS~~ (Done!)
 * ~~Phone calls~~ (Done!)
 * ~~Numbers~~ (Done!)
+* ~~Account~~
 * Images  (Next!)
 * Recorings
-* Account
 * Subaccounts
 * Voice clients
