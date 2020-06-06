@@ -4,15 +4,22 @@
 namespace Tarre\Php46Elks\Clients\Image\Resouces;
 
 
+use Tarre\Php46Elks\Clients\Image\ImageClient;
 use Tarre\Php46Elks\Interfaces\Arrayable;
+use Tarre\Php46Elks\Utils\FileResource;
 
+/**
+ * @property ImageClient imageClient
+ */
 class Image implements Arrayable
 {
     protected $data;
+    protected $imageClient;
 
-    public function __construct(array $data)
+    public function __construct(array $data, ImageClient $imageClient)
     {
         $this->data = $data;
+        $this->imageClient = $imageClient;
     }
 
 
@@ -74,6 +81,16 @@ class Image implements Arrayable
     public function digest()
     {
         return isset($this->data[__FUNCTION__]) ? $this->data[__FUNCTION__] : null;
+    }
+
+    /**
+     * shortcut for "getFileById" on the resource
+     *
+     * @return FileResource
+     */
+    public function withFile(): FileResource
+    {
+        return $this->imageClient->getFileById($this->id());
     }
 
     /**

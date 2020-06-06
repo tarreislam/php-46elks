@@ -34,7 +34,7 @@ class ImageClient extends BaseClient
         $payload = [
             'next' => isset($assoc['next']) ? $assoc['next'] : null,
             'data' => array_map(function ($row) {
-                return new Image($row);
+                return new Image($row, $this);
             }, $assoc['data'])
         ];
 
@@ -59,7 +59,7 @@ class ImageClient extends BaseClient
         $assoc = json_decode($response, true);
 
         // return image object
-        return new Image($assoc);
+        return new Image($assoc, $this);
     }
 
     /**

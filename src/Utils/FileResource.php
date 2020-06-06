@@ -27,25 +27,31 @@ class FileResource
      */
     public function __toString(): string
     {
+        return $this->getContent();
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent(): string
+    {
         return $this->getFileContent();
     }
 
-
     /**
-     * This implementation might be stupid, but i dont understand what else they are trying to do xD
      *
      * Save the file resource on disk
      *
-     * @param string $absolutePath
-     * @param string $name
+     * @param string $absoluteDirectoryPath
+     * @param string $fileName
      * @param bool $replace
      * @return bool
      * @throws FileAlreadyExistsException
      */
-    public function saveToDisk(string $absolutePath, string $name, $replace = false): bool
+    public function saveToDisk(string $absoluteDirectoryPath, string $fileName, $replace = false): bool
     {
         // create new name
-        $path = $absolutePath . DIRECTORY_SEPARATOR . $name;
+        $path = $absoluteDirectoryPath . DIRECTORY_SEPARATOR . $fileName;
 
         if (!$replace) {
             if (file_exists($path)) {
@@ -71,23 +77,28 @@ class FileResource
     }
 
     /**
+     * This implementation might be stupid, but I dont understand the docs
+     *
      * @return string|bool
      */
     protected function getFileContent()
     {
-        // prepare auth
-        $auth = base64_encode(sprintf('%s:%s', $this->baseClient->getAuthUsername(), $this->baseClient->getAuthPassword()));
+        // get API credentials
+        $username = $this->baseClient->getAuthUsername();
+        $password = $this->baseClient->getAuthPassword();
 
-        // prepare context
-        $context = [
+        // prepare auth
+        $auth = base64_encode("$username:$password");
+
+        // prepare request
+        $request = [
             'http' => [
-                'method' => 'GET',
-                'header' => "Authorization: Basic $auth\r\nContent-type: application/octet-stream\r\n\r\n"
+                'headers' => "Authorization: Basic $auth\r\n"
             ]
         ];
 
         // create context
-        $context = stream_context_create($context);
+        $context = stream_context_create($request);
 
         // get file content
         return file_get_contents($this->fileUrl, false, $context);
