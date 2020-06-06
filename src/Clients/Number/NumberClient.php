@@ -127,7 +127,7 @@ class NumberClient extends BaseClient
     public function getById(string $id): Number
     {
         // perform request
-        $request = $this->getGuzzleClient()->post("numbers/$id", $this->getOptions(true));
+        $request = $this->getGuzzleClient()->get("numbers/$id", $this->getOptions(true));
 
         // catch result
         $response = $request->getBody()->getContents();
@@ -144,7 +144,7 @@ class NumberClient extends BaseClient
     public function get(): Paginator
     {
         // perform request
-        $request = $this->getGuzzleClient()->post('numbers', $this->getOptions(true));
+        $request = $this->getGuzzleClient()->get('numbers', $this->getOptions(true));
 
         // catch result
         $response = $request->getBody()->getContents();
