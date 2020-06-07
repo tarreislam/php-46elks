@@ -29,13 +29,14 @@ For Laravel, please check out [Laravel-46elks](https://github.com/tarreislam/lar
 * [Numbers](docs/number.md)
 * [Account](docs/account.md)
 * [Images](docs/image.md)
+* [Recordings](docs/recording.md)
 
 
 ### Things to wrap 
 * ~~SMS & MMS~~ (Done!)
 * ~~Phone calls~~ (Done!)
 * ~~Numbers~~ (Done!)
-* Recorings (Next!)
+* ~~Recorings~~ (Done!)
 * ~~Images~~ (Done!)
 * ~~Account~~ (Done!)
-* Subaccounts
+* Subaccounts (Next)
