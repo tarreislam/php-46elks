@@ -1,6 +1,6 @@
 # The number Client
 
-The Phone client wraps the number section of [46elks.se docs](https://46elks.se/docs/allocate-number)
+The Number client wraps the number section of [46elks.se docs](https://46elks.se/docs/allocate-number)
 
 ## Available services
 
