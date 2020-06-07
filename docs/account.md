@@ -1,6 +1,6 @@
 # The account Client
 
-The Phone client wraps the account section of [46elks.se docs](https://46elks.se/docs/get-account)
+The Account client wraps the account section of [46elks.se docs](https://46elks.se/docs/get-account)
 
 ## Available services
 
