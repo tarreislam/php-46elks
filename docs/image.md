@@ -56,3 +56,24 @@ $result = $image->getById('enter id here');
 print_r($result);
 ```
 
+
+### <a id="get-by-id"></a> Get image file by id
+
+Returns the image file of the image with the specified ID.
+
+```php
+// Initialize client
+use Tarre\Php46Elks\Client as Php46ElkClient;
+$Php46ElksClient = new Php46ElkClient('username', 'password');
+
+$image = $Php46ElksClient->image();
+
+$result = $image->getFileById('enter id here'); 
+
+// You can either save the file to your disk
+$result->saveToDisk('/var/downloads', 'my-file.jpg');
+
+// or get the raw image data
+$result->getContent();
+```
+
