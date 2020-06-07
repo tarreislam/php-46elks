@@ -10,6 +10,7 @@ use Tarre\Php46Elks\Clients\Account\AccountClient;
 use Tarre\Php46Elks\Clients\Image\ImageClient;
 use Tarre\Php46Elks\Clients\Number\NumberClient;
 use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
+use Tarre\Php46Elks\Clients\Recording\RecordingClient;
 use Tarre\Php46Elks\Clients\SMS\SMSClient;
 use Tarre\Php46Elks\Utils\Helper;
 
@@ -87,6 +88,13 @@ class Client
     public function image(): ImageClient
     {
         return new ImageClient($this->getGuzzleClient());
+    }
+    /**
+     * @return RecordingClient
+     */
+    public function recording(): RecordingClient
+    {
+        return new RecordingClient($this->getGuzzleClient());
     }
 
     /**
