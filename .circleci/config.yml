@@ -7,7 +7,6 @@ workflows:
   version: 2
   test:
     jobs:
-      - test-for-7.0
       - test-for-7.1
       - test-for-7.2
       - test-for-7.3
