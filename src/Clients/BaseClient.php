@@ -5,6 +5,7 @@ namespace Tarre\Php46Elks\Clients;
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 
 /**
  * @property Client guzzleClient
@@ -28,5 +29,21 @@ class BaseClient
     public function getGuzzleClient(): Client
     {
         return $this->guzzleClient;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthUsername(): string
+    {
+        return $this->guzzleClient->getConfig(GuzzleHttpRequestOptions::AUTH)[0];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthPassword(): string
+    {
+        return $this->guzzleClient->getConfig(GuzzleHttpRequestOptions::AUTH)[1];
     }
 }

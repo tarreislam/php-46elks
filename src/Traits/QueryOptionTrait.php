@@ -33,11 +33,16 @@ trait QueryOptionTrait
     }
 
     /**
+     * $flush bool if true, the "options" array will be reset
      * @return array
      */
-    public function getOptions(): array
+    public function getOptions($flush = false): array
     {
-        return $this->queryOptions;
+        $queryOptions = $this->queryOptions;
+        if ($flush) {
+            $this->queryOptions = [];
+        }
+        return $queryOptions;
     }
 
     /**

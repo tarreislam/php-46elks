@@ -26,14 +26,17 @@ For Laravel, please check out [Laravel-46elks](https://github.com/tarreislam/lar
 
 * [SMS and MMS](docs/sms.md)
 * [Phone calls](docs/call.md)
+* [Numbers](docs/number.md)
+* [Account](docs/account.md)
+* [Images](docs/image.md)
+* [Recordings](docs/recording.md)
 
 
 ### Things to wrap 
 * ~~SMS & MMS~~ (Done!)
 * ~~Phone calls~~ (Done!)
-* Numbers (Next!)
-* Images
-* Recorings
-* Account
-* Subaccounts
-* Voice clients
+* ~~Numbers~~ (Done!)
+* ~~Recorings~~ (Done!)
+* ~~Images~~ (Done!)
+* ~~Account~~ (Done!)
+* Subaccounts (Next)

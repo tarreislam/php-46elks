@@ -11,6 +11,18 @@ trait RecipientsTrait
     protected $recipients = [];
 
     /**
+     * Alias for "recipient"
+     *
+     * @param string $e164PhoneNumber
+     * @return $this
+     * @throws InvalidE164PhoneNumberFormatException
+     */
+    public function to(string $e164PhoneNumber): self
+    {
+        return $this->recipient($e164PhoneNumber);
+    }
+
+    /**
      * Add a recipient
      * @param string $e164PhoneNumber
      * @return $this

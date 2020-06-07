@@ -6,5 +6,5 @@ namespace Tarre\Php46Elks\Interfaces;
 
 interface ReceiverInterface
 {
-    public function handleRequest(callable $fn, array $request = null);
+    public function handleRequest(callable $fnc, array $request = null);
 }

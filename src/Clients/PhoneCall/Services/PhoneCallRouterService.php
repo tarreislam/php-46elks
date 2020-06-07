@@ -12,7 +12,7 @@ use Tarre\Php46Elks\Exceptions\RouteNameReservedException;
 
 class PhoneCallRouterService
 {
-    const DEFAULT_ROUTE_NAME = 'default';
+    public const DEFAULT_ROUTE_NAME = 'default';
 
     protected $callbacks;
     protected $compiledCallbacks = [];
@@ -20,27 +20,27 @@ class PhoneCallRouterService
 
     /**
      * @param $name
-     * @param callable $fn
+     * @param callable $fnc
      * @return $this
      * @throws RouteNameReservedException
      */
-    public function register($name, callable $fn): self
+    public function register($name, callable $fnc): self
     {
         if ($name === self::DEFAULT_ROUTE_NAME) {
             throw new RouteNameReservedException(sprintf('The route name "%s" is reserved. use the default() method instead', self::DEFAULT_ROUTE_NAME));
         }
-        $this->callbacks[$name] = $fn;
+        $this->callbacks[$name] = $fnc;
 
         return $this;
     }
 
     /**
-     * @param callable $fn
+     * @param callable $fnc
      * @return $this
      */
-    public function default(callable $fn): self
+    public function default(callable $fnc): self
     {
-        $this->callbacks[self::DEFAULT_ROUTE_NAME] = $fn;
+        $this->callbacks[self::DEFAULT_ROUTE_NAME] = $fnc;
 
         return $this;
     }
