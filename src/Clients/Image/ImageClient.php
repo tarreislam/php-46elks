@@ -6,13 +6,14 @@ namespace Tarre\Php46Elks\Clients\Image;
 
 use Tarre\Php46Elks\Clients\BaseClient;
 use Tarre\Php46Elks\Clients\Image\Resources\Image;
+use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\FileResource;
 use Tarre\Php46Elks\Utils\Paginator;
 
 class ImageClient extends BaseClient
 {
-    use QueryOptionTrait;
+    use QueryOptionTrait, DataResourceFilterTrait;
 
     /**
      * Get MMS Image History
