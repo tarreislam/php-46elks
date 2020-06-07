@@ -1,4 +1,4 @@
-# The recording Client
+# The Recording Client
 
 The Recording client wraps the recording section of [46elks.se docs](https://46elks.se/docs/get-recordings)
 
@@ -71,7 +71,7 @@ $recording = $Php46ElksClient->recording();
 $result = $recording->getFileById('enter id here'); 
 
 // You can either save the file to your disk
-$result->saveToDisk('/var/downloads', 'my-file.jpg');
+$result->saveToDisk('/var/downloads', 'my-file.mp3');
 
 // or get the raw recording data
 $result->getContent();

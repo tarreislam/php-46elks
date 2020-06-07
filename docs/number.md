@@ -1,4 +1,4 @@
-# The number Client
+# The Number Client
 
 The Number client wraps the number section of [46elks.se docs](https://46elks.se/docs/allocate-number)
 
