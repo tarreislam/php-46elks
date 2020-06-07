@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
-      - run: composer install --no-dev --prefer-dist
+      - run: composer install -n --prefer-dist
       - run: ./vendor/bin/phpunit
   test-for-7.1:
     docker:
@@ -29,7 +29,7 @@ jobs:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
-      - run: composer install --no-dev --prefer-dist
+      - run: composer install -n --prefer-dist
       - run: ./vendor/bin/phpunit
   test-for-7.2:
     docker:
@@ -38,7 +38,7 @@ jobs:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
-      - run: composer install --no-dev --prefer-dist
+      - run: composer install -n --prefer-dist
       - run: ./vendor/bin/phpunit
   test-for-7.3:
     docker:
@@ -47,7 +47,7 @@ jobs:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
-      - run: composer install --no-dev --prefer-dist
+      - run: composer install -n --prefer-dist
       - run: ./vendor/bin/phpunit
   test-for-7.4:
     docker:
@@ -56,5 +56,5 @@ jobs:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
-      - run: composer install --no-dev --prefer-dist
+      - run: composer install -n --prefer-dist
       - run: ./vendor/bin/phpunit
