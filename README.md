@@ -28,6 +28,7 @@ For Laravel, please check out [Laravel-46elks](https://github.com/tarreislam/lar
 * [Phone calls](docs/call.md)
 * [Numbers](docs/number.md)
 * [Account](docs/account.md)
+* [Images](docs/image.md)
 
 
 ### Things to wrap 
@@ -35,6 +36,6 @@ For Laravel, please check out [Laravel-46elks](https://github.com/tarreislam/lar
 * ~~Phone calls~~ (Done!)
 * ~~Numbers~~ (Done!)
 * Recorings (Next!)
-* Images (Next!)
+* ~~Images~~ (Done!)
 * ~~Account~~ (Done!)
 * Subaccounts
