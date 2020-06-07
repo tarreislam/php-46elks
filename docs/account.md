@@ -23,7 +23,7 @@ $Php46ElksClient = new Php46ElkClient('username', 'password');
 $account = $Php46ElksClient->account();
 ```
 
-### <a id="get"></a> Get accoint info
+### <a id="get"></a> Get account info
 
 Get account information
 
