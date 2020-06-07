@@ -1,17 +1,18 @@
 <?php
 
 
-namespace Tarre\Php46Elks\Clients\Image\Resouces;
+namespace Tarre\Php46Elks\Clients\Image\Resources;
 
 
 use Tarre\Php46Elks\Clients\Image\ImageClient;
 use Tarre\Php46Elks\Interfaces\Arrayable;
+use Tarre\Php46Elks\Interfaces\HasFileInterface;
 use Tarre\Php46Elks\Utils\FileResource;
 
 /**
  * @property ImageClient imageClient
  */
-class Image implements Arrayable
+class Image implements Arrayable, HasFileInterface
 {
     protected $data;
     protected $imageClient;
