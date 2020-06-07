@@ -74,7 +74,7 @@ class ImageClient extends BaseClient
     {
 
         // perform request
-        $res = $this->getGuzzleClient()->get("images/$id.jpg", $this->getOptions(true));
+        $res = $this->getGuzzleClient()->get("images/$id.$format", $this->getOptions(true));
 
         // return file resource
         return new FileResource($res->getBody()->getContents(), $this);
