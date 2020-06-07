@@ -1,6 +1,6 @@
 # The image Client
 
-The Image client wraps the image section of [46elks.se docs](https://46elks.se/docs/get-image)
+The Image client wraps the image section of [46elks.se docs](https://46elks.se/docs/get-images)
 
 ## Available services
 
