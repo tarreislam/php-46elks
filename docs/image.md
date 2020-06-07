@@ -57,7 +57,7 @@ print_r($result);
 ```
 
 
-### <a id="get-by-id"></a> Get image file by id
+### <a id="get-file-by-id"></a> Get image file by id
 
 Returns the image file of the image with the specified ID.
 
