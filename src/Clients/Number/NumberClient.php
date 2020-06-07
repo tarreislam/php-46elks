@@ -9,12 +9,13 @@ use Tarre\Php46Elks\Clients\Number\Resources\Number;
 use Tarre\Php46Elks\Exceptions\InvalidNumberCapabilityException;
 use Tarre\Php46Elks\Exceptions\InvalidNumberCategoryException;
 use Tarre\Php46Elks\Exceptions\InvalidNumberOptionException;
+use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Paginator;
 
 class NumberClient extends BaseClient
 {
-    use QueryOptionTrait;
+    use QueryOptionTrait, DataResourceFilterTrait;
 
 
     /**
