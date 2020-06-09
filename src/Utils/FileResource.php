@@ -8,17 +8,17 @@ use Tarre\Php46Elks\Clients\BaseClient;
 use Tarre\Php46Elks\Exceptions\FileAlreadyExistsException;
 
 /**
- * @property string fileUrl
+ * @property resource fileResource
  * @property BaseClient baseClient
  */
 class FileResource
 {
-    protected $fileUrl;
+    protected $fileResource;
     protected $baseClient;
 
-    public function __construct(string $fileUrl, BaseClient $baseClient)
+    public function __construct($fileResource, BaseClient $baseClient)
     {
-        $this->fileUrl = $fileUrl;
+        $this->fileResource = $fileResource;
         $this->baseClient = $baseClient;
     }
 
@@ -83,25 +83,8 @@ class FileResource
      */
     protected function getFileContent()
     {
-        // get API credentials
-        $username = $this->baseClient->getAuthUsername();
-        $password = $this->baseClient->getAuthPassword();
-
-        // prepare auth
-        $auth = base64_encode("$username:$password");
-
-        // prepare request
-        $request = [
-            'http' => [
-                'headers' => "Authorization: Basic $auth\r\n"
-            ]
-        ];
-
-        // create context
-        $context = stream_context_create($request);
-
         // get file content
-        return file_get_contents($this->fileUrl, false, $context);
+        return fread($this->fileResource, filesize($this->fileResource));
     }
 
 }
