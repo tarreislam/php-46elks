@@ -10,6 +10,7 @@ use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\FileResource;
 use Tarre\Php46Elks\Utils\Paginator;
+use function GuzzleHttp\Psr7\stream_for;
 
 class ImageClient extends BaseClient
 {
@@ -72,12 +73,16 @@ class ImageClient extends BaseClient
      */
     public function getFileById(string $id, string $format = 'jpg'): FileResource
     {
+        // setup resource to sink file into
+        $resource = tmpfile();
+
+        $this->setOption('sink', $resource);
 
         // perform request
-        $res = $this->getGuzzleClient()->get("images/$id.$format", $this->getOptions(true));
+        $this->getGuzzleClient()->get("images/$id.$format", $this->getOptions(true));
 
         // return file resource
-        return new FileResource($res->getBody()->getContents(), $this);
+        return new FileResource($resource, $this);
     }
 
 }

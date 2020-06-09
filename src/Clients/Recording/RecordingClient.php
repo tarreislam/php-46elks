@@ -71,12 +71,16 @@ class RecordingClient extends BaseClient
      */
     public function getFileById(string $id): FileResource
     {
+        // setup resource to sink file into
+        $resource = tmpfile();
+
+        $this->setOption('sink', $resource);
 
         // perform request
-        $res = $this->getGuzzleClient()->get("recordings/$id", $this->getOptions(true));
+        $this->getGuzzleClient()->get("recordings/$id", $this->getOptions(true));
 
         // return file resource
-        return new FileResource($res->getBody()->getContents(), $this);
+        return new FileResource($resource, $this);
     }
 
 }
