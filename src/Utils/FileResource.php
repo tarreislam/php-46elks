@@ -16,7 +16,7 @@ class FileResource
     protected $fileResource;
     protected $baseClient;
 
-    public function __construct($fileResource, BaseClient $baseClient)
+    public function __construct(&$fileResource, BaseClient $baseClient)
     {
         $this->fileResource = $fileResource;
         $this->baseClient = $baseClient;
@@ -84,7 +84,7 @@ class FileResource
     protected function getFileContent()
     {
         // get file content
-        return fread($this->fileResource, filesize($this->fileResource));
+        return fread($this->fileResource, stream_get_meta_data($this->fileResource)['uri']);
     }
 
 }

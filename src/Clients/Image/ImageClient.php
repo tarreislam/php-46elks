@@ -78,8 +78,11 @@ class ImageClient extends BaseClient
 
         $this->setOption('sink', $resource);
 
+        var_dump($resource);
+        exit;
         // perform request
         $this->getGuzzleClient()->get("images/$id.$format", $this->getOptions(true));
+
 
         // return file resource
         return new FileResource($resource, $this);
