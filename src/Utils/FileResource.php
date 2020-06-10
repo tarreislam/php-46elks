@@ -8,18 +8,24 @@ use Tarre\Php46Elks\Clients\BaseClient;
 use Tarre\Php46Elks\Exceptions\FileAlreadyExistsException;
 
 /**
- * @property resource fileResource
- * @property BaseClient baseClient
+ * @property string url
  */
 class FileResource
 {
-    protected $fileResource;
-    protected $baseClient;
+    protected $fileName;
 
-    public function __construct(&$fileResource, BaseClient $baseClient)
+    public function __construct(string $url, BaseClient $baseClient)
     {
-        $this->fileResource = $fileResource;
-        $this->baseClient = $baseClient;
+        // setup a temp file
+        $this->fileName = tempnam(sys_get_temp_dir(), 'l46elks');
+
+        // setup resource to sink file into
+        $resource = fopen($this->fileName, 'w+');
+
+        // perform request
+        $baseClient->getGuzzleClient()->get($url, [
+            'sink' => $resource
+        ]);
     }
 
     /**
@@ -83,8 +89,11 @@ class FileResource
      */
     protected function getFileContent()
     {
-        // get file content
-        return fread($this->fileResource, stream_get_meta_data($this->fileResource)['uri']);
+        // open file for read
+        $resource = fopen($this->fileName, 'r');
+
+        // return content
+        return fread($resource, filesize($this->fileName));
     }
 
 }

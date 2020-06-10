@@ -73,19 +73,8 @@ class ImageClient extends BaseClient
      */
     public function getFileById(string $id, string $format = 'jpg'): FileResource
     {
-        // setup resource to sink file into
-        $resource = tmpfile();
-
-        $this->setOption('sink', $resource);
-
-        var_dump($resource);
-        exit;
-        // perform request
-        $this->getGuzzleClient()->get("images/$id.$format", $this->getOptions(true));
-
-
         // return file resource
-        return new FileResource($resource, $this);
+        return new FileResource("images/$id.$format", $this);
     }
 
 }
