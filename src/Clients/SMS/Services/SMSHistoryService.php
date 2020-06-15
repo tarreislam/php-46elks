@@ -7,14 +7,14 @@ use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\SMS\Resources\Message;
 use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
 use Tarre\Php46Elks\Exceptions\InvalidE164PhoneNumberFormatException;
-use Tarre\Php46Elks\Interfaces\DataResourceInterface;
+use Tarre\Php46Elks\Interfaces\PaginatorInterface;
 use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Paginator;
 use Tarre\Php46Elks\Utils\Helper;
 
 
-class SMSHistoryService extends SMSServiceBase implements DataResourceInterface
+class SMSHistoryService extends SMSServiceBase implements PaginatorInterface
 {
     use QueryOptionTrait, DataResourceFilterTrait;
 

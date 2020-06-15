@@ -7,7 +7,7 @@ namespace Tarre\Php46Elks\Clients\PhoneCall\Services;
 use GuzzleHttp\RequestOptions as GuzzleHttpRequestOptions;
 use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Clients\PhoneCall\Resources\CallHistory;
-use Tarre\Php46Elks\Interfaces\DataResourceInterface;
+use Tarre\Php46Elks\Interfaces\PaginatorInterface;
 use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\Paginator;
@@ -15,7 +15,7 @@ use Tarre\Php46Elks\Utils\Paginator;
 /**
  * @property PhoneCallClient phoneCallClient
  */
-class PhoneCallHistoryService implements DataResourceInterface
+class PhoneCallHistoryService implements PaginatorInterface
 {
     use DataResourceFilterTrait, QueryOptionTrait;
 

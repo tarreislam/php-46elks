@@ -6,6 +6,7 @@ trait DataResourceFilterTrait
 {
     /**
      * Retrieve resources before this date.
+     *
      * @param $start
      * @return $this
      */
@@ -19,6 +20,7 @@ trait DataResourceFilterTrait
 
     /**
      * Retrieve resources after this date.
+     *
      * @param $end
      * @return $this
      */
@@ -32,6 +34,7 @@ trait DataResourceFilterTrait
 
     /**
      * Limit the number of results on each page.
+     *
      * @param $limit
      * @return $this
      */

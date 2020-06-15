@@ -6,13 +6,13 @@ namespace Tarre\Php46Elks\Clients\Image;
 
 use Tarre\Php46Elks\Clients\BaseClient;
 use Tarre\Php46Elks\Clients\Image\Resources\Image;
+use Tarre\Php46Elks\Interfaces\PaginatorInterface;
 use Tarre\Php46Elks\Traits\DataResourceFilterTrait;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Utils\FileResource;
 use Tarre\Php46Elks\Utils\Paginator;
-use function GuzzleHttp\Psr7\stream_for;
 
-class ImageClient extends BaseClient
+class ImageClient extends BaseClient implements PaginatorInterface
 {
     use QueryOptionTrait, DataResourceFilterTrait;
 
