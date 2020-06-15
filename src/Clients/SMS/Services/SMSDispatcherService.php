@@ -8,11 +8,11 @@ use Tarre\Php46Elks\Clients\SMS\SMSServiceBase;
 use Tarre\Php46Elks\Clients\SMS\Traits\CommonSmsTraits;
 use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Exceptions\NoRecipientsSetException;
-use Tarre\Php46Elks\Interfaces\RequestStructureInterface;
+use Tarre\Php46Elks\Interfaces\SenderInterface;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Traits\RecipientsTrait;
 
-class SMSDispatcherService extends SMSServiceBase implements RequestStructureInterface
+class SMSDispatcherService extends SMSServiceBase implements SenderInterface
 {
     use QueryOptionTrait, CommonSmsTraits, RecipientsTrait;
 

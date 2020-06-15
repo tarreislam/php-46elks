@@ -1,19 +1,19 @@
 <?php
 
-
 namespace Tarre\Php46Elks\Interfaces;
 
-
-interface RequestStructureInterface
+interface SenderInterface
 {
     /**
-     * The array of array requests that should be used with guzzle
+     * Get collection of requests to process by send
+     *
      * @return array
      */
     public function getRequests(): array;
 
     /**
      * Send requests
+     *
      * @return array
      */
     public function send(): array;

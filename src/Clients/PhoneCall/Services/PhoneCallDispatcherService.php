@@ -9,14 +9,14 @@ use Tarre\Php46Elks\Clients\PhoneCall\PhoneCallClient;
 use Tarre\Php46Elks\Clients\PhoneCall\Traits\CommonPhoneTraits;
 use Tarre\Php46Elks\Exceptions\InvalidSenderIdException;
 use Tarre\Php46Elks\Exceptions\NoRecipientsSetException;
-use Tarre\Php46Elks\Interfaces\RequestStructureInterface;
+use Tarre\Php46Elks\Interfaces\SenderInterface;
 use Tarre\Php46Elks\Traits\QueryOptionTrait;
 use Tarre\Php46Elks\Traits\RecipientsTrait;
 
 /**
  * @property PhoneCallClient phoneCallClient
  */
-class PhoneCallDispatcherService implements RequestStructureInterface
+class PhoneCallDispatcherService implements SenderInterface
 {
     use QueryOptionTrait, CommonPhoneTraits, RecipientsTrait;
 
