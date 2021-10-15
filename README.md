@@ -12,6 +12,8 @@
 
 PHP-46Elks is a wrapper for [46elks.se](46elks.se), written to streamline the interaction between 46elks API and your PHP application
 
+For Laravel applications, please check out [Laravel-46elks](https://github.com/tarreislam/laravel-46elks) instead
+
 ### Installation
 
 install with composer
@@ -19,8 +21,6 @@ install with composer
 ```
 composer require tarre/php-46elks
 ```
-
-For Laravel, please check out [Laravel-46elks](https://github.com/tarreislam/laravel-46elks) _(Includes notification driver)_
 
 ### Getting started
 

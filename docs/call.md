@@ -37,7 +37,7 @@ $phone = $Php46ElksClient->phone()->dispatcher();
 
 ### <a id="make-a-phone-call"></a> Make a phone call
 
-To make an outgoing phonecall you need a valid number with `VOICE` support, you can get this number from 46elks control panel.
+To make an outgoing phone call you need a valid number with `VOICE` support, you can get this number from 46elks control panel.
 
 ```php
 use Tarre\Php46Elks\Client as Php46ElkClient;
@@ -52,11 +52,9 @@ $phone
     ->from('+467147147417')
     // Set recipeient
     ->recipient('+4671928398')
-    // When the accepts the call, play a file and hang up
+    // When the accepts the call, play sound file
     ->voiceStart(function(PhoneCallAction $action){
-        return $action
-            ->play('http://yourapp.com/wav/hello.wav')
-            ->hangUp();
+        return $action->play('http://yourapp.com/wav/hello.wav');
 });
 ```
 
@@ -82,11 +80,9 @@ $phone
         '+46719283983',
         '+46719283984',
 ])
-    // When the accepts the call, play a file and hang up
+    // When the accepts the call, play a sound file
     ->voiceStart(function(PhoneCallAction $action){
-        return $action
-            ->play('http://yourapp.com/wav/hello.wav')
-            ->hangUp();
+        return $action->play('http://yourapp.com/wav/hello.wav');
 });
 ```
 
@@ -100,10 +96,9 @@ use Tarre\Php46Elks\Client as Php46ElkClient;
 use Tarre\Php46Elks\Clients\PhoneCall\Services\PhoneCallReceiverService;
 // Initialize client
 $Php46ElksClient = new Php46ElkClient('username', 'password');
-
+// With client
 $phone = $Php46ElksClient->phone()->receiver();
-
-// without client
+// Without client
 $phone = new PhoneCallReceiverService;
 ```
 
@@ -141,7 +136,6 @@ return $receiver->handleRequest(function(ReceivedPhoneCall $phoneCall){
     return $phoneCall
         ->action() 
         ->play('http://yourapp.com/elks/soundfile.mp3') // play this file
-        ->hangUp(); // hangup the call
 });
 ```
 
