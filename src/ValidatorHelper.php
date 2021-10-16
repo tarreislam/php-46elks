@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks;
 
-class HelperClassRenamePLs
+class ValidatorHelper
 {
     // https://46elks.se/kb/text-sender-id
     const RE_TEXT_SENDER_ID = '/^[a-z]{1}[a-z-A-Z0-9]{0,10}$/';
@@ -42,6 +42,30 @@ class HelperClassRenamePLs
     public static function isValidSenderOrE164(string $mixed)
     {
         return self::isValidSenderId($mixed) || self::isValidE164PhoneNubmer($mixed);
+    }
+
+    /**
+     * @param string $number
+     */
+    public static function isValidMultiPartE164PhoneNumber(string $number)
+    {
+        $number = preg_replace('/\h+/', '', $number);
+        $parts = explode(',', $number);
+        foreach ($parts as $part) {
+            if (!self::isValidE164PhoneNubmer($part)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param string $url
+     * @return mixed
+     */
+    public static function isValidUrl(string $url)
+    {
+        return filter_var($url, FILTER_VALIDATE_URL);
     }
 
 }

@@ -7,15 +7,10 @@ abstract class QueryBuilderFactory
     protected array $data;
 
     /**
-     * @return bool
-     */
-    public abstract function validate(): bool;
-
-    /**
      * @param string $key
      * @param $v
      */
-    protected function set(string $key, $v)
+    public function set(string $key, $v)
     {
         $this->data[$key] = $v;
     }
@@ -52,4 +47,18 @@ abstract class QueryBuilderFactory
     {
         return $this->toJson();
     }
+
+    /**
+     * Validate the resource and throw exceptions
+     * @return void
+     * @throws \Exception
+     */
+    public abstract function validate(): void;
+
+    /**
+     * Build the resource
+     * @return void
+     */
+    public abstract function build(): void;
+
 }

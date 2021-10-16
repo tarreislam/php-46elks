@@ -1,9 +1,13 @@
 <?php
 
-namespace Tarre\Php46Elks\Elks\Sms\Resources;
+namespace Tarre\Php46Elks\Elks\Sms\Models;
 
+use Tarre\Php46Elks\Elks\Exceptions\InvalidMultipartSenderE164NumberException;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidSenderIdOrE164NumberException;
-use Tarre\Php46Elks\HelperClassRenamePLs;
+use Tarre\Php46Elks\Elks\Exceptions\InvalidUrlException;
+use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidDryRunValueException;
+use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidFlashValueException;
+use Tarre\Php46Elks\ValidatorHelper;
 use Tarre\Php46Elks\QueryBuilderFactory;
 
 class SmsMessage extends QueryBuilderFactory
@@ -18,10 +22,48 @@ class SmsMessage extends QueryBuilderFactory
     protected string $flash;
     protected string $dontLog;
 
-    public function validate(): bool
+    public function validate(): void
     {
-        if (!HelperClassRenamePLs::isValidE164PhoneNubmer($this->getFrom())) {
+        if (!ValidatorHelper::isValidE164PhoneNubmer($this->getFrom())) {
             throw new InvalidSenderIdOrE164NumberException($this->getFrom());
+        }
+
+        if (!ValidatorHelper::isValidMultiPartE164PhoneNumber($this->getTo())) {
+            throw new InvalidMultipartSenderE164NumberException($this->getTo());
+        }
+
+        if (!is_null($this->getDryRun()) && !in_array($this->getDryRun(), ['yes', 'no'])) {
+            throw new InvalidDryRunValueException($this->getDryRun());
+        }
+
+        if (!is_null($this->getFlash()) && !in_array($this->getFlash(), ['yes', 'no'])) {
+            throw new InvalidFlashValueException($this->getFlash());
+        }
+
+        if (!is_null($this->getWhenDelivered()) && !ValidatorHelper::isValidUrl($this->getWhenDelivered())) {
+            throw new InvalidUrlException($this->getWhenDelivered());
+        }
+
+    }
+
+    public function build(): void
+    {
+        // required
+        $this->set('from', $this->getFrom());
+        $this->set('to', $this->getTo());
+        $this->set('message', $this->getMessage());
+        // optional
+        if (!is_null($this->getDryRun())) {
+            $this->set('dry_run', $this->getDryRun());
+        }
+        if (!is_null($this->getWhenDelivered())) {
+            $this->set('whendelivered', $this->getWhenDelivered());
+        }
+        if (!is_null($this->getFlash())) {
+            $this->set('flash', $this->getFlash());
+        }
+        if (!is_null($this->getDontLog())) {
+            $this->set('dontlog', $this->getDontLog());
         }
     }
 

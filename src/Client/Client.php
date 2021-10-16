@@ -42,15 +42,4 @@ class Client
         $this->guzzleClient = $guzzleClient;
     }
 
-    /**
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     * @return \Psr\Http\Message\ResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function request(string $method, string $uri, array $options)
-    {
-        return $this->getGuzzleClient()->request($method, $uri, $options);
-    }
 }
