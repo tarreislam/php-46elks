@@ -76,14 +76,14 @@ abstract class SenderFactory
         return $resAssoc;
     }
 
+    public function headers(): array
+    {
+        return [];
+    }
+
     protected function guzzle(): \GuzzleHttp\Client
     {
         return $this->client->getGuzzleClient();
-    }
-
-    protected function headers(): array
-    {
-        return [];
     }
 
     protected abstract function getQueryBuilderFactories(): array;
