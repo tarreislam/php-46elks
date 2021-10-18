@@ -3,8 +3,8 @@
 namespace Tarre\Php46Elks\Elks\Sms;
 
 
-use Tarre\Php46Elks\Elks\Sms\Models\SmsMessage as SmsMessageModel;
-use Tarre\Php46Elks\Elks\Sms\Responses\SmsMessage as SmsMessageResponse;
+use Tarre\Php46Elks\Elks\Sms\Requests\SmsMessage as SmsMessageRequest;
+use Tarre\Php46Elks\Elks\Sms\Responses\SentSmsMessage as SmsMessageResponse;
 use Tarre\Php46Elks\SenderFactory;
 
 class SmsDispatcher extends SenderFactory
@@ -12,10 +12,10 @@ class SmsDispatcher extends SenderFactory
     protected array $messages = [];
 
     /**
-     * @param SmsMessageModel $smsMessage
+     * @param SmsMessageRequest $smsMessage
      * @return SmsDispatcher
      */
-    public function addMessage(SmsMessageModel $smsMessage)
+    public function addMessage(SmsMessageRequest $smsMessage)
     {
         $this->messages[] = $smsMessage;
         return $this;
@@ -43,7 +43,14 @@ class SmsDispatcher extends SenderFactory
 
     protected function mapResult(array $result)
     {
-        return array_map(fn($res) => new SmsMessageResponse($res), $result);
+        /*
+         * Flatten reqs
+         */
+        $reqs = array_merge(...$result);
+        /*
+         * Map result
+         */
+        return array_map(fn($reqs) => new SmsMessageResponse($reqs), $reqs);
     }
 
     protected function getQueryBuilderFactories(): array

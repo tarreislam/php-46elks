@@ -2,12 +2,16 @@
 
 namespace Tarre\Php46Elks\Elks\Sms\Responses;
 
-class SmsMessage
+use Tarre\Php46Elks\ConstructSetter;
+
+class SentSmsMessage extends ConstructSetter
 {
     const STATUS_CREATED = 'created';
     const STATUS_SENT = 'sent';
     const STATUS_FAILED = 'failed';
     const STATUS_DELIVERED = 'delivered';
+
+    const DIRECTION_OUTGOING = 'outgoing';
 
     protected string $status;
     protected string $id;
@@ -18,22 +22,13 @@ class SmsMessage
     protected string $delivered;
     protected int $cost;
     protected string $direction;
+    protected string $dont_log;
     protected int $estimated_cost;
     protected int $parts;
 
-    public function __construct(array $rows)
-    {
-        foreach ($rows as $key => $val) {
-            $this->{$key} = $val;
-        }
-
-    }
-
     /**
      * Current delivery status of the message.
-     *
      * Possible values are "created", "sent", "failed" and "delivered".
-     * Possible CONST's are SmsMessage::STATUS_CREATED, SmsMessage::STATUS_SENT, SmsMessage::STATUS_FAILED, SmsMessage::STATUS_DELVIERED,
      * @return string
      */
     public function getStatus(): string
@@ -61,6 +56,7 @@ class SmsMessage
     }
 
     /**
+     * The phone number of the recipient in E.164 format.
      * @return string
      */
     public function getTo(): string
@@ -69,6 +65,7 @@ class SmsMessage
     }
 
     /**
+     *    The message text.
      * @return string
      */
     public function getMessage(): string
@@ -77,6 +74,7 @@ class SmsMessage
     }
 
     /**
+     *    Time in UTC when the SMS was created.
      * @return string
      */
     public function getCreated(): string
@@ -85,6 +83,7 @@ class SmsMessage
     }
 
     /**
+     * Time in UTC if the SMS has been successfully delivered.
      * @return string
      */
     public function getDelivered(): string
@@ -93,6 +92,7 @@ class SmsMessage
     }
 
     /**
+     *    Cost of sending the SMS. Specified in 10000s of the currency of your account. For an account with currency SEK a cost of 3500 means that the price for sending this SMS was 0.35 SEK.
      * @return int
      */
     public function getCost(): int
@@ -101,6 +101,7 @@ class SmsMessage
     }
 
     /**
+     * The direction of the SMS. Set to "outgoing" for sent SMS.
      * @return string
      */
     public function getDirection(): string
@@ -109,6 +110,16 @@ class SmsMessage
     }
 
     /**
+     * @return string
+     * Set to "message" if dontlog was enabled.
+     */
+    public function getDontLog(): string
+    {
+        return $this->dont_log;
+    }
+
+    /**
+     * Replaces cost in the response if dryrun was enabled.
      * @return int
      */
     public function getEstimatedCost(): int
@@ -117,12 +128,11 @@ class SmsMessage
     }
 
     /**
+     * Number of parts the SMS was divided into.
      * @return int
      */
     public function getParts(): int
     {
         return $this->parts;
     }
-
-
 }

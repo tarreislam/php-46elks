@@ -1,6 +1,6 @@
 <?php
 
-namespace Tarre\Php46Elks\Elks\Sms\Models;
+namespace Tarre\Php46Elks\Elks\Sms\Requests;
 
 use Tarre\Php46Elks\Elks\Exceptions\InvalidMultipartSenderE164NumberException;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidSenderIdOrE164NumberException;
