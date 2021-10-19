@@ -4,7 +4,8 @@ namespace Tarre\Php46Elks;
 
 use GuzzleHttp\RequestOptions;
 use Tarre\Php46Elks\Client\Client;
-use Tarre\Php46Elks\Interfaces\QueryBuilder;
+use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedMmsMessage;
+use Tarre\Php46Elks\Interfaces\RequestFactoryInterface;
 
 abstract class SenderFactory
 {
@@ -21,10 +22,10 @@ abstract class SenderFactory
 
     /**
      * Add requests
-     * @param QueryBuilder $request
+     * @param RequestFactoryInterface $request
      * @return $this
      */
-    public function addRequest(QueryBuilder $request): SenderFactory
+    public function addRequest(RequestFactoryInterface $request): SenderFactory
     {
         $this->requests[] = $request;
         return $this;
@@ -50,7 +51,6 @@ abstract class SenderFactory
      */
     public function send()
     {
-        /**@var QueryBuilderFactory $qbFactory */
         $qbFactories = $this->requests;
         /*
          * Validate and build the factories
@@ -62,12 +62,9 @@ abstract class SenderFactory
         /*
          * Make requests
          */
-        $res = [];
-        foreach ($qbFactories as $qbFactory) {
-            $res[] = $this->request($qbFactory->toArray());
-        }
+        $res = array_map(fn(RequestFactoryInterface $qbFactory) => $this->request($qbFactory->toArray()), $qbFactories);
         /*
-         * Map result
+         * Map all requests results
          */
         $res = $this->mapResult($res);
         /*
@@ -92,19 +89,15 @@ abstract class SenderFactory
             self::METHOD_POST => RequestOptions::JSON,
         ];
 
-        $headers = $this->headers();
-        $uri = $this->uri();
-        $method = $this->method();
-
         $options = [
-            RequestOptions::HEADERS => $headers
+            RequestOptions::HEADERS => $this->headers()
         ];
 
         $options = array_merge($options, [
-            $requestOption[$method] => $params
+            $requestOption[$this->method()] => $params
         ]);
 
-        $res = $this->guzzle()->get($uri, $options);
+        $res = $this->guzzle()->get($this->uri(), $options);
 
         $resAssoc = json_decode($res->getBody()->getContents(), true);
 
@@ -121,10 +114,26 @@ abstract class SenderFactory
         return $this->client->getGuzzleClient();
     }
 
+    protected function mapResult(array $result)
+    {
+        /*
+         * Flatten
+         */
+        $reqs = array_merge(...$result);
+        /*
+         * Get response class
+         */
+        $class = $this->mapResponse();
+        /*
+         * Map result
+         */
+        return array_map(fn($reqs) => new $class($reqs), $reqs);
+    }
+
     protected abstract function uri(): string;
 
     protected abstract function method(): string;
 
-    protected abstract function mapResult(array $result);
+    protected abstract function mapResponse(): string;
 
 }

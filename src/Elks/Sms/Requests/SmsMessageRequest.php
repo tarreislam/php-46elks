@@ -8,9 +8,9 @@ use Tarre\Php46Elks\Elks\Exceptions\InvalidUrlException;
 use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidDryRunValueException;
 use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidFlashValueException;
 use Tarre\Php46Elks\ValidatorHelper;
-use Tarre\Php46Elks\QueryBuilderFactory;
+use Tarre\Php46Elks\RequestFactory;
 
-class SmsMessageRequest extends QueryBuilderFactory
+class SmsMessageRequest extends RequestFactory
 {
     // Required
     protected string $from;

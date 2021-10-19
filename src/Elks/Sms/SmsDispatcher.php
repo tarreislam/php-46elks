@@ -3,7 +3,7 @@
 namespace Tarre\Php46Elks\Elks\Sms;
 
 
-use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedMmsMessage;
+use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsMessage;
 use Tarre\Php46Elks\SenderFactory;
 
 class SmsDispatcher extends SenderFactory
@@ -21,16 +21,8 @@ class SmsDispatcher extends SenderFactory
         return SenderFactory::METHOD_POST;
     }
 
-    protected function mapResult(array $result)
+    protected function mapResponse(): string
     {
-        /*
-         * Flatten reqs
-         */
-        $reqs = array_merge(...$result);
-        /*
-         * Map result
-         */
-        return array_map(fn($reqs) => new ReceivedMmsMessage($reqs), $reqs);
+        return ReceivedSmsMessage::class;
     }
-
 }

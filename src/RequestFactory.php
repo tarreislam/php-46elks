@@ -3,9 +3,9 @@
 namespace Tarre\Php46Elks;
 
 
-use Tarre\Php46Elks\Interfaces\QueryBuilder;
+use Tarre\Php46Elks\Interfaces\RequestFactoryInterface;
 
-abstract class QueryBuilderFactory implements QueryBuilder
+abstract class RequestFactory implements RequestFactoryInterface
 {
     protected array $data;
 

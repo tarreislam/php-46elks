@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks\Interfaces;
 
-interface QueryBuilder
+interface RequestFactoryInterface
 {
     public function set(string $key, $val);
 
