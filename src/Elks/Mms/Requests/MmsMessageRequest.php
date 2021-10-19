@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks\Elks\Mms\Requests;
 
-use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidMmsImageValueException;
+use Tarre\Php46Elks\Elks\Mms\Exceptions\InvalidMmsImageValueException;
 use Tarre\Php46Elks\Elks\Sms\Requests\SmsMessageRequest;
 use Tarre\Php46Elks\ValidatorHelper;
 
