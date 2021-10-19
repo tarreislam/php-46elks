@@ -1,8 +1,9 @@
 <?php
 
-namespace Tarre\Php46Elks\Elks\Sms;
+namespace Tarre\Php46Elks\Elks\Mms;
 
-use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedMmsMessage;
+use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsMessage;
+use Tarre\Php46Elks\Elks\Sms\SmsDispatcher;
 
 class MmsDispatcher extends SmsDispatcher
 {
