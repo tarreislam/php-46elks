@@ -4,7 +4,6 @@ namespace Tarre\Php46Elks;
 
 use GuzzleHttp\RequestOptions;
 use Tarre\Php46Elks\Client\Client;
-use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsResponse;
 use Tarre\Php46Elks\Interfaces\RequestFactoryInterface;
 
 abstract class SenderFactory
@@ -99,7 +98,9 @@ abstract class SenderFactory
 
         $res = $this->guzzle()->get($this->uri(), $options);
 
-        $resAssoc = json_decode($res->getBody()->getContents(), true);
+        $resBodyContents = $res->getBody()->getContents();
+
+        $resAssoc = json_decode($resBodyContents, true);
 
         return $resAssoc;
     }
