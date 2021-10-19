@@ -6,7 +6,7 @@ use Tarre\Php46Elks\ConstructSetter;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidNumberToForwardToException;
 use Tarre\Php46Elks\ValidatorHelper;
 
-class ReceivedSmsMessage extends ConstructSetter
+class ReceivedSmsResponse extends ConstructSetter
 {
     const DIRECTION_INCOMING = 'incoming';
 

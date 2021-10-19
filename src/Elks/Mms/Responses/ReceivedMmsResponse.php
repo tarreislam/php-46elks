@@ -4,13 +4,17 @@ namespace Tarre\Php46Elks\Elks\Mms\Responses;
 
 use Tarre\Php46Elks\ConstructSetter;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidNumberToForwardToException;
-use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsMessage;
+use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsResponse;
 use Tarre\Php46Elks\ValidatorHelper;
 
-class ReceivedMmsMessage extends ReceivedSmsMessage
+class ReceivedMmsResponse extends ReceivedSmsResponse
 {
     protected array $images;
 
+    /**
+     * Array of strings of all images
+     * @return array
+     */
     public function getImages(): array
     {
         return $this->images;

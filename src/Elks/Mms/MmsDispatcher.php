@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks\Elks\Mms;
 
-use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsMessage;
+use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsResponse;
 use Tarre\Php46Elks\Elks\Sms\SmsDispatcher;
 
 class MmsDispatcher extends SmsDispatcher
@@ -14,6 +14,6 @@ class MmsDispatcher extends SmsDispatcher
 
     protected function mapResponse(): string
     {
-        return ReceivedMmsMessage::class;
+        return ReceivedMmsResponse::class;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Tarre\Php46Elks\Elks\Sms;
 
-use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsMessage;
-use Tarre\Php46Elks\Elks\Sms\Responses\SMSDeliveryReport;
+use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsResponse;
+use Tarre\Php46Elks\Elks\Sms\Responses\DeliveryReportResponse;
 use Tarre\Php46Elks\ReceiverFactory;
 
 class SmsReceiver extends ReceiverFactory
@@ -15,7 +15,7 @@ class SmsReceiver extends ReceiverFactory
      */
     public function sms(callable $cb)
     {
-        return $this->cbUsingCallable($cb, ReceivedSmsMessage::class);
+        return $this->cbUsingCallable($cb, ReceivedSmsResponse::class);
     }
 
     /**
@@ -24,7 +24,7 @@ class SmsReceiver extends ReceiverFactory
      */
     public function dlr(callable $cb)
     {
-        return $this->cbUsingCallable($cb, SMSDeliveryReport::class);
+        return $this->cbUsingCallable($cb, DeliveryReportResponse::class);
     }
 
 

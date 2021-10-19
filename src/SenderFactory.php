@@ -4,7 +4,7 @@ namespace Tarre\Php46Elks;
 
 use GuzzleHttp\RequestOptions;
 use Tarre\Php46Elks\Client\Client;
-use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsMessage;
+use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsResponse;
 use Tarre\Php46Elks\Interfaces\RequestFactoryInterface;
 
 abstract class SenderFactory

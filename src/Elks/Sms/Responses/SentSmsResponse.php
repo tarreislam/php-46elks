@@ -4,7 +4,7 @@ namespace Tarre\Php46Elks\Elks\Sms\Responses;
 
 use Tarre\Php46Elks\ConstructSetter;
 
-class SentSmsMessage extends ConstructSetter
+class SentSmsResponse extends ConstructSetter
 {
     const STATUS_CREATED = 'created';
     const STATUS_SENT = 'sent';

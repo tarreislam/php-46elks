@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks\Elks\Mms;
 
-use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsMessage;
+use Tarre\Php46Elks\Elks\Mms\Responses\ReceivedMmsResponse;
 use Tarre\Php46Elks\ReceiverFactory;
 
 class MmsReceiver extends ReceiverFactory
@@ -13,7 +13,7 @@ class MmsReceiver extends ReceiverFactory
      */
     public function mms(callable $cb)
     {
-        return $this->cbUsingCallable($cb, ReceivedMmsMessage::class);
+        return $this->cbUsingCallable($cb, ReceivedMmsResponse::class);
     }
 
 }

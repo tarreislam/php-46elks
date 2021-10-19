@@ -3,7 +3,7 @@
 namespace Tarre\Php46Elks\Elks\Sms;
 
 
-use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsMessage;
+use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsResponse;
 use Tarre\Php46Elks\SenderFactory;
 
 class SmsDispatcher extends SenderFactory
@@ -23,6 +23,6 @@ class SmsDispatcher extends SenderFactory
 
     protected function mapResponse(): string
     {
-        return ReceivedSmsMessage::class;
+        return ReceivedSmsResponse::class;
     }
 }
