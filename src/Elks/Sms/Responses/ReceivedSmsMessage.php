@@ -8,7 +8,7 @@ use Tarre\Php46Elks\ValidatorHelper;
 
 class ReceivedSmsMessage extends ConstructSetter
 {
-    const DIRECTION_INCOMING = 'outgoing';
+    const DIRECTION_INCOMING = 'incoming';
 
     protected string $id;
     protected string $from;

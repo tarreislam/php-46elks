@@ -9,5 +9,11 @@ use Tarre\Php46Elks\ValidatorHelper;
 
 class ReceivedMmsMessage extends ReceivedSmsMessage
 {
+    protected array $images;
+
+    public function getImages(): array
+    {
+        return $this->images;
+    }
 
 }
