@@ -10,7 +10,7 @@ use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidFlashValueException;
 use Tarre\Php46Elks\ValidatorHelper;
 use Tarre\Php46Elks\QueryBuilderFactory;
 
-class SmsMessage extends QueryBuilderFactory
+class SmsMessageRequest extends QueryBuilderFactory
 {
     // Required
     protected string $from;
@@ -77,9 +77,9 @@ class SmsMessage extends QueryBuilderFactory
 
     /**
      * @param string $from
-     * @return SmsMessage
+     * @return SmsMessageRequest
      */
-    public function setFrom(string $from): SmsMessage
+    public function setFrom(string $from): SmsMessageRequest
     {
         $this->from = $from;
         return $this;
@@ -95,9 +95,9 @@ class SmsMessage extends QueryBuilderFactory
 
     /**
      * @param string $to
-     * @return SmsMessage
+     * @return SmsMessageRequest
      */
-    public function setTo(string $to): SmsMessage
+    public function setTo(string $to): SmsMessageRequest
     {
         $this->to = $to;
         return $this;
@@ -113,9 +113,9 @@ class SmsMessage extends QueryBuilderFactory
 
     /**
      * @param string $message
-     * @return SmsMessage
+     * @return SmsMessageRequest
      */
-    public function setMessage(string $message): SmsMessage
+    public function setMessage(string $message): SmsMessageRequest
     {
         $this->message = $message;
         return $this;
@@ -131,9 +131,9 @@ class SmsMessage extends QueryBuilderFactory
 
     /**
      * @param string $dryRun
-     * @return SmsMessage
+     * @return SmsMessageRequest
      */
-    public function setDryRun(string $dryRun): SmsMessage
+    public function setDryRun(string $dryRun): SmsMessageRequest
     {
         $this->dryRun = $dryRun;
         return $this;
@@ -149,9 +149,9 @@ class SmsMessage extends QueryBuilderFactory
 
     /**
      * @param string $whenDelivered
-     * @return SmsMessage
+     * @return SmsMessageRequest
      */
-    public function setWhenDelivered(string $whenDelivered): SmsMessage
+    public function setWhenDelivered(string $whenDelivered): SmsMessageRequest
     {
         $this->whenDelivered = $whenDelivered;
         return $this;
@@ -167,9 +167,9 @@ class SmsMessage extends QueryBuilderFactory
 
     /**
      * @param string $flash
-     * @return SmsMessage
+     * @return SmsMessageRequest
      */
-    public function setFlash(string $flash): SmsMessage
+    public function setFlash(string $flash): SmsMessageRequest
     {
         $this->flash = $flash;
         return $this;
@@ -185,9 +185,9 @@ class SmsMessage extends QueryBuilderFactory
 
     /**
      * @param string $dontLog
-     * @return SmsMessage
+     * @return SmsMessageRequest
      */
-    public function setDontLog(string $dontLog): SmsMessage
+    public function setDontLog(string $dontLog): SmsMessageRequest
     {
         $this->dontLog = $dontLog;
         return $this;

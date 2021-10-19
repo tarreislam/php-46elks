@@ -2,7 +2,10 @@
 
 namespace Tarre\Php46Elks;
 
-abstract class QueryBuilderFactory
+
+use Tarre\Php46Elks\Interfaces\QueryBuilder;
+
+abstract class QueryBuilderFactory implements QueryBuilder
 {
     protected array $data;
 
@@ -27,7 +30,7 @@ abstract class QueryBuilderFactory
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->data;
     }
@@ -35,7 +38,7 @@ abstract class QueryBuilderFactory
     /**
      * @return false|string
      */
-    public function toJson()
+    public function toJson(): string
     {
         return json_encode($this->toArray());
     }

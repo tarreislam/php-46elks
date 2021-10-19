@@ -3,7 +3,7 @@
 namespace Tarre\Php46Elks\Client;
 
 use GuzzleHttp\Client as GuzzleClient;
-use Tarre\Php46Elks\Credentials\Resources\Credential;
+use Tarre\Php46Elks\Credentials\Credential;
 
 class Client
 {
@@ -15,15 +15,19 @@ class Client
     public function __construct(Credential $credential)
     {
         /*
-         * Set client
+         * Create guzzle client instnace
          */
-        $this->setGuzzleClient(new GuzzleClient([
+        $client = new GuzzleClient([
             'base_uri' => $credential->getEndpoint(),
             'auth' => [
                 'username' => $credential->getUsername(),
                 'password' => $credential->getPassword()
             ]
-        ]));
+        ]);
+        /*
+         * Set client
+         */
+        $this->setGuzzleClient($client);
     }
 
     /**

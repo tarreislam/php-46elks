@@ -1,12 +1,17 @@
 <?php
 
-namespace Tarre\Php46Elks\Credentials\Resources;
+namespace Tarre\Php46Elks\Credentials;
 
 class Credential
 {
     protected string $username;
     protected string $password;
     protected string $endpoint;
+
+    public function __construct()
+    {
+        $this->endpoint = 'https://api.46elks.com/a1';
+    }
 
     /**
      * @return string
@@ -55,6 +60,7 @@ class Credential
     }
 
     /**
+     * Defaults to 'https://api.46elks.com/a1'
      * @return string
      */
     public function getEndpoint(): string

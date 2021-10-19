@@ -68,4 +68,19 @@ class ValidatorHelper
         return filter_var($url, FILTER_VALIDATE_URL);
     }
 
+    /**
+     * @param string $url
+     * @return false|void
+     */
+    public static function isValidMultipartUrl(string $url)
+    {
+        $parts = explode(',', $url);
+        foreach ($parts as $part) {
+            if (!self::isValidUrl($part)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

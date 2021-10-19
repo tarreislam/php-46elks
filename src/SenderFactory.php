@@ -4,6 +4,7 @@ namespace Tarre\Php46Elks;
 
 use GuzzleHttp\RequestOptions;
 use Tarre\Php46Elks\Client\Client;
+use Tarre\Php46Elks\Interfaces\QueryBuilder;
 
 abstract class SenderFactory
 {
@@ -11,10 +12,36 @@ abstract class SenderFactory
     const METHOD_GET = 'get';
 
     protected Client $client;
+    protected array $requests;
 
     public function __construct(Client $client)
     {
         $this->client = $client;
+    }
+
+    /**
+     * Add requests
+     * @param QueryBuilder $request
+     * @return $this
+     */
+    public function addRequest(QueryBuilder $request): SenderFactory
+    {
+        $this->requests[] = $request;
+        return $this;
+    }
+
+    /**
+     * Remove all requests and set new value
+     * @param array $requests
+     * @return $this
+     */
+    public function setRequests(array $requests): self
+    {
+        $this->requests = [];
+        foreach ($requests as $request) {
+            $this->addRequest($request);
+        }
+        return $this;
     }
 
     /**
@@ -24,7 +51,7 @@ abstract class SenderFactory
     public function send()
     {
         /**@var QueryBuilderFactory $qbFactory */
-        $qbFactories = $this->getQueryBuilderFactories();
+        $qbFactories = $this->requests;
         /*
          * Validate and build the factories
          */
@@ -40,9 +67,17 @@ abstract class SenderFactory
             $res[] = $this->request($qbFactory->toArray());
         }
         /*
-         * Return array of responses
+         * Map result
          */
-        return $this->mapResult($res);
+        $res = $this->mapResult($res);
+        /*
+         * Reset requests
+         */
+        $this->setRequests([]);
+        /*
+         * Return result
+         */
+        return $res;
     }
 
     /**
@@ -85,8 +120,6 @@ abstract class SenderFactory
     {
         return $this->client->getGuzzleClient();
     }
-
-    protected abstract function getQueryBuilderFactories(): array;
 
     protected abstract function uri(): string;
 
