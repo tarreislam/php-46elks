@@ -2,9 +2,9 @@
 
 namespace Tarre\Php46Elks\Elks\Sms\Responses;
 
-use Tarre\Php46Elks\ConstructSetter;
+use Tarre\Php46Elks\ConstructSetterFactory;
 
-class DeliveryReportResponse extends ConstructSetter
+class DeliveryReportResponse extends ConstructSetterFactory
 {
     const STATUS_DELIVERED = 'delivered';
     const STATUS_FAILED = 'failed';

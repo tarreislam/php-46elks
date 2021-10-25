@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks;
 
-abstract class ConstructSetter
+abstract class ConstructSetterFactory
 {
     public function __construct(array $rows)
     {

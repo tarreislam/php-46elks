@@ -2,11 +2,11 @@
 
 namespace Tarre\Php46Elks\Elks\Sms\Responses;
 
-use Tarre\Php46Elks\ConstructSetter;
+use Tarre\Php46Elks\ConstructSetterFactory;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidNumberToForwardToException;
 use Tarre\Php46Elks\ValidatorHelper;
 
-class ReceivedSmsResponse extends ConstructSetter
+class ReceivedSmsResponse extends ConstructSetterFactory
 {
     const DIRECTION_INCOMING = 'incoming';
 

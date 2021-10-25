@@ -8,9 +8,16 @@ class Credential
     protected string $password;
     protected string $endpoint;
 
-    public function __construct()
+    public function __construct(string $username, string $password, string $endpoint = null)
     {
-        $this->endpoint = 'https://api.46elks.com/a1';
+        $this->setUsername($username);
+        $this->setPassword($password);
+        /*
+         * Default endpoint for 46elks
+         */
+        if (!$endpoint) {
+            $this->setEndpoint('https://api.46elks.com/a1');
+        }
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks\Elks\Mms\Responses;
 
-use Tarre\Php46Elks\ConstructSetter;
+use Tarre\Php46Elks\ConstructSetterFactory;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidNumberToForwardToException;
 use Tarre\Php46Elks\Elks\Sms\Responses\ReceivedSmsResponse;
 use Tarre\Php46Elks\ValidatorHelper;

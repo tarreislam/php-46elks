@@ -7,7 +7,7 @@ use Tarre\Php46Elks\Interfaces\RequestFactoryInterface;
 
 abstract class RequestFactory implements RequestFactoryInterface
 {
-    protected array $data;
+    protected array $data = [];
 
     /**
      * @param string $key

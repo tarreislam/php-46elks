@@ -2,17 +2,10 @@
 
 namespace Tarre\Php46Elks\Elks\Sms\Responses;
 
-use Tarre\Php46Elks\ConstructSetter;
+use Tarre\Php46Elks\ConstructSetterFactory;
 
-class SentSmsResponse extends ConstructSetter
+class SentSmsResponse extends ConstructSetterFactory
 {
-    const STATUS_CREATED = 'created';
-    const STATUS_SENT = 'sent';
-    const STATUS_FAILED = 'failed';
-    const STATUS_DELIVERED = 'delivered';
-
-    const DIRECTION_OUTGOING = 'outgoing';
-
     protected string $status;
     protected string $id;
     protected string $from;

@@ -2,7 +2,7 @@
 
 namespace Tarre\Php46Elks;
 
-class ReceiverFactory
+abstract class ReceiverFactory
 {
     protected array $params;
 

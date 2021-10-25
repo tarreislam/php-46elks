@@ -118,7 +118,7 @@ abstract class SenderFactory
     protected function mapResult(array $result)
     {
         /*
-         * Flatten
+         * Flatten [[1,2], [1,2]] => [1,2,1,2]
          */
         $reqs = array_merge(...$result);
         /*
