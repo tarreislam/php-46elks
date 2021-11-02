@@ -1,6 +1,6 @@
 <?php
 
-namespace Tarre\Php46Elks\Elks\Sms\Structs;
+namespace Tarre\Php46Elks\Elks\Sms\Enums;
 
 interface Status
 {

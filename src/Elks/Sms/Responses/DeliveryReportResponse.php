@@ -6,8 +6,6 @@ use Tarre\Php46Elks\ConstructSetterFactory;
 
 class DeliveryReportResponse extends ConstructSetterFactory
 {
-    const STATUS_DELIVERED = 'delivered';
-    const STATUS_FAILED = 'failed';
 
     protected string $id;
     protected string $status;
