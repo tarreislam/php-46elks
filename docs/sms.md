@@ -31,7 +31,7 @@ $smsMessage = (new SmsMessageRequest)
     ->setDontLog('message')
     ->setWhenDelivered('https://myapp.com')
     ->setMessage('Hello')
-    ->setTo('+46701474417');
+    ->setTo('+46701474417,+46701474417'); // Also works
 /*
  * Add one or more requests
  */
