@@ -1,6 +1,6 @@
 <?php
 
-namespace Tarre\Php46Elks\Elks\Exceptions;
+namespace Tarre\Php46Elks\Exceptions;
 
 class InvalidUrlException extends \Exception
 {

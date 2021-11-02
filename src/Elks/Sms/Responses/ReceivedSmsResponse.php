@@ -8,8 +8,6 @@ use Tarre\Php46Elks\ValidatorHelper;
 
 class ReceivedSmsResponse extends ConstructSetterFactory
 {
-    const DIRECTION_INCOMING = 'incoming';
-
     protected string $id;
     protected string $from;
     protected string $to;
@@ -91,7 +89,7 @@ class ReceivedSmsResponse extends ConstructSetterFactory
      * @return string[]
      * @throws InvalidNumberToForwardToException
      */
-    public function forward(string $to, string $prefix = null, string $suffix = null)
+    public function forward(string $to, string $prefix = null, string $suffix = null): array
     {
         if (!ValidatorHelper::isValidE164PhoneNubmer($to)) {
             throw new InvalidNumberToForwardToException($to);

@@ -2,6 +2,9 @@
 
 namespace Tarre\Php46Elks\Credentials;
 
+use Tarre\Php46Elks\Exceptions\InvalidUrlException;
+use Tarre\Php46Elks\ValidatorHelper;
+
 class Credential
 {
     protected string $username;
@@ -59,9 +62,13 @@ class Credential
     /**
      * @param string $endpoint
      * @return Credential
+     * @throws InvalidUrlException
      */
     public function setEndpoint(string $endpoint): Credential
     {
+        if (!ValidatorHelper::isValidUrl($endpoint)) {
+            throw new InvalidUrlException($endpoint);
+        }
         $this->endpoint = $endpoint;
         return $this;
     }

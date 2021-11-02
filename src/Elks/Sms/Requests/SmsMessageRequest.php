@@ -4,7 +4,7 @@ namespace Tarre\Php46Elks\Elks\Sms\Requests;
 
 use Tarre\Php46Elks\Elks\Exceptions\InvalidMultipartSenderE164NumberException;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidSenderIdOrE164NumberException;
-use Tarre\Php46Elks\Elks\Exceptions\InvalidUrlException;
+use Tarre\Php46Elks\Exceptions\InvalidUrlException;
 use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidDryRunValueException;
 use Tarre\Php46Elks\Elks\Sms\Exceptions\InvalidFlashValueException;
 use Tarre\Php46Elks\ValidatorHelper;
@@ -24,12 +24,12 @@ class SmsMessageRequest extends RequestFactory
 
     public function validate(): void
     {
-        if (!ValidatorHelper::isValidSenderOrE164($this->getFrom())) {
-            throw new InvalidSenderIdOrE164NumberException($this->getFrom());
+        if (!ValidatorHelper::isValidSenderOrE164($from = $this->getFrom())) {
+            throw new InvalidSenderIdOrE164NumberException($from);
         }
 
-        if (!ValidatorHelper::isValidMultiPartE164PhoneNumber($this->getTo())) {
-            throw new InvalidMultipartSenderE164NumberException($this->getTo());
+        if (!ValidatorHelper::isValidMultiPartE164PhoneNumber($to = $this->getTo())) {
+            throw new InvalidMultipartSenderE164NumberException($to);
         }
 
         if (!empty($dryRun = $this->getDryRun()) && !in_array($dryRun, ['yes', 'no'])) {

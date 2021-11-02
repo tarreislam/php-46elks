@@ -6,8 +6,12 @@ abstract class ReceiverFactory
 {
     protected array $params;
 
-    public function __construct(array $queryParams, array $postParams = null)
+    public function __construct(array $queryParams = null, array $postParams = null)
     {
+        if (is_null($queryParams)) {
+            $queryParams = $_REQUEST;
+        }
+
         if (is_null($postParams)) {
             $params = $queryParams;
         } else {
