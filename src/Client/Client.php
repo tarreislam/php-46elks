@@ -20,8 +20,8 @@ class Client
         $client = new GuzzleClient([
             'base_uri' => $credential->getEndpoint(),
             'auth' => [
-                'username' => $credential->getUsername(),
-                'password' => $credential->getPassword()
+                $credential->getUsername(),
+                $credential->getPassword()
             ]
         ]);
         /*

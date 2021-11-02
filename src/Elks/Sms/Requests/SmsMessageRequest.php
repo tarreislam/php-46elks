@@ -13,18 +13,18 @@ use Tarre\Php46Elks\RequestFactory;
 class SmsMessageRequest extends RequestFactory
 {
     // Required
-    protected string $from;
-    protected string $to;
-    protected string $message;
+    protected ?string $from = '';
+    protected ?string $to = '';
+    protected ?string $message = '';
     // optional
-    protected string $dryRun;
-    protected string $whenDelivered;
-    protected string $flash;
-    protected string $dontLog;
+    protected ?string $dryRun = '';
+    protected ?string $whenDelivered = '';
+    protected ?string $flash = '';
+    protected ?string $dontLog = '';
 
     public function validate(): void
     {
-        if (!ValidatorHelper::isValidE164PhoneNubmer($this->getFrom())) {
+        if (!ValidatorHelper::isValidSenderOrE164($this->getFrom())) {
             throw new InvalidSenderIdOrE164NumberException($this->getFrom());
         }
 
@@ -32,16 +32,16 @@ class SmsMessageRequest extends RequestFactory
             throw new InvalidMultipartSenderE164NumberException($this->getTo());
         }
 
-        if (!is_null($this->getDryRun()) && !in_array($this->getDryRun(), ['yes', 'no'])) {
-            throw new InvalidDryRunValueException($this->getDryRun());
+        if (!empty($dryRun = $this->getDryRun()) && !in_array($dryRun, ['yes', 'no'])) {
+            throw new InvalidDryRunValueException($dryRun);
         }
 
-        if (!is_null($this->getFlash()) && !in_array($this->getFlash(), ['yes', 'no'])) {
-            throw new InvalidFlashValueException($this->getFlash());
+        if (!empty($flash = $this->getFlash()) && !in_array($flash, ['yes', 'no'])) {
+            throw new InvalidFlashValueException($flash);
         }
 
-        if (!is_null($this->getWhenDelivered()) && !ValidatorHelper::isValidUrl($this->getWhenDelivered())) {
-            throw new InvalidUrlException($this->getWhenDelivered());
+        if (!empty($whenDelivered = $this->getWhenDelivered()) && !ValidatorHelper::isValidUrl($whenDelivered)) {
+            throw new InvalidUrlException($whenDelivered);
         }
 
     }
@@ -53,16 +53,16 @@ class SmsMessageRequest extends RequestFactory
         $this->set('to', $this->getTo());
         $this->set('message', $this->getMessage());
         // optional
-        if (!is_null($this->getDryRun())) {
-            $this->set('dry_run', $this->getDryRun());
+        if (!empty($this->getDryRun())) {
+            $this->set('dryrun', $this->getDryRun());
         }
-        if (!is_null($this->getWhenDelivered())) {
+        if (!empty($this->getWhenDelivered())) {
             $this->set('whendelivered', $this->getWhenDelivered());
         }
-        if (!is_null($this->getFlash())) {
+        if (!empty($this->getFlash())) {
             $this->set('flash', $this->getFlash());
         }
-        if (!is_null($this->getDontLog())) {
+        if (!empty($this->getDontLog())) {
             $this->set('dontlog', $this->getDontLog());
         }
     }
@@ -76,6 +76,7 @@ class SmsMessageRequest extends RequestFactory
     }
 
     /**
+     * The sender of the SMS as seen by the recipient. Either a text sender ID or a phone number in E.164 format if you want to be able to receive replies.
      * @param string $from
      * @return SmsMessageRequest
      */
@@ -94,6 +95,7 @@ class SmsMessageRequest extends RequestFactory
     }
 
     /**
+     * The phone number of the recipient in E.164 format.
      * @param string $to
      * @return SmsMessageRequest
      */
@@ -112,6 +114,7 @@ class SmsMessageRequest extends RequestFactory
     }
 
     /**
+     * The message to send.
      * @param string $message
      * @return SmsMessageRequest
      */
@@ -124,7 +127,7 @@ class SmsMessageRequest extends RequestFactory
     /**
      * @return string
      */
-    public function getDryRun(): string
+    public function getDryRun(): ?string
     {
         return $this->dryRun;
     }
@@ -142,7 +145,7 @@ class SmsMessageRequest extends RequestFactory
     /**
      * @return string
      */
-    public function getWhenDelivered(): string
+    public function getWhenDelivered(): ?string
     {
         return $this->whenDelivered;
     }
@@ -160,7 +163,7 @@ class SmsMessageRequest extends RequestFactory
     /**
      * @return string
      */
-    public function getFlash(): string
+    public function getFlash(): ?string
     {
         return $this->flash;
     }
@@ -178,7 +181,7 @@ class SmsMessageRequest extends RequestFactory
     /**
      * @return string
      */
-    public function getDontLog(): string
+    public function getDontLog(): ?string
     {
         return $this->dontLog;
     }

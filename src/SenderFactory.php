@@ -35,7 +35,7 @@ abstract class SenderFactory
      * @param array $requests
      * @return $this
      */
-    public function setRequests(array $requests): self
+    public function setRequests(array $requests): SenderFactory
     {
         $this->requests = [];
         foreach ($requests as $request) {
@@ -48,7 +48,7 @@ abstract class SenderFactory
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function send()
+    public function send(): array
     {
         $qbFactories = $this->requests;
         /*
@@ -78,14 +78,14 @@ abstract class SenderFactory
 
     /**
      * @param array $params
-     * @return mixed
+     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function request(array $params)
+    protected function request(array $params): array
     {
         static $requestOption = [
             self::METHOD_GET => RequestOptions::QUERY,
-            self::METHOD_POST => RequestOptions::JSON,
+            self::METHOD_POST => RequestOptions::FORM_PARAMS,
         ];
 
         $options = [
@@ -93,10 +93,10 @@ abstract class SenderFactory
         ];
 
         $options = array_merge($options, [
-            $requestOption[$this->method()] => $params
+            $requestOption[$method = $this->method()] => $params
         ]);
 
-        $res = $this->guzzle()->get($this->uri(), $options);
+        $res = $this->guzzle()->request($method, $this->uri(), $options);
 
         $resBodyContents = $res->getBody()->getContents();
 
@@ -120,7 +120,7 @@ abstract class SenderFactory
         /*
          * Flatten [[1,2], [1,2]] => [1,2,1,2]
          */
-        $reqs = array_merge(...$result);
+        // $reqs = array_merge(...$result);
         /*
          * Get response class
          */
@@ -128,7 +128,7 @@ abstract class SenderFactory
         /*
          * Map result
          */
-        return array_map(fn($reqs) => new $class($reqs), $reqs);
+        return array_map(fn($reqs) => new $class($reqs), $result);
     }
 
     protected abstract function uri(): string;

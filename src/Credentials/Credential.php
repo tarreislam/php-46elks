@@ -16,7 +16,7 @@ class Credential
          * Default endpoint for 46elks
          */
         if (!$endpoint) {
-            $this->setEndpoint('https://api.46elks.com/a1');
+            $this->setEndpoint('https://api.46elks.com/a1/');
         }
     }
 
