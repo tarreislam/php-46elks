@@ -74,6 +74,7 @@ $res = $smsDispatcher->send();
 
 * [Credentials and clients](docs/creds-n-clients.md)
 * [SMS](docs/sms.md)
+* [SMS](docs/mms.md)
 
 
 * [Phone calls](docs/call.md)
