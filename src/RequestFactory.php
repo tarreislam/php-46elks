@@ -28,6 +28,14 @@ abstract class RequestFactory implements RequestFactoryInterface
     }
 
     /**
+     * @param string $key
+     */
+    public function rm(string $key)
+    {
+        unset($this->data[$key]);
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array

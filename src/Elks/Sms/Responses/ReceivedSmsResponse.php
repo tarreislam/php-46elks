@@ -4,70 +4,17 @@ namespace Tarre\Php46Elks\Elks\Sms\Responses;
 
 use Tarre\Php46Elks\ConstructSetterFactory;
 use Tarre\Php46Elks\Elks\Exceptions\InvalidNumberToForwardToException;
+use Tarre\Php46Elks\Elks\Sms\traits\CreatedTrait;
+use Tarre\Php46Elks\Elks\Sms\traits\DirectionTrait;
+use Tarre\Php46Elks\Elks\Sms\traits\FromTrait;
+use Tarre\Php46Elks\Elks\Sms\traits\IdTrait;
+use Tarre\Php46Elks\Elks\Sms\traits\MessageTrait;
+use Tarre\Php46Elks\Elks\Sms\traits\ToTrait;
 use Tarre\Php46Elks\ValidatorHelper;
 
 class ReceivedSmsResponse extends ConstructSetterFactory
 {
-    protected string $id;
-    protected string $from;
-    protected string $to;
-    protected string $message;
-    protected string $direction;
-    protected string $created;
-
-    /**
-     * The unique id of the message in our systems.
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * The sender of the SMS.
-     * @return string
-     */
-    public function getFrom(): string
-    {
-        return $this->from;
-    }
-
-    /**
-     * The phone number the SMS was sent to.
-     * @return string
-     */
-    public function getTo(): string
-    {
-        return $this->to;
-    }
-
-    /**
-     * The contents of the SMS.
-     * @return string
-     */
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    /**
-     * The direction of the SMS. Always ”incoming” for incoming SMS.
-     * @return string
-     */
-    public function getDirection(): string
-    {
-        return $this->direction;
-    }
-
-    /**
-     * The time in UTC when the SMS object was created in our systems.
-     * @return string
-     */
-    public function getCreated(): string
-    {
-        return $this->created;
-    }
+    use IdTrait, FromTrait, ToTrait, MessageTrait, DirectionTrait, CreatedTrait;
 
     /**
      * Reply to the message

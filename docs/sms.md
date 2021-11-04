@@ -1,6 +1,5 @@
 # SMS
 
-
 ### Sending SMS
 
 ```php
@@ -83,7 +82,7 @@ $receiver->sms(function (ReceivedSmsResponse $response) {
 });
 ```
 
-### Delivery reports
+#### Delivery reports
 
 ```php
 use Tarre\Php46Elks\Elks\Sms\Responses\DeliveryReportResponse;
@@ -101,3 +100,5 @@ $receiver->dlr(function (DeliveryReportResponse $response) {
 });
 
 ```
+
+### History

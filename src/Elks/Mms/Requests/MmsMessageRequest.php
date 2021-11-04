@@ -8,7 +8,7 @@ use Tarre\Php46Elks\ValidatorHelper;
 
 class MmsMessageRequest extends SmsMessageRequest
 {
-    protected string $image;
+    protected ?string $image = '';
 
     public function validate(): void
     {
@@ -22,6 +22,10 @@ class MmsMessageRequest extends SmsMessageRequest
     {
         $this->set('image', $this->getImage());
         parent::build();
+        /*
+         * Remove invalid keys
+         */
+        $this->rm('dryrun');
     }
 
     /**
@@ -35,9 +39,10 @@ class MmsMessageRequest extends SmsMessageRequest
     /**
      * @param string $image
      */
-    public function setImage(string $image): void
+    public function setImage(string $image): MmsMessageRequest
     {
         $this->image = $image;
+        return $this;
     }
 
 }

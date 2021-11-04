@@ -29,6 +29,7 @@ trait QueryBuilder
     }
 
     /**
+     * @return mixed
      * @throws ResultNotFoundException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -38,5 +39,7 @@ trait QueryBuilder
         if (is_null($res)) {
             throw new ResultNotFoundException($this->uri());
         }
+
+        return $res;
     }
 }
